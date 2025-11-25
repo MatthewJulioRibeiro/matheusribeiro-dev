@@ -1,26 +1,23 @@
-let currentLang = 'en'; 
+let currentLang = 'en'; // O padrão agora é Inglês
 let allData = {};
-let typeWriterTimeout; // Para limpar o timeout ao trocar de língua
+let typeWriterTimeout;
 
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
-    detectUserLanguage();
-
+    
+    // Carrega dados ANTES de decidir a língua final para renderizar rápido
     try {
         const response = await fetch('./data/cv-data.json');
-        
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
         allData = await response.json();
         
-        updateLanguageUI();
-        renderPage();
+        // Lógica de Idioma: 1. LocalStorage -> 2. Navegador -> 3. Padrão (EN)
+        detectAndApplyLanguage();
+        
         initCommandPalette();
         
     } catch (error) {
-        console.error("Erro fatal:", error);
+        console.error("Fatal Error:", error);
         showErrorUI(error.message);
     } finally {
         const loader = document.getElementById('loading-screen');
@@ -34,27 +31,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 // --- Theme Management ---
 function initTheme() {
     const btn = document.getElementById('theme-toggle');
+    if(!btn) return;
     
     btn.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
-        if (document.documentElement.classList.contains('dark')) {
-            localStorage.theme = 'dark';
-        } else {
-            localStorage.theme = 'light';
-        }
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     });
 }
 
 // --- Language Logic ---
-function detectUserLanguage() {
-    const userLang = navigator.language || navigator.userLanguage;
-    if (userLang && userLang.startsWith('pt')) {
-        currentLang = 'pt';
+function detectAndApplyLanguage() {
+    const savedLang = localStorage.getItem('user_lang');
+    
+    if (savedLang) {
+        currentLang = savedLang;
+    } else {
+        // Se não tem salvo, verifica o navegador
+        const userLang = navigator.language || navigator.userLanguage;
+        // Se for português, muda para pt. Caso contrário, mantém 'en' (que é o base do HTML)
+        if (userLang && userLang.toLowerCase().startsWith('pt')) {
+            currentLang = 'pt';
+        }
     }
+
+    // Se o idioma determinado for diferente do HTML base (EN) ou se precisarmos atualizar a UI
+    updateLanguageUI();
+    
+    // Só renderiza novamente se for PT, pois EN já está no HTML estático
+    // Mas para garantir consistência e ativar o typewriter, chamamos o render
+    renderPage();
 }
 
 window.setLanguage = function(lang) {
+    if (currentLang === lang) return; // Evita re-render desnecessário
     currentLang = lang;
+    localStorage.setItem('user_lang', lang); // Salva preferência
     updateLanguageUI();
     renderPage();
 }
@@ -63,12 +74,16 @@ function updateLanguageUI() {
     const btnPt = document.getElementById('btn-pt');
     const btnEn = document.getElementById('btn-en');
     
+    if(!btnPt || !btnEn) return;
+
     if (currentLang === 'en') {
         btnEn.className = "font-bold text-ibm-blue cursor-default";
         btnPt.className = "text-slate-400 dark:text-slate-600 hover:text-ibm-blue transition-colors";
+        document.documentElement.lang = 'en';
     } else {
         btnPt.className = "font-bold text-ibm-blue cursor-default";
         btnEn.className = "text-slate-400 dark:text-slate-600 hover:text-ibm-blue transition-colors";
+        document.documentElement.lang = 'pt-BR';
     }
     
     if(allData[currentLang]) {
@@ -84,8 +99,11 @@ function startTypeWriter(text, elementId) {
     const el = document.getElementById(elementId);
     if(!el) return;
 
-    // Reset
+    // Se o texto já estiver lá (no carregamento inicial do HTML estático), não apaga e redigita se for o mesmo
+    if (el.textContent === text && !el.dataset.typing) return;
+
     el.textContent = "";
+    el.dataset.typing = "true";
     clearTimeout(typeWriterTimeout);
     
     let i = 0;
@@ -93,7 +111,9 @@ function startTypeWriter(text, elementId) {
         if (i < text.length) {
             el.textContent += text.charAt(i);
             i++;
-            typeWriterTimeout = setTimeout(type, 30); // Velocidade da digitação
+            typeWriterTimeout = setTimeout(type, 30);
+        } else {
+            el.removeAttribute('data-typing');
         }
     }
     type();
@@ -109,21 +129,21 @@ function renderPage() {
 
     // Header
     setText('profile-name', data.profile.name);
-    // Inicia o efeito de digitação no cargo
     startTypeWriter(data.profile.role, 'profile-role');
-    
     setText('profile-summary', data.profile.summary);
     setText('contact-text', ui.contactBtn);
-    setText('nav-download-text', ui.downloadBtn); // Botão do Nav (Texto Curto)
+    
+    // Atualiza botão de PDF se existir
+    const downloadText = document.getElementById('nav-download-text');
+    if(downloadText) downloadText.textContent = ui.downloadBtn;
     
     // Scroll Text
     setText('scroll-text', ui.scrollText);
 
-    // Profile Photo
+    // Profile Photo (mantém src se já estiver correto para evitar piscada)
     const img = document.getElementById('profile-img');
-    if(img && data.profile.photoUrl) {
+    if(img && data.profile.photoUrl && !img.src.includes(data.profile.photoUrl)) {
         img.src = data.profile.photoUrl;
-        img.onerror = () => { img.style.display = 'none'; }; // Esconde se falhar
     }
 
     // Titles
@@ -137,16 +157,21 @@ function renderPage() {
     // Sections
     renderCoreStack(common.skills);
     renderExperience(data.experience);
-    renderProjects(data.projects); // Nova função
+    renderProjects(data.projects);
     renderSkillsGrid(common.skills);
     renderEducation(data.education);
     renderLanguages(common.languages);
 }
 
+// As funções de renderização específicas (renderCoreStack, etc) 
+// permanecem iguais, pois elas limpam o container (.innerHTML = ...) 
+// e reconstroem. Isso garante que se mudar de EN -> PT, tudo atualiza.
+
 function renderCoreStack(skills) {
     const container = document.getElementById('core-stack');
     if(!container) return;
     
+    // Pega os items das duas primeiras categorias para mostrar no topo
     const core = [...skills[0].items, ...skills[1].items].slice(0, 8);
     container.innerHTML = core.map(skill => 
         `<div class="tech-tag flex items-center gap-2">
