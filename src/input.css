@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Utils */
+.section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569; 
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    transition: color 0.5s ease;
+}
+
+.dark .section-label {
+    color: #9ca3af; 
+}
+
+/* Cursor Blink Animation */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+.animate-blink {
+    animation: blink 1s step-end infinite;
+}
+
+/* Stack Tags (Light/Dark) */
+.tech-tag {
+    padding: 0.25rem 0.75rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    color: #334155; 
+    font-size: 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.2s;
+    cursor: default;
+}
+
+.dark .tech-tag {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+.tech-tag:hover {
+    border-color: #0f62fe;
+    color: #0f62fe;
+    background-color: #eff6ff;
+}
+
+.dark .tech-tag:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+    background-color: #1e3a8a;
+}
+
+/* Project Cards */
+.project-card {
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+.dark .project-card {
+    border-color: #374151;
+    background-color: #1f2937; /* Ou transparente se preferir */
+}
+.project-card:hover {
+    border-color: #0f62fe;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+.dark .project-card:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Palette Items */
+.palette-item {
+    padding: 0.5rem 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #525252;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    transition: background-color 0.2s;
+}
+
+.dark .palette-item {
+    color: #a3a3a3;
+}
+
+.palette-item:hover, .palette-item.active {
+    background-color: #f4f4f4;
+    color: #0f62fe;
+}
+
+.dark .palette-item:hover, .dark .palette-item.active {
+    background-color: #374151;
+    color: #60a5fa;
+}
+
+.palette-item .cmd-key {
+    opacity: 0.4;
+    font-size: 0.7rem;
+}
+
+/* Animations */
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+.dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+/* Command Palette State */
+#command-palette.open { display: block; }
+#command-palette.open #palette-content { transform: scale(100%); opacity: 1; }
+
+/* Loader */
+#loading-screen {
+    transition: opacity 0.5s ease, visibility 0.5s;
+}
+.loader {
+    border: 3px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 3px solid #0f62fe;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- Print Styles --- */
+@media print {
+    nav, #command-palette, footer, #scroll-indicator { display: none !important; }
+    body { background: white; color: black; }
+    main { padding-top: 0; max-width: 100%; }
+    a { text-decoration: none; color: black; }
+    .group-hover\:opacity-100 { opacity: 1 !important; }
+    #email-btn { background: none; color: black; border: 1px solid black; box-shadow: none; }
+    #linkedin-btn-header { border: 1px solid black; }
+    /* Hide Profile Photo on print to save ink or style it simpler */
+    #profile-img { filter: grayscale(100%); border: 1px solid #ccc; }
+}
