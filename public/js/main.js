@@ -14,9 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         allData = await response.json();
         
-        // Carrega idioma salvo OU detecta navegador OU usa padrão EN
         detectAndApplyLanguage();
-        
         initCommandPalette();
         
     } catch (error) {
@@ -51,7 +49,6 @@ function detectAndApplyLanguage() {
         currentLang = savedLang;
     } else {
         const userLang = navigator.language || navigator.userLanguage;
-        // Se for português, muda para pt. Se não, mantém en (default do HTML)
         if (userLang && userLang.toLowerCase().startsWith('pt')) {
             currentLang = 'pt';
         }
@@ -125,26 +122,28 @@ function renderPage() {
     const common = allData.common;
     const ui = data.ui;
 
-    // Header
+    // Header & Texts
     setText('profile-name', data.profile.name);
     startTypeWriter(data.profile.role, 'profile-role');
     setText('profile-summary', data.profile.summary);
     setText('contact-text', ui.contactBtn);
     
-    // --- LÓGICA DE PDF DINÂMICO ---
+    // --- LÓGICA DE PDF (GERADOR) ---
     const btnDownload = document.getElementById('btn-download-cv');
     const textDownload = document.getElementById('nav-download-text');
     
     if (btnDownload) {
-        if (textDownload) textDownload.textContent = ui.downloadBtn;
-
-        if (currentLang === 'pt') {
-            btnDownload.href = 'cv-pt.pdf';
-            btnDownload.setAttribute('download', 'Matheus_Ribeiro_CV_PT.pdf');
-        } else {
-            btnDownload.href = 'cv-en.pdf';
-            btnDownload.setAttribute('download', 'Matheus_Ribeiro_CV_EN.pdf');
-        }
+        if (textDownload) textDownload.textContent = ui.downloadBtn || "Generate PDF";
+        
+        // Remove links antigos
+        btnDownload.removeAttribute('href');
+        btnDownload.removeAttribute('download');
+        
+        // Novo comportamento: Gerar PDF ao clicar
+        btnDownload.onclick = (e) => {
+            e.preventDefault();
+            generatePDF();
+        };
     }
     
     setText('scroll-text', ui.scrollText);
@@ -155,7 +154,7 @@ function renderPage() {
         img.src = data.profile.photoUrl;
     }
 
-    // Titles & Sections
+    // Titles
     setText('title-core', ui.coreStackTitle);
     setText('title-experience', ui.experienceTitle);
     setText('title-skills', ui.skillsTitle);
@@ -163,6 +162,7 @@ function renderPage() {
     setText('title-languages', ui.languagesTitle);
     setText('title-projects', ui.projectsTitle);
 
+    // Sections
     renderCoreStack(common.skills);
     renderExperience(data.experience);
     renderProjects(data.projects);
@@ -290,6 +290,125 @@ function showErrorUI(msg) {
     }
 }
 
+// --- PDF GENERATOR (NEW) ---
+async function generatePDF() {
+    const element = document.getElementById('cv-template');
+    if(!element) return;
+
+    // 1. Popula o template com dados frescos
+    renderPDFTemplate();
+
+    // 2. Configurações do PDF
+    const opt = {
+        margin:       0,
+        filename:     `CV_Matheus_Ribeiro_${currentLang.toUpperCase()}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // 3. Mostra, Gera e Esconde
+    element.classList.remove('hidden');
+    
+    // Feedback visual simples no botão
+    const btnText = document.getElementById('nav-download-text');
+    const originalText = btnText ? btnText.textContent : "Generate PDF";
+    if(btnText) btnText.textContent = "Generating...";
+
+    try {
+        await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+        console.error(err);
+        alert('Error generating PDF');
+    } finally {
+        element.classList.add('hidden');
+        if(btnText) btnText.textContent = originalText;
+    }
+}
+
+function renderPDFTemplate() {
+    const data = allData[currentLang];
+    const common = allData.common;
+
+    // Header
+    setText('pdf-name', data.profile.name);
+    setText('pdf-role', data.profile.role);
+    
+    // Contato
+    const contactDiv = document.getElementById('pdf-contact');
+    if(contactDiv) {
+        contactDiv.innerHTML = `
+            <span>${data.profile.location}</span> • 
+            <span>${data.profile.email}</span> • 
+            <span>linkedin.com/in/matheus-julio-ribeiro</span>
+        `;
+    }
+
+    // Resumo
+    setText('pdf-summary', data.profile.summary);
+
+    // Experiência
+    const expDiv = document.getElementById('pdf-experience');
+    if(expDiv) {
+        expDiv.innerHTML = data.experience.map(job => `
+            <div class="mb-4 break-inside-avoid">
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-bold text-md text-slate-900">${job.company}</h4>
+                    <span class="text-xs text-slate-500 font-mono">${job.period}</span>
+                </div>
+                <div class="text-sm font-medium text-ibm-blue mb-1">${job.role}</div>
+                <p class="text-xs text-slate-700 leading-snug text-justify">${job.description}</p>
+            </div>
+        `).join('');
+    }
+
+    // Projetos
+    const projDiv = document.getElementById('pdf-projects');
+    if(projDiv) {
+        projDiv.innerHTML = data.projects.map(p => `
+            <div class="mb-3 break-inside-avoid">
+                <h4 class="font-bold text-sm text-slate-900">${p.title}</h4>
+                <p class="text-xs text-slate-700 leading-snug mb-1">${p.description}</p>
+                <div class="text-[10px] text-slate-500 font-mono">Stack: ${p.tech.join(', ')}</div>
+            </div>
+        `).join('');
+    }
+
+    // Skills
+    const skillsDiv = document.getElementById('pdf-skills');
+    if(skillsDiv) {
+        skillsDiv.innerHTML = common.skills.map(cat => `
+            <div class="mb-3 break-inside-avoid">
+                <h5 class="font-bold text-xs text-slate-800 mb-1">${cat.category}</h5>
+                <p class="text-xs text-slate-600 leading-tight">${cat.items.join(', ')}</p>
+            </div>
+        `).join('');
+    }
+
+    // Educação
+    const eduDiv = document.getElementById('pdf-education');
+    if(eduDiv) {
+        eduDiv.innerHTML = data.education.map(e => `
+            <div class="break-inside-avoid">
+                <div class="font-bold text-xs text-slate-900">${e.institution}</div>
+                <div class="text-xs text-slate-700">${e.degree}</div>
+                <div class="text-[10px] text-slate-500">${e.period}</div>
+            </div>
+        `).join('');
+    }
+
+    // Idiomas
+    const langDiv = document.getElementById('pdf-languages');
+    if(langDiv) {
+        langDiv.innerHTML = common.languages.map(l => `
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-slate-800">${l.name}</span>
+                <span class="text-slate-500 text-[10px] uppercase">${l.level}</span>
+            </div>
+        `).join('');
+    }
+}
+
 // --- Command Palette ---
 function initCommandPalette() {
     const modal = document.getElementById('command-palette');
@@ -313,8 +432,8 @@ function initCommandPalette() {
         { label: 'Jump to Experience', sub: 'Section', action: () => document.getElementById('experience-list')?.scrollIntoView({behavior: 'smooth'}) },
         { label: 'Jump to Stack', sub: 'Section', action: () => document.getElementById('core-stack')?.scrollIntoView({behavior: 'smooth'}) },
         { label: 'Jump to Projects', sub: 'Section', action: () => document.getElementById('projects-grid')?.scrollIntoView({behavior: 'smooth'}) },
-        // Ação de download corrigida para usar o botão principal
-        { label: 'Download PDF', sub: 'Action', action: () => document.getElementById('btn-download-cv')?.click() },
+        // Ação atualizada para chamar o novo gerador
+        { label: 'Generate PDF', sub: 'Action', action: () => generatePDF() },
         { label: 'Send Email', sub: 'Action', action: () => document.getElementById('email-btn')?.click() },
         { label: 'Open LinkedIn', sub: 'External', action: () => document.getElementById('linkedin-btn-header')?.click() },
         { label: 'Toggle Dark Mode', sub: 'Config', action: () => document.getElementById('theme-toggle').click() },
