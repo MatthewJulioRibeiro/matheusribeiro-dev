@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="antialiased">
 <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PKQF39WNWY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-PKQF39WNWY');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Meta Tags -->
@@ -13,7 +24,7 @@
     <title>Matheus Ribeiro | Integration Software Engineer</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/ico" href="/favicon.ico">
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -22,28 +33,6 @@
 
     <!-- PDF Generation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <!-- FIREBASE ANALYTICS (CONFIGURAÇÃO ATUALIZADA) -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-
-      // --- NOVAS CREDENCIAIS ---
-      const firebaseConfig = {
-        apiKey: "AIzaSyBn-RVGuC2oL3YFAgkM-Yo-Pj9frj9V5Zc",
-        authDomain: "meu-portfolio-141002.firebaseapp.com",
-        projectId: "meu-portfolio-141002",
-        storageBucket: "meu-portfolio-141002.firebasestorage.app",
-        messagingSenderId: "717756497988",
-        appId: "1:717756497988:web:e05141e08c371c8d84bc11",
-        measurementId: "G-PKQF39WNWY"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      console.log("Firebase Analytics Initialized with ID:", firebaseConfig.measurementId);
-    </script>
     
     <!-- Theme Prevention Flash -->
     <script>
