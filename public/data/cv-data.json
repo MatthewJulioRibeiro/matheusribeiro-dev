@@ -2,32 +2,32 @@
   "pt": {
     "profile": {
       "name": "Matheus Ribeiro",
-      "role": "Especialista IBM App Connect Enterprise",
+      "role": "Engenheiro de Software de Integração",
       "location": "Indaiatuba, SP",
       "email": "ribeiromatheusjulio@gmail.com",
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "photoUrl": "images/profile.jpg",
-      "summary": "Engenheiro de Software de Integração com 5,5 anos de experiência. Especialista em IBM ACE (v11/v12), IBM MQ e Cloud Pak for Integration. Foco em arquiteturas de alta performance, migrações críticas e modernização via OpenShift.",
+      "summary": "Engenheiro de Software com 5,5 anos de experiência em middleware e APIs. Especialista em IBM ACE (v11/v12), MQ e Cloud Pak for Integration. Histórico comprovado em coordenação técnica de migrações críticas e modernização via OpenShift para grandes clientes como TIM, Bradesco, SEBRAE e Porto Seguro.",
       "availability": "Disponível"
     },
     "experience": [
       {
         "company": "Icaro Tech",
-        "role": "Engenheiro de Software",
+        "role": "App Connect Developer",
         "period": "Jul 2021 - Presente",
-        "description": "Liderança técnica na migração de IBM ACE v11 para v12 em OpenShift. Desenvolvimento de fluxos de mensagens complexos (ESQL/Java), configuração de pipelines CI/CD (GitLab/ArgoCD) e implementação de segurança avançada (OAuth/MTLS)."
+        "description": "Coordenação técnica de migrações críticas (v11 para v12) em OpenShift usando IBM Cloud Pak. Design de pipelines CI/CD (GitLab/ArgoCD), gerenciamento de Dockerfiles/PVCs e orientação técnica da equipe. Desenvolvimento de APIs seguras (OAuth/LDAP) e otimização de performance com Log4j2/Kibana."
       },
       {
         "company": "VILT",
-        "role": "Analista de Sistemas",
+        "role": "Java Developer",
         "period": "Fev 2020 - Jun 2021",
-        "description": "Desenvolvimento backend Java de alta performance para portais de vendas. Análise e refatoração de sistemas legados para garantir escalabilidade e disponibilidade."
+        "description": "Engenharia de soluções backend de alta performance para portais de vendas. Realizou documentação abrangente, análise arquitetural de funções legadas e refatoração para garantir escalabilidade e disponibilidade."
       },
       {
         "company": "FIEC",
         "role": "Estagiário de Programação",
         "period": "Jan 2019 - Jan 2020",
-        "description": "Desenvolvimento Fullstack (Angular/Node.js) de sistema para gestão de coworking."
+        "description": "Desenvolvimento e manutenção de projeto fullstack para gestão de espaço de coworking, supervisionando operação e feedback de usuários."
       }
     ],
     "education": [
@@ -39,14 +39,14 @@
     ],
     "projects": [
       {
-        "title": "Migração OpenBanking",
-        "description": "Arquitetura e desenvolvimento de APIs compatíveis com o padrão OpenBanking Brasil usando IBM ACE e OAuth 2.0.",
-        "tech": ["IBM ACE", "Java", "OAuth"]
+        "title": "Migração Crítica & Modernização",
+        "description": "Coordenação técnica da migração de IBM ACE para OpenShift, incluindo configuração de Runtimes, Pods e Services para componentes IBM MQ e API Connect.",
+        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
       },
       {
-        "title": "Pipeline CI/CD Automatizado",
-        "description": "Criação de esteira DevOps completa para deploy de integrações no OpenShift usando Tekton e ArgoCD.",
-        "tech": ["Jenkins", "ArgoCD", "Docker"]
+        "title": "Automação DevOps (CI/CD)",
+        "description": "Implementação de pipelines completos usando GitLab CI e ArgoCD para deployments automatizados e gerenciamento de versão baseado em Git.",
+        "tech": ["GitLab CI", "ArgoCD", "Helm"]
       }
     ],
     "ui": {
@@ -55,7 +55,7 @@
       "educationTitle": "Formação",
       "languagesTitle": "Idiomas",
       "coreStackTitle": "Core Stack",
-      "projectsTitle": "Projetos em Destaque",
+      "projectsTitle": "Destaques Técnicos",
       "contactBtn": "Conectar",
       "downloadBtn": "Baixar CV.pdf",
       "scrollText": "Rolar para baixo"
@@ -64,32 +64,32 @@
   "en": {
     "profile": {
       "name": "Matheus Ribeiro",
-      "role": "IBM App Connect Enterprise Specialist",
+      "role": "Integration Software Engineer",
       "location": "Indaiatuba, Brazil",
       "email": "ribeiromatheusjulio@gmail.com",
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "photoUrl": "images/profile.jpg",
-      "summary": "Integration Software Engineer with 5.5+ years of experience. Specialized in IBM ACE (v11/v12), IBM MQ, and Cloud Pak for Integration. Focused on high-performance architectures, critical migrations, and OpenShift modernization.",
+      "summary": "Highly skilled Integration Engineer with 5.5+ years of experience. Specialized in IBM ACE (v11/v12), IBM MQ, and Cloud Pak for Integration. Proven track record in technical coordination of critical migrations and OpenShift modernization for major clients like TIM, Bradesco, SEBRAE, and Porto Seguro.",
       "availability": "Open to work"
     },
     "experience": [
       {
         "company": "Icaro Tech",
-        "role": "Software Engineer",
+        "role": "App Connect Developer",
         "period": "Jul 2021 - Present",
-        "description": "Technical lead for IBM ACE v11 to v12 migration on OpenShift. Development of complex message flows (ESQL/Java), CI/CD pipeline configuration (GitLab/ArgoCD), and advanced security implementation (OAuth/MTLS)."
+        "description": "Technical coordination of critical migrations (v11 to v12) on OpenShift leveraging IBM Cloud Pak. Design of CI/CD pipelines (GitLab/ArgoCD), management of Dockerfiles/PVCs, and team mentoring. Development of secure APIs (OAuth/LDAP) and performance optimization with Log4j2/Kibana."
       },
       {
         "company": "VILT",
-        "role": "Systems Analyst",
+        "role": "Java Developer",
         "period": "Feb 2020 - Jun 2021",
-        "description": "High-performance Java backend development for sales portals. Analysis and refactoring of legacy systems to ensure scalability and availability."
+        "description": "Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability."
       },
       {
         "company": "FIEC",
         "role": "Programming Intern",
         "period": "Jan 2019 - Jan 2020",
-        "description": "Fullstack development (Angular/Node.js) of a coworking management system."
+        "description": "Developed and maintained a fullstack project for coworking space management, overseeing operations and user feedback."
       }
     ],
     "education": [
@@ -101,14 +101,14 @@
     ],
     "projects": [
       {
-        "title": "OpenBanking Migration",
-        "description": "Architecture and development of APIs compliant with OpenBanking Brazil standards using IBM ACE and OAuth 2.0.",
-        "tech": ["IBM ACE", "Java", "OAuth"]
+        "title": "Critical Migration & Modernization",
+        "description": "Technical coordination of IBM ACE migration to OpenShift, including configuration of Runtimes, Pods, and Services for IBM MQ and API Connect components.",
+        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
       },
       {
-        "title": "Automated CI/CD Pipeline",
-        "description": "Creation of a full DevOps pipeline for integration deployments on OpenShift using Tekton and ArgoCD.",
-        "tech": ["Jenkins", "ArgoCD", "Docker"]
+        "title": "DevOps Automation (CI/CD)",
+        "description": "Implementation of full pipelines using GitLab CI and ArgoCD for automated deployments and Git-based version control.",
+        "tech": ["GitLab CI", "ArgoCD", "Helm"]
       }
     ],
     "ui": {
@@ -117,7 +117,7 @@
       "educationTitle": "Education",
       "languagesTitle": "Languages",
       "coreStackTitle": "Core Stack",
-      "projectsTitle": "Featured Projects",
+      "projectsTitle": "Technical Highlights",
       "contactBtn": "Connect",
       "downloadBtn": "Download CV.pdf",
       "scrollText": "Scroll Down"
@@ -131,9 +131,9 @@
     ],
     "skills": [
       { "category": "IBM Stack", "items": ["App Connect Enterprise", "IBM MQ", "API Connect", "Cloud Pak (CP4I)", "ESQL", "Integration Bus (IIB)"] },
-      { "category": "Cloud & DevOps", "items": ["OpenShift", "Docker", "Kubernetes", "GitLab CI", "ArgoCD", "Helm"] },
-      { "category": "Backend & Security", "items": ["Java", "REST/SOAP", "OAuth 2.0", "SSL/TLS", "LDAP", "SQL/Oracle"] },
-      { "category": "Observability", "items": ["Kibana", "ElasticSearch", "Log4j2", "Dynatrace", "Splunk"] }
+      { "category": "Cloud & DevOps", "items": ["OpenShift", "Docker", "Kubernetes", "GitLab CI", "ArgoCD", "Helm", "PVCs"] },
+      { "category": "Backend & DB", "items": ["Java", "REST/SOAP", "OAuth 2.0", "Oracle", "SQL Server", "MySQL", "Microservices"] },
+      { "category": "Tools & Observability", "items": ["Kibana", "ElasticSearch", "Log4j2", "JIRA", "Scrum", "Maven", "Git"] }
     ]
   }
 }
