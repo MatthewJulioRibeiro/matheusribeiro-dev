@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Integration Software Engineer with 5.5+ years of experience. Specialized in IBM ACE (v11/v12), IBM MQ, and Cloud Pak for Integration. Focused on high-performance architectures.">
-    <meta name="keywords" content="IBM ACE, App Connect Enterprise, ESQL, Java, OpenShift, Integration, Middleware, Matheus Ribeiro, Developer, Integration Engineer">
+    <meta name="description" content="Integration Software Engineer with 5.5+ years of experience. Specialized in IBM ACE (v11/v12), IBM MQ, and Cloud Pak for Integration.">
+    <meta name="keywords" content="IBM ACE, App Connect Enterprise, ESQL, Java, OpenShift, Integration, Middleware, Matheus Ribeiro, Developer">
     <meta property="og:title" content="Matheus Ribeiro | Integration Engineer">
     <meta property="og:description" content="IBM Integration Specialist & System Modernization Expert.">
     <meta property="og:type" content="website">
@@ -14,9 +14,27 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBn-RVGuC2oL3YFAgkM-Yo-Pj9frj9V5Zc",
+        authDomain: "meu-portfolio-141002.firebaseapp.com",
+        projectId: "meu-portfolio-141002",
+        storageBucket: "meu-portfolio-141002.firebasestorage.app",
+        messagingSenderId: "717756497988",
+        appId: "1:717756497988:web:3b1347e40bf788cb84bc11",
+        measurementId: "G-2P0B3RQTSZ"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
     
     <script>
-        // Inline script to prevent theme flash
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -46,10 +64,10 @@
                     <i class="bi bi-sun hidden dark:inline text-yellow-400"></i>
                 </button>
 
-                <button onclick="window.print()" class="hidden md:flex items-center gap-2 text-slate-500 hover:text-ibm-blue transition-colors" title="Print/Save PDF">
-                    <i class="bi bi-printer"></i>
-                    <span class="text-xs" id="nav-download-text">Download CV.pdf</span>
-                </button>
+                <a id="btn-download-cv" href="cv-en.pdf" download="Matheus_Ribeiro_CV_EN.pdf" class="hidden md:flex items-center gap-2 text-slate-500 hover:text-ibm-blue transition-colors" title="Download PDF">
+                    <i class="bi bi-download"></i>
+                    <span class="text-xs" id="nav-download-text">Download CV</span>
+                </a>
 
                 <div class="w-px h-4 bg-slate-200 dark:bg-slate-700"></div>
 
@@ -59,8 +77,9 @@
                     <button onclick="setLanguage('pt')" id="btn-pt" class="text-slate-400 hover:text-ibm-blue transition-colors">PT</button>
                 </div>
                 
-                <a href="#" id="nav-palette-trigger" onclick="openPalette()" class="hidden md:block hover:text-ibm-blue transition-colors text-slate-600 dark:text-slate-400" title="Command Palette (⌘K)">
+                <a href="#" id="nav-palette-trigger" onclick="openPalette()" class="hidden md:flex items-center gap-2 hover:text-ibm-blue transition-colors text-slate-600 dark:text-slate-400 group" title="Command Palette (⌘K)">
                     <i class="bi bi-terminal"></i>
+                    <span class="text-[10px] opacity-50 group-hover:opacity-100 transition-opacity border border-slate-300 dark:border-slate-700 rounded px-1">⌘K</span>
                 </a>
             </div>
         </div>
@@ -69,7 +88,6 @@
     <main class="relative z-10 max-w-3xl mx-auto px-6 pt-32 pb-24">
 
         <header class="mb-24 fade-in flex flex-col md:flex-row gap-10 items-start">
-            
             <div class="flex-1 border-l-2 border-ibm-blue pl-6 relative">
                 <h1 id="profile-name" class="text-5xl md:text-6xl font-bold tracking-tight mb-4 font-sans text-slate-900 dark:text-white transition-colors">Matheus Ribeiro</h1>
                 
@@ -126,7 +144,7 @@
                 <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
             </div>
             <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div class="project-card rounded-lg cursor-default">
+                <div class="project-card rounded-lg cursor-default">
                     <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">OpenBanking Migration</h4>
                     <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Architecture and development of APIs compliant with OpenBanking Brazil standards using IBM ACE and OAuth 2.0.</p>
                     <div class="flex flex-wrap gap-2">

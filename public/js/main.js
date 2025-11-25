@@ -1,17 +1,20 @@
-let currentLang = 'en'; // O padrão agora é Inglês
+let currentLang = 'en'; 
 let allData = {};
 let typeWriterTimeout;
 
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
     
-    // Carrega dados ANTES de decidir a língua final para renderizar rápido
     try {
         const response = await fetch('./data/cv-data.json');
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
         allData = await response.json();
         
-        // Lógica de Idioma: 1. LocalStorage -> 2. Navegador -> 3. Padrão (EN)
+        // Carrega idioma salvo OU detecta navegador OU usa padrão EN
         detectAndApplyLanguage();
         
         initCommandPalette();
@@ -35,7 +38,8 @@ function initTheme() {
     
     btn.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
-        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.theme = isDark ? 'dark' : 'light';
     });
 }
 
@@ -46,26 +50,21 @@ function detectAndApplyLanguage() {
     if (savedLang) {
         currentLang = savedLang;
     } else {
-        // Se não tem salvo, verifica o navegador
         const userLang = navigator.language || navigator.userLanguage;
-        // Se for português, muda para pt. Caso contrário, mantém 'en' (que é o base do HTML)
+        // Se for português, muda para pt. Se não, mantém en (default do HTML)
         if (userLang && userLang.toLowerCase().startsWith('pt')) {
             currentLang = 'pt';
         }
     }
 
-    // Se o idioma determinado for diferente do HTML base (EN) ou se precisarmos atualizar a UI
     updateLanguageUI();
-    
-    // Só renderiza novamente se for PT, pois EN já está no HTML estático
-    // Mas para garantir consistência e ativar o typewriter, chamamos o render
     renderPage();
 }
 
 window.setLanguage = function(lang) {
-    if (currentLang === lang) return; // Evita re-render desnecessário
+    if (currentLang === lang) return;
     currentLang = lang;
-    localStorage.setItem('user_lang', lang); // Salva preferência
+    localStorage.setItem('user_lang', lang); 
     updateLanguageUI();
     renderPage();
 }
@@ -99,7 +98,6 @@ function startTypeWriter(text, elementId) {
     const el = document.getElementById(elementId);
     if(!el) return;
 
-    // Se o texto já estiver lá (no carregamento inicial do HTML estático), não apaga e redigita se for o mesmo
     if (el.textContent === text && !el.dataset.typing) return;
 
     el.textContent = "";
@@ -133,20 +131,31 @@ function renderPage() {
     setText('profile-summary', data.profile.summary);
     setText('contact-text', ui.contactBtn);
     
-    // Atualiza botão de PDF se existir
-    const downloadText = document.getElementById('nav-download-text');
-    if(downloadText) downloadText.textContent = ui.downloadBtn;
+    // --- LÓGICA DE PDF DINÂMICO ---
+    const btnDownload = document.getElementById('btn-download-cv');
+    const textDownload = document.getElementById('nav-download-text');
     
-    // Scroll Text
+    if (btnDownload) {
+        if (textDownload) textDownload.textContent = ui.downloadBtn;
+
+        if (currentLang === 'pt') {
+            btnDownload.href = 'cv-pt.pdf';
+            btnDownload.setAttribute('download', 'Matheus_Ribeiro_CV_PT.pdf');
+        } else {
+            btnDownload.href = 'cv-en.pdf';
+            btnDownload.setAttribute('download', 'Matheus_Ribeiro_CV_EN.pdf');
+        }
+    }
+    
     setText('scroll-text', ui.scrollText);
 
-    // Profile Photo (mantém src se já estiver correto para evitar piscada)
+    // Profile Photo
     const img = document.getElementById('profile-img');
     if(img && data.profile.photoUrl && !img.src.includes(data.profile.photoUrl)) {
         img.src = data.profile.photoUrl;
     }
 
-    // Titles
+    // Titles & Sections
     setText('title-core', ui.coreStackTitle);
     setText('title-experience', ui.experienceTitle);
     setText('title-skills', ui.skillsTitle);
@@ -154,7 +163,6 @@ function renderPage() {
     setText('title-languages', ui.languagesTitle);
     setText('title-projects', ui.projectsTitle);
 
-    // Sections
     renderCoreStack(common.skills);
     renderExperience(data.experience);
     renderProjects(data.projects);
@@ -163,15 +171,10 @@ function renderPage() {
     renderLanguages(common.languages);
 }
 
-// As funções de renderização específicas (renderCoreStack, etc) 
-// permanecem iguais, pois elas limpam o container (.innerHTML = ...) 
-// e reconstroem. Isso garante que se mudar de EN -> PT, tudo atualiza.
-
 function renderCoreStack(skills) {
     const container = document.getElementById('core-stack');
     if(!container) return;
     
-    // Pega os items das duas primeiras categorias para mostrar no topo
     const core = [...skills[0].items, ...skills[1].items].slice(0, 8);
     container.innerHTML = core.map(skill => 
         `<div class="tech-tag flex items-center gap-2">
@@ -310,7 +313,8 @@ function initCommandPalette() {
         { label: 'Jump to Experience', sub: 'Section', action: () => document.getElementById('experience-list')?.scrollIntoView({behavior: 'smooth'}) },
         { label: 'Jump to Stack', sub: 'Section', action: () => document.getElementById('core-stack')?.scrollIntoView({behavior: 'smooth'}) },
         { label: 'Jump to Projects', sub: 'Section', action: () => document.getElementById('projects-grid')?.scrollIntoView({behavior: 'smooth'}) },
-        { label: 'Print / Save PDF', sub: 'Action', action: () => window.print() },
+        // Ação de download corrigida para usar o botão principal
+        { label: 'Download PDF', sub: 'Action', action: () => document.getElementById('btn-download-cv')?.click() },
         { label: 'Send Email', sub: 'Action', action: () => document.getElementById('email-btn')?.click() },
         { label: 'Open LinkedIn', sub: 'External', action: () => document.getElementById('linkedin-btn-header')?.click() },
         { label: 'Toggle Dark Mode', sub: 'Config', action: () => document.getElementById('theme-toggle').click() },
