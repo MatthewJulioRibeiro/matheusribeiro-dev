@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PKQF39WNWY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-PKQF39WNWY');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Integration Software Engineer with 6.5+ years of experience. Specialized in MuleSoft (Anypoint Platform), IBM ACE (v11/v12), and IBM MQ. Proven track record in critical migrations, OpenShift modernization, and API governance.">
+    <meta name="keywords" content="MuleSoft, Anypoint Platform, Mule 4, IBM ACE, App Connect Enterprise, ESQL, Java, OpenShift, Integration, Middleware, Matheus Ribeiro, Developer, DevOps, ArgoCD">
+    <meta property="og:title" content="Matheus Ribeiro | Integration Software Engineer">
+    <meta property="og:description" content="MuleSoft & IBM Integration Specialist and System Modernization Expert.">
+    <meta property="og:type" content="website">
+    
+    <title>Matheus Ribeiro | Integration Software Engineer</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/ico" href="/favicon.ico">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Theme Prevention Flash -->
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-[#161616] text-ibm-text dark:text-[#f4f4f4] selection:bg-ibm-blue selection:text-white transition-colors duration-300">
+
+    <!-- Loader -->
+    <div id="loading-screen" class="fixed inset-0 z-[100] bg-white dark:bg-[#161616] flex flex-col items-center justify-center">
+        <div class="loader mb-4"></div>
+        <div class="font-mono text-xs text-slate-500 dark:text-slate-400 animate-pulse">INITIALIZING_SYSTEM...</div>
+    </div>
+
+    <!-- Background Grid -->
+    <div class="fixed inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20" style="background-image: radial-gradient(#e0e0e0 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+    <nav class="fixed top-0 w-full bg-white/90 dark:bg-[#161616]/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300 print:hidden">
+        <div class="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span id="nav-availability" class="font-mono text-xs font-medium text-slate-600 dark:text-slate-400">Open to work</span>
+            </div>
+            
+            <div class="flex items-center gap-6 text-sm font-mono">
+                <button id="theme-toggle" class="hover:text-ibm-blue transition-colors" title="Toggle Theme">
+                    <i class="bi bi-moon-stars dark:hidden text-slate-600"></i>
+                    <i class="bi bi-sun hidden dark:inline text-yellow-400"></i>
+                </button>
+
+                <!-- BOTÃO PDF (Gera via JS) -->
+                <a id="btn-download-cv" href="#" class="flex items-center gap-2 text-slate-500 hover:text-ibm-blue transition-colors" title="Generate PDF">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    <span class="hidden md:inline text-xs" id="nav-download-text">Generate PDF</span>
+                </a>
+
+                <div class="w-px h-4 bg-slate-200 dark:bg-slate-700"></div>
+
+                <div class="flex gap-1">
+                    <button onclick="setLanguage('en')" id="btn-en" class="font-bold text-ibm-blue cursor-default">EN</button>
+                    <span class="text-slate-300 dark:text-slate-600">/</span>
+                    <button onclick="setLanguage('pt')" id="btn-pt" class="text-slate-400 hover:text-ibm-blue transition-colors">PT</button>
+                </div>
+                
+                <!-- COMMAND PALETTE UX -->
+                <a href="#" id="nav-palette-trigger" onclick="openPalette()" class="hidden md:flex items-center gap-2 hover:text-ibm-blue transition-colors text-slate-600 dark:text-slate-400 group" title="Command Palette (⌘K)">
+                    <i class="bi bi-terminal"></i>
+                    <span class="text-[10px] opacity-50 group-hover:opacity-100 transition-opacity border border-slate-300 dark:border-slate-700 rounded px-1">⌘K</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-3xl mx-auto px-6 pt-32 pb-24">
+
+        <header class="mb-24 fade-in flex flex-col md:flex-row gap-10 items-start">
+            <div class="flex-1 border-l-2 border-ibm-blue pl-6 relative">
+                <h1 id="profile-name" class="text-5xl md:text-6xl font-bold tracking-tight mb-4 font-sans text-slate-900 dark:text-white transition-colors">Matheus Ribeiro</h1>
+                
+                <div class="h-8 mb-6 flex items-center">
+                    <h2 id="profile-role" class="text-lg md:text-xl text-ibm-blue font-mono">Integration Software Engineer</h2>
+                    <span class="w-2 h-5 bg-ibm-blue ml-1 animate-blink inline-block"></span>
+                </div>
+
+                <p id="profile-summary" class="text-lg text-slate-700 dark:text-slate-300 leading-relaxed font-light transition-colors">Highly skilled Integration Engineer with 6.5+ years of experience, technically leading integration teams across MuleSoft (Anypoint Platform) and IBM ACE (v11/v12)/MQ. Proven track record leading critical migrations, OpenShift modernization, and API governance for major clients like TIM, Bradesco, SEBRAE, and Porto Seguro.</p>
+
+                <div class="mt-10 flex flex-wrap items-center gap-4">
+                    <a id="email-btn" href="mailto:ribeiromatheusjulio@gmail.com" class="group flex items-center gap-3 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-mono hover:bg-ibm-blue dark:hover:bg-ibm-blue dark:hover:text-white transition-all shadow-lg shadow-slate-200 dark:shadow-none">
+                        <i class="bi bi-envelope"></i> 
+                        <span id="contact-text">Connect</span>
+                        <i class="bi bi-arrow-right opacity-0 group-hover:opacity-100 transition-all -ml-2 group-hover:ml-0"></i>
+                    </a>
+                    <a id="linkedin-btn-header" href="https://www.linkedin.com/in/matheus-julio-ribeiro/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue dark:hover:border-ibm-blue dark:hover:text-ibm-blue transition-colors bg-white dark:bg-transparent">
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+
+            <div class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative group hidden md:block">
+                <div class="absolute inset-0 bg-ibm-blue rounded-full opacity-0 group-hover:opacity-20 transition-opacity blur-lg"></div>
+                <img id="profile-img" src="images/profile.jpg" alt="Matheus Ribeiro Profile Picture" class="w-full h-full object-cover rounded-full border-2 border-slate-200 dark:border-slate-700 grayscale group-hover:grayscale-0 transition-all duration-500 shadow-xl">
+            </div>
+        </header>
+
+        <div class="hidden md:flex flex-col items-center justify-center absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce fade-in delay-3 opacity-50">
+            <span class="font-mono text-[10px] uppercase text-slate-400 mb-1" id="scroll-text">Scroll Down</span>
+            <i class="bi bi-arrow-down text-slate-400"></i>
+        </div>
+
+        <section class="mb-24 fade-in delay-1">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="section-label" id="title-core">Core Stack</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <!-- Static Content from JSON -->
+            <div id="core-stack" class="grid grid-cols-2 md:grid-cols-4 gap-4 font-mono text-sm">
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>MuleSoft (Anypoint Platform)</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>App Connect Enterprise</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>IBM MQ</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>API Connect</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>Cloud Pak (CP4I)</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>OpenShift</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>Docker</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>GitLab CI</div>
+                <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>ArgoCD</div>
+            </div>
+        </section>
+
+        <section class="mb-24 fade-in delay-2">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="section-label" id="title-projects">Technical Highlights</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="project-card rounded-lg cursor-default">
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">MuleSoft API Governance & Automation</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Technical leadership of a MuleSoft integration suite for a telecom infrastructure client: technical backlog discovery and refinement, hardening of production APIs, and automation of manual ticketing workflows.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">MuleSoft</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">Anypoint Platform</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">API Governance</span>
+                    </div>
+                </div>
+                <div class="project-card rounded-lg cursor-default">
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">Critical Migration & Modernization</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Technical coordination of IBM ACE migration to OpenShift, including configuration of Runtimes, Pods, and Services for IBM MQ and API Connect components.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">OpenShift</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">IBM ACE v12</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">Docker</span>
+                    </div>
+                </div>
+                <div class="project-card rounded-lg cursor-default">
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">DevOps Automation (CI/CD)</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Implementation of full pipelines using GitLab CI and ArgoCD for automated deployments and Git-based version control.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">GitLab CI</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">ArgoCD</span>
+                        <span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">Helm</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 fade-in delay-2">
+            <div class="flex items-center gap-4 mb-10">
+                <h3 class="section-label" id="title-experience">Professional Journey</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <div id="experience-list" class="space-y-12 border-l border-slate-200 dark:border-slate-800 ml-2 pl-8 relative transition-colors">
+                <div class="relative group">
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">Icaro Tech</h4>
+                        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Jul 2021 - Present</span>
+                    </div>
+                    <div class="text-sm font-medium text-ibm-blue font-mono mb-3">Integration Engineer</div>
+                    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">Technical lead of the integration team, driving both MuleSoft (Anypoint Platform, Mule 4) and IBM ACE (v11/v12) initiatives for a telecom infrastructure client, including coordination of critical migrations (v11 to v12) on OpenShift via IBM Cloud Pak and CI/CD pipeline design (GitLab/ArgoCD). Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening and bug-fix initiatives across multiple production APIs (input validation, error handling, workflow automation such as automatic ticket creation) and technical governance through documentation and regression test collections.</p>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">VILT</h4>
+                        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Feb 2020 - Jun 2021</span>
+                    </div>
+                    <div class="text-sm font-medium text-ibm-blue font-mono mb-3">Java Developer</div>
+                    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability.</p>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">FIEC</h4>
+                        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Jan 2019 - Jan 2020</span>
+                    </div>
+                    <div class="text-sm font-medium text-ibm-blue font-mono mb-3">Programming Intern</div>
+                    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">Developed and maintained a fullstack project for coworking space management, overseeing operations and user feedback.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 fade-in delay-3">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="section-label" id="title-skills">Technical Expertise</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <!-- Static Content -->
+            <div id="skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                <div>
+                    <h4 class="font-sans font-bold text-slate-900 dark:text-slate-100 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2 transition-colors">Integration Platforms</h4>
+                    <ul class="space-y-2 font-mono text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> MuleSoft (Anypoint Platform)</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> App Connect Enterprise</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> IBM MQ</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> API Connect</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Cloud Pak (CP4I)</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> ESQL</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Integration Bus (IIB)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold text-slate-900 dark:text-slate-100 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2 transition-colors">Cloud & DevOps</h4>
+                    <ul class="space-y-2 font-mono text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> OpenShift</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Docker</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Kubernetes</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> GitLab CI</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> ArgoCD</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Helm</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> PVCs</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold text-slate-900 dark:text-slate-100 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2 transition-colors">Backend & DB</h4>
+                    <ul class="space-y-2 font-mono text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Java</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> REST/SOAP</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> OAuth 2.0</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Oracle</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> SQL Server</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> MySQL</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Microservices</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold text-slate-900 dark:text-slate-100 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2 transition-colors">Tools & Observability</h4>
+                    <ul class="space-y-2 font-mono text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Kibana</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> ElasticSearch</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Log4j2</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> JIRA</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Scrum</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Maven</li>
+                        <li class="flex items-center gap-3"><span class="text-slate-400 dark:text-slate-600">::</span> Git</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pt-10 border-t border-slate-200 dark:border-slate-800 fade-in delay-3 transition-colors">
+            <div>
+                <h4 class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-4 uppercase font-bold tracking-wider" id="title-education">Education</h4>
+                <div id="education-list" class="font-mono text-sm text-slate-700 dark:text-slate-300">
+                    <div class="mb-4">
+                        <div class="font-bold text-slate-900 dark:text-slate-100">FIEC - Indaiatuba</div>
+                        <div class="text-slate-700 dark:text-slate-300">Computer Technician</div>
+                        <div class="text-slate-500 dark:text-slate-500 text-xs mt-1">2018 - 2019</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-mono text-xs text-slate-500 dark:text-slate-400 mb-4 uppercase font-bold tracking-wider" id="title-languages">Languages</h4>
+                <div id="languages-list" class="space-y-2">
+                    <div class="flex justify-between text-sm font-mono">
+                        <span class="text-slate-800 dark:text-slate-200">Português</span>
+                        <span class="text-slate-500 dark:text-slate-500">[Native]</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-mono">
+                        <span class="text-slate-800 dark:text-slate-200">English</span>
+                        <span class="text-slate-500 dark:text-slate-500">[Professional]</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-mono">
+                        <span class="text-slate-800 dark:text-slate-200">Español</span>
+                        <span class="text-slate-500 dark:text-slate-500">[Basic]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-20 text-center text-slate-500 dark:text-slate-500 text-[10px] font-mono uppercase tracking-widest opacity-80 pb-8">
+            Start_Time: 2025 &bull; Status: Active
+        </footer>
+
+    </main>
+
+    <!-- HIDDEN PDF TEMPLATE (A4 Layout) -->
+    <div id="cv-template" class="hidden font-sans text-slate-800 bg-white" style="width: 210mm; min-height: 297mm; padding: 12mm; font-size: 10pt; line-height: 1.4;">
+        
+        <!-- Header -->
+        <header class="border-b-2 border-slate-800 pb-4 mb-6">
+            <h1 id="pdf-name" class="text-3xl font-bold uppercase tracking-wider mb-1 text-slate-900"></h1>
+            <h2 id="pdf-role" class="text-lg text-ibm-blue font-mono font-bold mb-3"></h2>
+            <div class="flex flex-wrap gap-4 text-xs text-slate-600 font-mono" id="pdf-contact"></div>
+        </header>
+    
+        <!-- Summary -->
+        <section class="mb-6">
+            <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-2 pb-1 text-slate-400">Summary</h3>
+            <p id="pdf-summary" class="leading-relaxed text-justify text-slate-700"></p>
+        </section>
+    
+        <div class="grid grid-cols-3 gap-8">
+            <!-- Coluna Esquerda (33%) -->
+            <div class="col-span-1">
+                <section class="mb-6">
+                    <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-3 pb-1 text-slate-400">Technical Skills</h3>
+                    <div id="pdf-skills" class="space-y-4"></div>
+                </section>
+    
+                <section class="mb-6">
+                    <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-3 pb-1 text-slate-400">Education</h3>
+                    <div id="pdf-education" class="space-y-3"></div>
+                </section>
+    
+                <section>
+                    <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-3 pb-1 text-slate-400">Languages</h3>
+                    <div id="pdf-languages" class="space-y-1 text-sm"></div>
+                </section>
+            </div>
+    
+            <!-- Coluna Direita (66%) -->
+            <div class="col-span-2">
+                <section class="mb-6">
+                    <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-4 pb-1 text-slate-400">Professional Experience</h3>
+                    <div id="pdf-experience" class="space-y-5"></div>
+                </section>
+    
+                <section>
+                    <h3 class="font-bold text-xs uppercase tracking-widest border-b border-slate-200 mb-4 pb-1 text-slate-400">Key Projects</h3>
+                    <div id="pdf-projects" class="space-y-4"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div id="command-palette" class="fixed inset-0 z-[100] hidden print:hidden">
+        <div class="absolute inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-sm transition-opacity" onclick="closePalette()"></div>
+        <div class="relative w-full max-w-lg mx-auto mt-32 bg-white dark:bg-[#1e1e1e] border border-slate-200 dark:border-slate-700 shadow-2xl transform transition-all scale-95 opacity-0 rounded-lg overflow-hidden" id="palette-content">
+            <div class="flex items-center px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <span class="font-mono text-ibm-blue mr-3">></span>
+                <input type="text" id="palette-input" class="flex-1 outline-none text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-mono text-sm bg-transparent" placeholder="Type command..." autocomplete="off">
+            </div>
+            <div id="palette-results" class="max-h-64 overflow-y-auto py-1"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

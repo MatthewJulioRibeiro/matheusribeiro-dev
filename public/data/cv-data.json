@@ -1,0 +1,149 @@
+{
+  "pt": {
+    "profile": {
+      "name": "Matheus Ribeiro",
+      "role": "Engenheiro de Software de Integração",
+      "location": "Indaiatuba, SP",
+      "email": "ribeiromatheusjulio@gmail.com",
+      "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
+      "photoUrl": "images/profile.jpg",
+      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs, liderando tecnicamente times de integração em MuleSoft (Anypoint Platform) e IBM ACE (v11/v12) e MQ. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API para grandes clientes como TIM, Bradesco, SEBRAE e Porto Seguro.",
+      "availability": "Disponível"
+    },
+    "experience": [
+      {
+        "company": "Icaro Tech",
+        "role": "Engenheiro de Integração",
+        "period": "Jul 2021 - Presente",
+        "description": "Liderança técnica do time de integrações, atuando tanto em MuleSoft (Anypoint Platform, Mule 4) quanto em IBM ACE (v11/v12) para um cliente do setor de telecomunicações/infraestrutura, incluindo coordenação de migrações críticas (v11 para v12) em OpenShift via IBM Cloud Pak e pipelines CI/CD (GitLab/ArgoCD). Responsável pelo levantamento e refinamento do backlog técnico do time, priorizando e mitigando achados antes de virarem cards de desenvolvimento. Condução de iniciativas de correção e hardening em múltiplas APIs em produção (validação de entrada, tratamento de erros, automação de processos como abertura automática de tickets) e governança técnica via documentação e collections de teste de regressão."
+      },
+      {
+        "company": "VILT",
+        "role": "Java Developer",
+        "period": "Fev 2020 - Jun 2021",
+        "description": "Engenharia de soluções backend de alta performance para portais de vendas. Realizou documentação abrangente, análise arquitetural de funções legadas e refatoração para garantir escalabilidade e disponibilidade."
+      },
+      {
+        "company": "FIEC",
+        "role": "Estagiário de Programação",
+        "period": "Jan 2019 - Jan 2020",
+        "description": "Desenvolvimento e manutenção de projeto fullstack para gestão de espaço de coworking, supervisionando operação e feedback de usuários."
+      }
+    ],
+    "education": [
+      {
+        "institution": "FIEC - Indaiatuba",
+        "degree": "Técnico em Informática",
+        "period": "2018 - 2019"
+      }
+    ],
+    "projects": [
+      {
+        "title": "Governança e Automação MuleSoft",
+        "description": "Liderança técnica de uma suíte de integrações MuleSoft para cliente do setor de telecomunicações/infraestrutura: levantamento e refinamento de backlog técnico, hardening de APIs em produção e automação de fluxos manuais de abertura de chamados.",
+        "tech": ["MuleSoft", "Anypoint Platform", "Governança de API"]
+      },
+      {
+        "title": "Migração Crítica & Modernização",
+        "description": "Coordenação técnica da migração de IBM ACE para OpenShift, incluindo configuração de Runtimes, Pods e Services para componentes IBM MQ e API Connect.",
+        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
+      },
+      {
+        "title": "Automação DevOps (CI/CD)",
+        "description": "Implementação de pipelines completos usando GitLab CI e ArgoCD para deployments automatizados e gerenciamento de versão baseado em Git.",
+        "tech": ["GitLab CI", "ArgoCD", "Helm"]
+      }
+    ],
+    "ui": {
+      "experienceTitle": "Trajetória Profissional",
+      "skillsTitle": "Expertise Técnica",
+      "educationTitle": "Formação",
+      "languagesTitle": "Idiomas",
+      "coreStackTitle": "Core Stack",
+      "projectsTitle": "Destaques Técnicos",
+      "contactBtn": "Conectar",
+      "downloadBtn": "Baixar CV.pdf",
+      "scrollText": "Rolar para baixo"
+    }
+  },
+  "en": {
+    "profile": {
+      "name": "Matheus Ribeiro",
+      "role": "Integration Software Engineer",
+      "location": "Indaiatuba, Brazil",
+      "email": "ribeiromatheusjulio@gmail.com",
+      "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
+      "photoUrl": "images/profile.jpg",
+      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience, technically leading integration teams across MuleSoft (Anypoint Platform) and IBM ACE (v11/v12)/MQ. Proven track record leading critical migrations, OpenShift modernization, and API governance for major clients like TIM, Bradesco, SEBRAE, and Porto Seguro.",
+      "availability": "Open to work"
+    },
+    "experience": [
+      {
+        "company": "Icaro Tech",
+        "role": "Integration Engineer",
+        "period": "Jul 2021 - Present",
+        "description": "Technical lead of the integration team, driving both MuleSoft (Anypoint Platform, Mule 4) and IBM ACE (v11/v12) initiatives for a telecom infrastructure client, including coordination of critical migrations (v11 to v12) on OpenShift via IBM Cloud Pak and CI/CD pipeline design (GitLab/ArgoCD). Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening and bug-fix initiatives across multiple production APIs (input validation, error handling, workflow automation such as automatic ticket creation) and technical governance through documentation and regression test collections."
+      },
+      {
+        "company": "VILT",
+        "role": "Java Developer",
+        "period": "Feb 2020 - Jun 2021",
+        "description": "Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability."
+      },
+      {
+        "company": "FIEC",
+        "role": "Programming Intern",
+        "period": "Jan 2019 - Jan 2020",
+        "description": "Developed and maintained a fullstack project for coworking space management, overseeing operations and user feedback."
+      }
+    ],
+    "education": [
+      {
+        "institution": "FIEC - Indaiatuba",
+        "degree": "Computer Technician",
+        "period": "2018 - 2019"
+      }
+    ],
+    "projects": [
+      {
+        "title": "MuleSoft API Governance & Automation",
+        "description": "Technical leadership of a MuleSoft integration suite for a telecom infrastructure client: technical backlog discovery and refinement, hardening of production APIs, and automation of manual ticketing workflows.",
+        "tech": ["MuleSoft", "Anypoint Platform", "API Governance"]
+      },
+      {
+        "title": "Critical Migration & Modernization",
+        "description": "Technical coordination of IBM ACE migration to OpenShift, including configuration of Runtimes, Pods, and Services for IBM MQ and API Connect components.",
+        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
+      },
+      {
+        "title": "DevOps Automation (CI/CD)",
+        "description": "Implementation of full pipelines using GitLab CI and ArgoCD for automated deployments and Git-based version control.",
+        "tech": ["GitLab CI", "ArgoCD", "Helm"]
+      }
+    ],
+    "ui": {
+      "experienceTitle": "Professional Journey",
+      "skillsTitle": "Technical Expertise",
+      "educationTitle": "Education",
+      "languagesTitle": "Languages",
+      "coreStackTitle": "Core Stack",
+      "projectsTitle": "Technical Highlights",
+      "contactBtn": "Connect",
+      "downloadBtn": "Download CV.pdf",
+      "scrollText": "Scroll Down"
+    }
+  },
+  "common": {
+    "languages": [
+      { "name": "Português", "level": "Native" },
+      { "name": "English", "level": "Professional" },
+      { "name": "Español", "level": "Basic" }
+    ],
+    "skills": [
+      { "category": "Integration Platforms", "category_pt": "Plataformas de Integração", "items": ["MuleSoft (Anypoint Platform)", "App Connect Enterprise", "IBM MQ", "API Connect", "Cloud Pak (CP4I)", "ESQL", "Integration Bus (IIB)"] },
+      { "category": "Cloud & DevOps", "category_pt": "Nuvem e DevOps", "items": ["OpenShift", "Docker", "Kubernetes", "GitLab CI", "ArgoCD", "Helm", "PVCs"] },
+      { "category": "Backend & DB", "category_pt": "Backend e Banco de Dados", "items": ["Java", "REST/SOAP", "OAuth 2.0", "Oracle", "SQL Server", "MySQL", "Microservices"] },
+      { "category": "Tools & Observability", "category_pt": "Ferramentas e Observabilidade", "items": ["Kibana", "ElasticSearch", "Log4j2", "JIRA", "Scrum", "Maven", "Git"] }
+    ]
+  }
+}

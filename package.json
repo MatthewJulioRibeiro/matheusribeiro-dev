@@ -1,0 +1,12 @@
+{
+  "name": "meu-portfolio",
+  "version": "2.0.0",
+  "description": "Portfólio Profissional Matheus Ribeiro",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --minify",
+    "watch": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
