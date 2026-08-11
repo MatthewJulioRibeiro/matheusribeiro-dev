@@ -170,7 +170,7 @@ function renderPage() {
     renderStats(common.stats);
     renderCoreStack(common.skills);
     renderExperience(data.experience);
-    renderProjects(data.projects);
+    renderProjects(data.projects, ui);
     renderSkillsGrid(common.skills);
     renderEducation(data.education);
     renderLanguages(common.languages);
@@ -231,7 +231,7 @@ function renderExperience(experience) {
     `).join('');
 }
 
-function renderProjects(projects) {
+function renderProjects(projects, ui) {
     const container = document.getElementById('projects-grid');
     if(!container) return;
 
@@ -247,6 +247,11 @@ function renderProjects(projects) {
             <div class="flex flex-wrap gap-2">
                 ${proj.tech.map((t, i) => `<span class="text-xs font-mono ${i % 2 ? 'text-ibm-royal bg-ibm-royal/10' : 'text-ibm-blue bg-ibm-blue/10'} px-2 py-1 rounded-md">${t}</span>`).join('')}
             </div>
+            ${(proj.repoUrl || proj.demoUrl) ? `
+            <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                ${proj.repoUrl ? `<a href="${proj.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.viewCodeBtn || 'View code'}</a>` : ''}
+                ${proj.demoUrl ? `<a href="${proj.demoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>${ui.tryLiveBtn || 'Try it live'}</a>` : ''}
+            </div>` : ''}
         </div>
     `).join('');
 }

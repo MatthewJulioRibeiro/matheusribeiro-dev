@@ -63,6 +63,20 @@
         "title": "MuleSoft — Nova Frente",
         "description": "Iniciativa atual (últimos 3 meses): atuação em uma suíte de integrações MuleSoft para a American Tower, com foco em levantamento de backlog técnico e hardening de APIs em produção.",
         "tech": ["MuleSoft", "Anypoint Platform", "Governança de API"]
+      },
+      {
+        "title": "API de Clima (demo MuleSoft)",
+        "description": "API pública ao vivo construída em Mule 4: orquestra dois endpoints do Open-Meteo com DataWeave e tratamento de erros. Código aberto, sem chaves de API.",
+        "tech": ["Mule 4", "DataWeave", "Docker"],
+        "demoUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather?city=Indaiatuba",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api"
+      },
+      {
+        "title": "API de Câmbio (demo IBM ACE)",
+        "description": "API pública ao vivo construída em IBM ACE: HTTP Input, ESQL e uma chamada HTTP de saída, com rotas de erro dedicadas. Código aberto, sem chaves de API.",
+        "tech": ["IBM ACE", "ESQL", "Docker"],
+        "demoUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency?from=USD&to=BRL&amount=100",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
     ],
     "ui": {
@@ -72,6 +86,8 @@
       "languagesTitle": "Idiomas",
       "coreStackTitle": "Core Stack",
       "projectsTitle": "Destaques Técnicos",
+      "viewCodeBtn": "Ver código",
+      "tryLiveBtn": "Testar ao vivo",
       "contactBtn": "Conectar",
       "downloadBtn": "Baixar CV.pdf",
       "scrollText": "Rolar para baixo",
@@ -149,6 +165,20 @@
         "title": "MuleSoft — New Focus",
         "description": "Current initiative (last 3 months): working on a MuleSoft integration suite for American Tower, focused on technical backlog discovery and hardening of production APIs.",
         "tech": ["MuleSoft", "Anypoint Platform", "API Governance"]
+      },
+      {
+        "title": "Weather API (MuleSoft demo)",
+        "description": "Live public API built with Mule 4: orchestrates two Open-Meteo endpoints with DataWeave and error handling. Open source, no API keys.",
+        "tech": ["Mule 4", "DataWeave", "Docker"],
+        "demoUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather?city=Indaiatuba",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api"
+      },
+      {
+        "title": "Currency API (IBM ACE demo)",
+        "description": "Live public API built with IBM ACE: HTTP Input, ESQL, and an outbound HTTP call, with dedicated error-path routing. Open source, no API keys.",
+        "tech": ["IBM ACE", "ESQL", "Docker"],
+        "demoUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency?from=USD&to=BRL&amount=100",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
     ],
     "ui": {
@@ -158,6 +188,8 @@
       "languagesTitle": "Languages",
       "coreStackTitle": "Core Stack",
       "projectsTitle": "Technical Highlights",
+      "viewCodeBtn": "View code",
+      "tryLiveBtn": "Try it live",
       "contactBtn": "Connect",
       "downloadBtn": "Download CV.pdf",
       "scrollText": "Scroll Down",
