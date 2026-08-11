@@ -17,13 +17,22 @@
         "company": "Icaro Tech",
         "role": "Engenheiro de Integração",
         "period": "Jul 2021 - Presente",
-        "description": "Liderança técnica do time de integrações em IBM ACE (v11/v12) para a TIM, incluindo coordenação da migração crítica v11 para v12 em OpenShift via IBM Cloud Pak (desde Jan/2025) e pipelines CI/CD (GitLab/ArgoCD). Nos últimos 3 meses, passou a atuar também com MuleSoft (Anypoint Platform, Mule 4) para a American Tower. Responsável pelo levantamento e refinamento do backlog técnico do time, priorizando e mitigando achados antes de virarem cards de desenvolvimento. Condução de iniciativas de correção e hardening em múltiplas APIs REST/SOAP em produção via IBM API Connect — autenticação LDAP/OAuth, certificados SSL e políticas de API Gateway — e governança técnica via documentação e collections de teste de regressão."
+        "description": [
+          "Entrou na TIM como desenvolvedor júnior integrando sistemas via IBM ACE, e assumiu, ao longo dos anos seguintes, a responsabilidade técnica única por um portfólio extenso de fluxos entre TI e ServiceNow.",
+          "Conduziu a modernização desse portfólio para IBM ACE v12 e OpenShift, do desenho da arquitetura ao pipeline de deploy via ArgoCD.",
+          "Levou os fluxos ao API Connect com um catálogo simplificado, adaptando parte deles ao padrão TM Forum — incluindo uma solução de compartilhamento de alarmes entre a TIM e um parceiro.",
+          "Atua com MuleSoft para a American Tower desde que se capacitou na plataforma, acumulando suporte em produção (N2/N3) com o time evolutivo dessas APIs, apoiando o aprendizado de outros desenvolvedores e conduzindo uma revisão técnica e de segurança no portfólio."
+        ]
       },
       {
         "company": "VILT",
         "role": "Analista de Sistemas",
         "period": "Fev 2020 - Jun 2021",
-        "description": "Engenharia de soluções backend de alta performance para portais de vendas. Realizou documentação abrangente, análise arquitetural de funções legadas e refatoração para garantir escalabilidade e disponibilidade."
+        "description": [
+          "Integrou o time de um projeto estruturado para a SEBRAE, desenvolvendo funcionalidades de front e back-end sobre o CMS da OpenText.",
+          "Apoiou um GP na leitura e documentação técnica de código legado herdado num projeto para o Bradesco, após a saída dos desenvolvedores originais.",
+          "Assumiu o portoSDM, sistema de chamados dos portais da Porto Seguro, identificando e corrigindo problemas antes mesmo de virarem chamados formais — até sair em busca de um time de desenvolvimento."
+        ]
       },
       {
         "company": "FIEC",
@@ -70,7 +79,10 @@
       "contactNamePlaceholder": "Nome",
       "contactEmailPlaceholder": "Seu email",
       "contactMessagePlaceholder": "Mensagem",
-      "contactSendBtn": "Enviar"
+      "contactSendBtn": "Enviar",
+      "contactSending": "Enviando...",
+      "contactSuccess": "Mensagem enviada — obrigado pelo contato!",
+      "contactError": "Não consegui enviar agora. Tenta de novo ou manda direto pro"
     }
   },
   "en": {
@@ -91,13 +103,22 @@
         "company": "Icaro Tech",
         "role": "Integration Engineer",
         "period": "Jul 2021 - Present",
-        "description": "Technical lead of the integration team on IBM ACE (v11/v12) for TIM, including coordination of the critical v11-to-v12 migration on OpenShift via IBM Cloud Pak (since Jan/2025) and CI/CD pipeline design (GitLab/ArgoCD). Over the past 3 months, also took on MuleSoft (Anypoint Platform, Mule 4) work for American Tower. Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening initiatives across multiple production REST/SOAP APIs via IBM API Connect — LDAP/OAuth authentication, SSL certificates, and API Gateway policies — and technical governance through documentation and regression test collections."
+        "description": [
+          "Joined TIM as a junior developer integrating systems via IBM ACE, and over the following years took on sole technical ownership of an extensive portfolio of IT/ServiceNow integration flows.",
+          "Led the modernization of that portfolio to IBM ACE v12 and OpenShift, from architecture design through the ArgoCD deployment pipeline.",
+          "Brought the flows into API Connect with a simplified catalog, adapting part of them to the TM Forum standard — including a mutual alarm-sharing solution between TIM and a partner.",
+          "Works with MuleSoft for American Tower since training on the platform, combining N2/N3 production support with the APIs' evolutionary development team, helping other developers ramp up, and having led a technical and security review of the portfolio."
+        ]
       },
       {
         "company": "VILT",
         "role": "Systems Analyst",
         "period": "Feb 2020 - Jun 2021",
-        "description": "Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability."
+        "description": [
+          "Joined the team on a structured project for SEBRAE, building front and back-end features on top of OpenText's CMS.",
+          "Supported a PM in reading and documenting legacy code inherited on a Bradesco project, after the original developers had left.",
+          "Took over portoSDM, Porto Seguro's ticketing system for its portals, catching and fixing issues before they became formal tickets — until leaving in search of a development-focused team."
+        ]
       },
       {
         "company": "FIEC",
@@ -144,7 +165,10 @@
       "contactNamePlaceholder": "Name",
       "contactEmailPlaceholder": "Your email",
       "contactMessagePlaceholder": "Message",
-      "contactSendBtn": "Send"
+      "contactSendBtn": "Send",
+      "contactSending": "Sending...",
+      "contactSuccess": "Message sent — thanks for reaching out!",
+      "contactError": "Couldn't send that right now. Try again or email"
     }
   },
   "common": {

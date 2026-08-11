@@ -202,6 +202,15 @@ function renderCoreStack(skills) {
     ).join('');
 }
 
+function renderJobDescription(description) {
+    if (Array.isArray(description)) {
+        return `<ul class="job-bullets text-slate-700 dark:text-slate-300">
+            ${description.map(d => `<li>${d}</li>`).join('')}
+        </ul>`;
+    }
+    return `<p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">${description}</p>`;
+}
+
 function renderExperience(experience) {
     const container = document.getElementById('experience-list');
     if(!container) return;
@@ -217,9 +226,7 @@ function renderExperience(experience) {
 
             <div class="text-sm font-medium ${i % 2 ? 'text-ibm-royal' : 'text-ibm-blue'} font-mono mb-3">${job.role}</div>
 
-            <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">
-                ${job.description}
-            </p>
+            ${renderJobDescription(job.description)}
         </div>
     `).join('');
 }
@@ -289,6 +296,12 @@ function renderLanguages(languages) {
     `).join('');
 }
 
+// TODO: replace with the real Formspree endpoint before this goes live —
+// sign up free at https://formspree.io, create a form, paste its ID here.
+// Until then the form shows a clear error with a mailto fallback link
+// instead of silently failing.
+const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
 function renderContactForm(ui, profile) {
     const email = profile.email;
     const direct = document.getElementById('contact-direct');
@@ -300,11 +313,11 @@ function renderContactForm(ui, profile) {
         `;
     }
 
-    const title = document.getElementById('contact-title');
     const nameInput = document.getElementById('contact-name');
     const emailInput = document.getElementById('contact-email');
     const messageInput = document.getElementById('contact-message');
     const submitBtn = document.getElementById('contact-submit');
+    const statusEl = document.getElementById('contact-status');
     const form = document.getElementById('contact-form-el');
     if(!form) return;
 
@@ -314,33 +327,52 @@ function renderContactForm(ui, profile) {
     if(messageInput) messageInput.placeholder = ui.contactMessagePlaceholder;
     if(submitBtn) submitBtn.textContent = ui.contactSendBtn;
 
-    form.onsubmit = (e) => {
+    form.onsubmit = async (e) => {
         e.preventDefault();
-        const name = nameInput.value.trim();
-        const from = emailInput.value.trim();
-        const msg = messageInput.value.trim();
-        const subject = encodeURIComponent(`Contato via portfolio — ${name || 'visitante'}`);
-        const body = encodeURIComponent(`${msg}\n\n— ${name} (${from})`);
-        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        if(!statusEl) return;
+
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = ui.contactSending;
+        statusEl.className = 'form-status';
+        statusEl.textContent = '';
+
+        try {
+            if(CONTACT_FORM_ENDPOINT.includes('YOUR_FORM_ID')) {
+                throw new Error('form not configured');
+            }
+            const res = await fetch(CONTACT_FORM_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new FormData(form)
+            });
+            if(!res.ok) throw new Error('request failed');
+
+            statusEl.className = 'form-status success';
+            statusEl.textContent = ui.contactSuccess;
+            form.reset();
+        } catch (err) {
+            statusEl.className = 'form-status error';
+            statusEl.innerHTML = `${ui.contactError} <a href="mailto:${email}">${email}</a>`;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        }
     };
 }
 
-// --- Cursor spotlight (hero) ---
+// --- Cursor "radar sense" glow (site-wide) ---
 function initSpotlight() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const hero = document.getElementById('hero-header');
-    const spot = document.getElementById('hero-spotlight');
-    if(!hero || !spot || reduceMotion) return;
+    const spot = document.getElementById('site-spotlight');
+    if(!spot || reduceMotion) return;
 
     let raf = null;
-    hero.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    document.addEventListener('mousemove', (e) => {
         if(raf) return;
         raf = requestAnimationFrame(() => {
-            spot.style.setProperty('--mx', x + 'px');
-            spot.style.setProperty('--my', y + 'px');
+            spot.style.setProperty('--mx', e.clientX + 'px');
+            spot.style.setProperty('--my', e.clientY + 'px');
             raf = null;
         });
     });
@@ -451,7 +483,9 @@ function renderPDFTemplate() {
                     <span class="text-xs text-slate-500 font-mono">${job.period}</span>
                 </div>
                 <div class="text-sm font-medium text-ibm-blue mb-1">${job.role}</div>
-                <p class="text-xs text-slate-700 leading-snug text-justify">${job.description}</p>
+                ${Array.isArray(job.description)
+                    ? `<ul class="text-xs text-slate-700 leading-snug list-disc pl-4 space-y-0.5">${job.description.map(d => `<li>${d}</li>`).join('')}</ul>`
+                    : `<p class="text-xs text-slate-700 leading-snug text-justify">${job.description}</p>`}
             </div>
         `).join('');
     }
