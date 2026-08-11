@@ -4,7 +4,8 @@ let typeWriterTimeout;
 
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
-    
+    initSpotlight();
+
     try {
         const response = await fetch('./data/cv-data.json');
         
@@ -85,8 +86,10 @@ function updateLanguageUI() {
     if(allData[currentLang]) {
         const linkedin = document.getElementById('linkedin-btn-header');
         const email = document.getElementById('email-btn');
+        const github = document.getElementById('github-btn-header');
         if(linkedin) linkedin.href = allData[currentLang].profile.linkedin;
         if(email) email.href = `mailto:${allData[currentLang].profile.email}`;
+        if(github && allData[currentLang].profile.github) github.href = allData[currentLang].profile.github;
     }
 }
 
@@ -164,12 +167,26 @@ function renderPage() {
     setText('title-projects', ui.projectsTitle);
 
     // Sections
+    renderStats(common.stats);
     renderCoreStack(common.skills);
     renderExperience(data.experience);
     renderProjects(data.projects);
     renderSkillsGrid(common.skills);
     renderEducation(data.education);
     renderLanguages(common.languages);
+    renderContactForm(ui, data.profile);
+}
+
+function renderStats(stats) {
+    const container = document.getElementById('stats-row');
+    if(!container || !stats) return;
+
+    container.innerHTML = stats.map(s => `
+        <div class="stat-card">
+            <b>${s.value}</b>
+            <span>${currentLang === 'pt' ? s.label_pt : s.label_en}</span>
+        </div>
+    `).join('');
 }
 
 function renderCoreStack(skills) {
@@ -189,17 +206,17 @@ function renderExperience(experience) {
     const container = document.getElementById('experience-list');
     if(!container) return;
 
-    container.innerHTML = experience.map(job => `
+    container.innerHTML = experience.map((job, i) => `
         <div class="relative group">
-            <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
-            
+            <div class="job-node${i % 2 ? ' alt' : ''}"></div>
+
             <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
                 <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${job.company}</h4>
-                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">${job.period}</span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 tabular-nums">${job.period}</span>
             </div>
-            
-            <div class="text-sm font-medium text-ibm-blue font-mono mb-3">${job.role}</div>
-            
+
+            <div class="text-sm font-medium ${i % 2 ? 'text-ibm-royal' : 'text-ibm-blue'} font-mono mb-3">${job.role}</div>
+
             <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">
                 ${job.description}
             </p>
@@ -217,11 +234,11 @@ function renderProjects(projects) {
     }
 
     container.innerHTML = projects.map(proj => `
-        <div class="project-card rounded-lg cursor-default">
+        <div class="project-card cursor-default">
             <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">${proj.title}</h4>
             <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${proj.description}</p>
             <div class="flex flex-wrap gap-2">
-                ${proj.tech.map(t => `<span class="text-xs font-mono text-ibm-blue bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">${t}</span>`).join('')}
+                ${proj.tech.map((t, i) => `<span class="text-xs font-mono ${i % 2 ? 'text-ibm-royal bg-ibm-royal/10' : 'text-ibm-blue bg-ibm-blue/10'} px-2 py-1 rounded-md">${t}</span>`).join('')}
             </div>
         </div>
     `).join('');
@@ -270,6 +287,63 @@ function renderLanguages(languages) {
             <span class="text-slate-500 dark:text-slate-500">[${lang.level}]</span>
         </div>
     `).join('');
+}
+
+function renderContactForm(ui, profile) {
+    const email = profile.email;
+    const direct = document.getElementById('contact-direct');
+    if(direct) {
+        direct.innerHTML = `
+            <a href="mailto:${email}" class="hover:text-ibm-blue transition-colors">${email}</a>
+            ${profile.phone ? `<a href="tel:${profile.phone.replace(/\s/g, '')}" class="hover:text-ibm-blue transition-colors">${profile.phone}</a>` : ''}
+            ${profile.location ? `<span>${profile.location}</span>` : ''}
+        `;
+    }
+
+    const title = document.getElementById('contact-title');
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const messageInput = document.getElementById('contact-message');
+    const submitBtn = document.getElementById('contact-submit');
+    const form = document.getElementById('contact-form-el');
+    if(!form) return;
+
+    setText('contact-title', ui.contactFormTitle);
+    if(nameInput) nameInput.placeholder = ui.contactNamePlaceholder;
+    if(emailInput) emailInput.placeholder = ui.contactEmailPlaceholder;
+    if(messageInput) messageInput.placeholder = ui.contactMessagePlaceholder;
+    if(submitBtn) submitBtn.textContent = ui.contactSendBtn;
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const name = nameInput.value.trim();
+        const from = emailInput.value.trim();
+        const msg = messageInput.value.trim();
+        const subject = encodeURIComponent(`Contato via portfolio — ${name || 'visitante'}`);
+        const body = encodeURIComponent(`${msg}\n\n— ${name} (${from})`);
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    };
+}
+
+// --- Cursor spotlight (hero) ---
+function initSpotlight() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = document.getElementById('hero-header');
+    const spot = document.getElementById('hero-spotlight');
+    if(!hero || !spot || reduceMotion) return;
+
+    let raf = null;
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if(raf) return;
+        raf = requestAnimationFrame(() => {
+            spot.style.setProperty('--mx', x + 'px');
+            spot.style.setProperty('--my', y + 'px');
+            raf = null;
+        });
+    });
 }
 
 // --- Helpers ---
@@ -356,9 +430,11 @@ function renderPDFTemplate() {
     const contactDiv = document.getElementById('pdf-contact');
     if(contactDiv) {
         contactDiv.innerHTML = `
-            <span>${data.profile.location}</span> • 
-            <span>${data.profile.email}</span> • 
-            <span>linkedin.com/in/matheus-julio-ribeiro</span>
+            <span>${data.profile.location}</span> •
+            <span>${data.profile.email}</span> •
+            ${data.profile.phone ? `<span>${data.profile.phone}</span> • ` : ''}
+            <span>linkedin.com/in/matheus-julio-ribeiro</span> •
+            <span>github.com/MatthewJulioRibeiro</span>
         `;
     }
 
@@ -454,6 +530,7 @@ function initCommandPalette() {
         { label: 'Generate PDF', sub: 'Action', action: () => generatePDF() },
         { label: 'Send Email', sub: 'Action', action: () => document.getElementById('email-btn')?.click() },
         { label: 'Open LinkedIn', sub: 'External', action: () => document.getElementById('linkedin-btn-header')?.click() },
+        { label: 'Open GitHub', sub: 'External', action: () => document.getElementById('github-btn-header')?.click() },
         { label: 'Toggle Dark Mode', sub: 'Config', action: () => document.getElementById('theme-toggle').click() },
         { label: 'Switch Language: PT', sub: 'Config', action: () => setLanguage('pt') },
         { label: 'Switch Language: EN', sub: 'Config', action: () => setLanguage('en') }

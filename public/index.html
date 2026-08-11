@@ -56,9 +56,10 @@
     </script>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <!-- Theme Prevention Flash -->
     <script>
@@ -69,10 +70,10 @@
         }
     </script>
 </head>
-<body class="bg-white dark:bg-[#161616] text-ibm-text dark:text-[#f4f4f4] selection:bg-ibm-blue selection:text-white transition-colors duration-300">
+<body class="bg-[#F4F7FB] dark:bg-[#070D1A] text-[#0B1930] dark:text-[#E8EEF7] selection:bg-ibm-blue selection:text-white transition-colors duration-300">
 
     <!-- Loader -->
-    <div id="loading-screen" class="fixed inset-0 z-[100] bg-white dark:bg-[#161616] flex flex-col items-center justify-center">
+    <div id="loading-screen" class="fixed inset-0 z-[100] bg-[#F4F7FB] dark:bg-[#070D1A] flex flex-col items-center justify-center">
         <div class="loader mb-4"></div>
         <div class="font-mono text-xs text-slate-500 dark:text-slate-400 animate-pulse">INITIALIZING_SYSTEM...</div>
     </div>
@@ -80,8 +81,8 @@
     <!-- Background Grid -->
     <div class="fixed inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20" style="background-image: radial-gradient(#e0e0e0 1px, transparent 1px); background-size: 24px 24px;"></div>
 
-    <nav class="fixed top-0 w-full bg-white/90 dark:bg-[#161616]/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300 print:hidden">
-        <div class="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
+    <nav class="fixed top-0 w-full bg-[#F4F7FB]/90 dark:bg-[#070D1A]/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300 print:hidden">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span id="nav-availability" class="font-mono text-xs font-medium text-slate-600 dark:text-slate-400">Open to work</span>
@@ -116,9 +117,10 @@
         </div>
     </nav>
 
-    <main class="relative z-10 max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <main class="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24">
 
-        <header class="mb-24 fade-in flex flex-col md:flex-row gap-10 items-start">
+        <header class="mb-16 fade-in flex flex-col md:flex-row gap-10 items-start relative" style="isolation:isolate;" id="hero-header">
+            <div id="hero-spotlight"></div>
             <div class="flex-1 border-l-2 border-ibm-blue pl-6 relative">
                 <h1 id="profile-name" class="text-5xl md:text-6xl font-bold tracking-tight mb-4 font-sans text-slate-900 dark:text-white transition-colors">Matheus Ribeiro</h1>
                 
@@ -138,6 +140,9 @@
                     <a id="linkedin-btn-header" href="https://www.linkedin.com/in/matheus-julio-ribeiro/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue dark:hover:border-ibm-blue dark:hover:text-ibm-blue transition-colors bg-white dark:bg-transparent">
                         LinkedIn
                     </a>
+                    <a id="github-btn-header" href="https://github.com/MatthewJulioRibeiro" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue dark:hover:border-ibm-blue dark:hover:text-ibm-blue transition-colors bg-white dark:bg-transparent">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
                 </div>
             </div>
 
@@ -152,13 +157,16 @@
             <i class="bi bi-arrow-down text-slate-400"></i>
         </div>
 
+        <div id="stats-row" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-24 fade-in delay-1"></div>
+
         <section class="mb-24 fade-in delay-1">
             <div class="flex items-center gap-4 mb-8">
                 <h3 class="section-label" id="title-core">Core Stack</h3>
                 <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-8 items-center">
             <!-- Static Content from JSON -->
-            <div id="core-stack" class="grid grid-cols-2 md:grid-cols-4 gap-4 font-mono text-sm">
+            <div id="core-stack" class="grid grid-cols-2 md:grid-cols-3 gap-3 font-mono text-sm">
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>MuleSoft (Anypoint Platform)</div>
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>App Connect Enterprise</div>
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>IBM MQ</div>
@@ -168,6 +176,27 @@
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>Docker</div>
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>GitLab CI</div>
                 <div class="tech-tag flex items-center gap-2"><div class="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>ArgoCD</div>
+            </div>
+
+            <svg class="hero-diagram hidden md:block" viewBox="0 0 260 220" aria-hidden="true">
+                <path class="edge live" d="M40,50 C90,50 90,110 130,110" />
+                <path class="edge live b" d="M130,110 C170,110 170,50 220,50" />
+                <path class="edge live" d="M40,170 C90,170 90,110 130,110" />
+                <path class="edge live b" d="M130,110 C170,110 170,170 220,170" />
+                <path class="edge" d="M40,50 L40,170" />
+                <path class="edge" d="M220,50 L220,170" />
+
+                <circle class="node accent" cx="40" cy="50" r="14"><title>MuleSoft — Anypoint Platform, Mule 4</title></circle>
+                <text x="40" y="30" text-anchor="middle">MULE</text>
+                <circle class="node royal" cx="40" cy="170" r="14"><title>IBM MQ — mensageria entre sistemas</title></circle>
+                <text x="40" y="196" text-anchor="middle">MQ</text>
+                <circle class="node" cx="130" cy="110" r="18"><title>IBM App Connect Enterprise (v11/v12) — o hub central</title></circle>
+                <text x="130" y="88" text-anchor="middle">ACE</text>
+                <circle class="node accent" cx="220" cy="50" r="14"><title>API Connect — governança e exposição de API</title></circle>
+                <text x="220" y="30" text-anchor="middle">API</text>
+                <circle class="node royal" cx="220" cy="170" r="14"><title>OpenShift — runtime via IBM Cloud Pak</title></circle>
+                <text x="220" y="196" text-anchor="middle">OCP</text>
+            </svg>
             </div>
         </section>
 
@@ -214,7 +243,7 @@
             </div>
             <div id="experience-list" class="space-y-12 border-l border-slate-200 dark:border-slate-800 ml-2 pl-8 relative transition-colors">
                 <div class="relative group">
-                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-[#F4F7FB] dark:bg-[#070D1A] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
                     <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
                         <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">Icaro Tech</h4>
                         <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Jul 2021 - Present</span>
@@ -223,7 +252,7 @@
                     <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">Technical lead of the integration team, driving both MuleSoft (Anypoint Platform, Mule 4) and IBM ACE (v11/v12) initiatives for a telecom infrastructure client, including coordination of critical migrations (v11 to v12) on OpenShift via IBM Cloud Pak and CI/CD pipeline design (GitLab/ArgoCD). Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening and bug-fix initiatives across multiple production APIs (input validation, error handling, workflow automation such as automatic ticket creation) and technical governance through documentation and regression test collections.</p>
                 </div>
                 <div class="relative group">
-                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-[#F4F7FB] dark:bg-[#070D1A] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
                     <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
                         <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">VILT</h4>
                         <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Feb 2020 - Jun 2021</span>
@@ -232,7 +261,7 @@
                     <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability.</p>
                 </div>
                 <div class="relative group">
-                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-white dark:bg-[#161616] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
+                    <div class="absolute -left-[39px] top-1.5 w-3 h-3 bg-[#F4F7FB] dark:bg-[#070D1A] border-2 border-slate-300 dark:border-slate-700 rounded-full group-hover:border-ibm-blue transition-colors"></div>
                     <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
                         <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">FIEC</h4>
                         <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Jan 2019 - Jan 2020</span>
@@ -331,8 +360,23 @@
             </div>
         </div>
 
-        <footer class="mt-20 text-center text-slate-500 dark:text-slate-500 text-[10px] font-mono uppercase tracking-widest opacity-80 pb-8">
-            Start_Time: 2025 &bull; Status: Active
+        <section class="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 fade-in delay-3">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="section-label" id="contact-title">Contact</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <div id="contact-direct" class="flex flex-wrap gap-x-6 gap-y-1 mb-6 font-mono text-sm text-slate-600 dark:text-slate-400"></div>
+            <form id="contact-form-el" class="max-w-md grid grid-cols-1 gap-3">
+                <input id="contact-name" type="text" required class="form-input" placeholder="Name">
+                <input id="contact-email" type="email" required class="form-input" placeholder="Email">
+                <textarea id="contact-message" required rows="4" class="form-input resize-none" placeholder="Message"></textarea>
+                <button id="contact-submit" type="submit" class="justify-self-start px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-mono hover:bg-ibm-blue dark:hover:bg-ibm-blue dark:hover:text-white transition-all rounded-md">Send</button>
+            </form>
+        </section>
+
+        <footer class="mt-16 text-center text-slate-500 dark:text-slate-500 text-[10px] font-mono uppercase tracking-widest opacity-80 pb-8">
+            <span>Start_Time: 2025 &bull; Status: Active</span>
+            <span class="footer-hint block mt-2 normal-case tracking-normal">psst — <kbd>⌘</kbd><kbd>K</kbd> opens the command palette</span>
         </footer>
 
     </main>

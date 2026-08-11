@@ -5,16 +5,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // "ibm" namespace kept for minimal churn across templates; values now
+        // point at the v2 brand palette (MuleSoft cyan + IBM ACE royal blue)
+        // instead of literal IBM Blue.
         ibm: {
-          blue: '#0f62fe',
-          hover: '#0353e9',
-          text: '#161616',
-          gray: '#8d8d8d',
-          light: '#f4f4f4'
+          blue: '#0098C9',
+          'blue-bright': '#3FCBF2',
+          royal: '#2A5ADB',
+          'royal-bright': '#7592FF',
+          hover: '#007099',
+          text: '#0B1930',
+          gray: '#5B6B84',
+          light: '#F4F7FB'
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
         mono: ['IBM Plex Mono', 'monospace'],
       }
     }
