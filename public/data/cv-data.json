@@ -9,7 +9,7 @@
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs, liderando tecnicamente times de integração em MuleSoft (Anypoint Platform) e IBM ACE (v11/v12) e MQ. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API para grandes clientes como TIM, Bradesco, SEBRAE e Porto Seguro.",
+      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs, com atuação técnica de longa data em IBM ACE (v11/v12) e MQ — e, nos últimos meses, também em MuleSoft (Anypoint Platform). Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API para grandes clientes como TIM, Bradesco, SEBRAE e Porto Seguro.",
       "availability": "Disponível"
     },
     "experience": [
@@ -17,11 +17,11 @@
         "company": "Icaro Tech",
         "role": "Engenheiro de Integração",
         "period": "Jul 2021 - Presente",
-        "description": "Liderança técnica do time de integrações, atuando tanto em MuleSoft (Anypoint Platform, Mule 4) quanto em IBM ACE (v11/v12) para um cliente do setor de telecomunicações/infraestrutura, incluindo coordenação da migração crítica v11 para v12 em OpenShift via IBM Cloud Pak (desde Jan/2025) e pipelines CI/CD (GitLab/ArgoCD). Responsável pelo levantamento e refinamento do backlog técnico do time, priorizando e mitigando achados antes de virarem cards de desenvolvimento. Condução de iniciativas de correção e hardening em múltiplas APIs REST/SOAP em produção via IBM API Connect — autenticação LDAP/OAuth, certificados SSL e políticas de API Gateway — e governança técnica via documentação e collections de teste de regressão."
+        "description": "Liderança técnica do time de integrações em IBM ACE (v11/v12) para um cliente do setor de telecomunicações/infraestrutura, incluindo coordenação da migração crítica v11 para v12 em OpenShift via IBM Cloud Pak (desde Jan/2025) e pipelines CI/CD (GitLab/ArgoCD). Nos últimos 3 meses, passou a atuar também com MuleSoft (Anypoint Platform, Mule 4). Responsável pelo levantamento e refinamento do backlog técnico do time, priorizando e mitigando achados antes de virarem cards de desenvolvimento. Condução de iniciativas de correção e hardening em múltiplas APIs REST/SOAP em produção via IBM API Connect — autenticação LDAP/OAuth, certificados SSL e políticas de API Gateway — e governança técnica via documentação e collections de teste de regressão."
       },
       {
         "company": "VILT",
-        "role": "Java Developer",
+        "role": "Analista de Sistemas",
         "period": "Fev 2020 - Jun 2021",
         "description": "Engenharia de soluções backend de alta performance para portais de vendas. Realizou documentação abrangente, análise arquitetural de funções legadas e refatoração para garantir escalabilidade e disponibilidade."
       },
@@ -41,11 +41,6 @@
     ],
     "projects": [
       {
-        "title": "Governança e Automação MuleSoft",
-        "description": "Liderança técnica de uma suíte de integrações MuleSoft para cliente do setor de telecomunicações/infraestrutura: levantamento e refinamento de backlog técnico, hardening de APIs em produção e automação de fluxos manuais de abertura de chamados.",
-        "tech": ["MuleSoft", "Anypoint Platform", "Governança de API"]
-      },
-      {
         "title": "Migração Crítica & Modernização",
         "description": "Coordenação técnica da migração de IBM ACE para OpenShift, incluindo configuração de Runtimes, Pods e Services para componentes IBM MQ e API Connect.",
         "tech": ["OpenShift", "IBM ACE v12", "Docker"]
@@ -54,6 +49,11 @@
         "title": "Automação DevOps (CI/CD)",
         "description": "Implementação de pipelines completos usando GitLab CI e ArgoCD para deployments automatizados e gerenciamento de versão baseado em Git.",
         "tech": ["GitLab CI", "ArgoCD", "Helm"]
+      },
+      {
+        "title": "MuleSoft — Nova Frente",
+        "description": "Iniciativa atual (últimos 3 meses): atuação em uma suíte de integrações MuleSoft para cliente do setor de telecomunicações/infraestrutura, com foco em levantamento de backlog técnico e hardening de APIs em produção.",
+        "tech": ["MuleSoft", "Anypoint Platform", "Governança de API"]
       }
     ],
     "ui": {
@@ -83,7 +83,7 @@
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience, technically leading integration teams across MuleSoft (Anypoint Platform) and IBM ACE (v11/v12)/MQ. Proven track record leading critical migrations, OpenShift modernization, and API governance for major clients like TIM, Bradesco, SEBRAE, and Porto Seguro.",
+      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience, with long-standing technical depth in IBM ACE (v11/v12) and MQ — and, over the past few months, also MuleSoft (Anypoint Platform). Proven track record leading critical migrations, OpenShift modernization, and API governance for major clients like TIM, Bradesco, SEBRAE, and Porto Seguro.",
       "availability": "Open to work"
     },
     "experience": [
@@ -91,11 +91,11 @@
         "company": "Icaro Tech",
         "role": "Integration Engineer",
         "period": "Jul 2021 - Present",
-        "description": "Technical lead of the integration team, driving both MuleSoft (Anypoint Platform, Mule 4) and IBM ACE (v11/v12) initiatives for a telecom infrastructure client, including coordination of the critical v11-to-v12 migration on OpenShift via IBM Cloud Pak (since Jan/2025) and CI/CD pipeline design (GitLab/ArgoCD). Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening initiatives across multiple production REST/SOAP APIs via IBM API Connect — LDAP/OAuth authentication, SSL certificates, and API Gateway policies — and technical governance through documentation and regression test collections."
+        "description": "Technical lead of the integration team on IBM ACE (v11/v12) for a telecom infrastructure client, including coordination of the critical v11-to-v12 migration on OpenShift via IBM Cloud Pak (since Jan/2025) and CI/CD pipeline design (GitLab/ArgoCD). Over the past 3 months, also took on MuleSoft (Anypoint Platform, Mule 4) work. Own technical backlog discovery and refinement for the team, prioritizing and mitigating findings before they become development tickets. Lead hardening initiatives across multiple production REST/SOAP APIs via IBM API Connect — LDAP/OAuth authentication, SSL certificates, and API Gateway policies — and technical governance through documentation and regression test collections."
       },
       {
         "company": "VILT",
-        "role": "Java Developer",
+        "role": "Systems Analyst",
         "period": "Feb 2020 - Jun 2021",
         "description": "Engineered high-performance backend solutions for sales portals. Performed comprehensive documentation, architectural analysis of legacy functions, and refactoring to ensure scalability and availability."
       },
@@ -115,11 +115,6 @@
     ],
     "projects": [
       {
-        "title": "MuleSoft API Governance & Automation",
-        "description": "Technical leadership of a MuleSoft integration suite for a telecom infrastructure client: technical backlog discovery and refinement, hardening of production APIs, and automation of manual ticketing workflows.",
-        "tech": ["MuleSoft", "Anypoint Platform", "API Governance"]
-      },
-      {
         "title": "Critical Migration & Modernization",
         "description": "Technical coordination of IBM ACE migration to OpenShift, including configuration of Runtimes, Pods, and Services for IBM MQ and API Connect components.",
         "tech": ["OpenShift", "IBM ACE v12", "Docker"]
@@ -128,6 +123,11 @@
         "title": "DevOps Automation (CI/CD)",
         "description": "Implementation of full pipelines using GitLab CI and ArgoCD for automated deployments and Git-based version control.",
         "tech": ["GitLab CI", "ArgoCD", "Helm"]
+      },
+      {
+        "title": "MuleSoft — New Focus",
+        "description": "Current initiative (last 3 months): working on a MuleSoft integration suite for a telecom infrastructure client, focused on technical backlog discovery and hardening of production APIs.",
+        "tech": ["MuleSoft", "Anypoint Platform", "API Governance"]
       }
     ],
     "ui": {
@@ -151,7 +151,7 @@
     "stats": [
       { "value": "6.5+", "label_en": "Years in integration", "label_pt": "Anos em integração" },
       { "value": "4", "label_en": "Enterprise clients", "label_pt": "Clientes enterprise" },
-      { "value": "2", "label_en": "Platforms mastered", "label_pt": "Plataformas dominadas" }
+      { "value": "2", "label_en": "Integration platforms", "label_pt": "Plataformas de integração" }
     ],
     "languages": [
       { "name": "Português", "level": "Native" },
@@ -159,7 +159,7 @@
       { "name": "Español", "level": "Basic" }
     ],
     "skills": [
-      { "category": "Integration Platforms", "category_pt": "Plataformas de Integração", "items": ["MuleSoft (Anypoint Platform)", "App Connect Enterprise", "IBM MQ", "API Connect", "Cloud Pak (CP4I)", "ESQL", "Integration Bus (IIB)"] },
+      { "category": "Integration Platforms", "category_pt": "Plataformas de Integração", "items": ["App Connect Enterprise", "IBM MQ", "MuleSoft (Anypoint Platform)", "API Connect", "Cloud Pak (CP4I)", "ESQL", "Integration Bus (IIB)"] },
       { "category": "Cloud & DevOps", "category_pt": "Nuvem e DevOps", "items": ["OpenShift", "Docker", "Kubernetes", "GitLab CI", "ArgoCD", "Helm", "PVCs"] },
       { "category": "Backend & DB", "category_pt": "Backend e Banco de Dados", "items": ["Java", "Node.js", "REST/SOAP", "OAuth 2.0", "Oracle", "SQL Server", "MySQL", "Microservices"] },
       { "category": "Tools & Observability", "category_pt": "Ferramentas e Observabilidade", "items": ["Kibana", "ElasticSearch", "Log4j2", "JIRA", "Scrum", "Maven", "Git"] }
