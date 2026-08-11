@@ -5,6 +5,7 @@ let typeWriterTimeout;
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
     initSpotlight();
+    initApiDemos();
 
     try {
         const response = await fetch('./data/cv-data.json');
@@ -165,6 +166,8 @@ function renderPage() {
     setText('title-education', ui.educationTitle);
     setText('title-languages', ui.languagesTitle);
     setText('title-projects', ui.projectsTitle);
+    setText('title-demos', ui.demosTitle);
+    setText('demos-intro', ui.demosIntro);
 
     // Sections
     renderStats(common.stats);
@@ -357,6 +360,68 @@ function renderContactForm(ui, profile) {
             submitBtn.textContent = originalBtnText;
         }
     };
+}
+
+// --- Live API demos (Mule weather / ACE currency) ---
+function initApiDemos() {
+    const muleForm = document.getElementById('mule-demo-form');
+    const muleResult = document.getElementById('mule-demo-result');
+    if (muleForm && muleResult) {
+        muleForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const city = document.getElementById('mule-demo-city').value.trim();
+            if (!city) return;
+            runDemoCall(muleForm, muleResult,
+                `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`);
+        };
+    }
+
+    const aceForm = document.getElementById('ace-demo-form');
+    const aceResult = document.getElementById('ace-demo-result');
+    if (aceForm && aceResult) {
+        aceForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const from = document.getElementById('ace-demo-from').value.trim().toUpperCase();
+            const to = document.getElementById('ace-demo-to').value.trim().toUpperCase();
+            const amount = document.getElementById('ace-demo-amount').value.trim() || '1';
+            if (!from || !to) return;
+            runDemoCall(aceForm, aceResult,
+                `https://ace-demo.matheusribeiro.dev.br/api/currency?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`);
+        };
+    }
+}
+
+async function runDemoCall(form, resultEl, url) {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.textContent : null;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '...'; }
+    resultEl.className = 'demo-result';
+    resultEl.textContent = 'Loading...';
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        resultEl.className = res.ok ? 'demo-result' : 'demo-result is-error';
+        resultEl.innerHTML = syntaxHighlightJson(data);
+    } catch (err) {
+        resultEl.className = 'demo-result is-error';
+        resultEl.textContent = `Request failed: ${err.message}. The demo VM may be asleep on the first request -- try again in a few seconds.`;
+    } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+    }
+}
+
+function syntaxHighlightJson(obj) {
+    const json = JSON.stringify(obj, null, 2)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
+        (match) => {
+            if (/^"/.test(match)) return `<span class="${/:$/.test(match) ? 'key' : 'str'}">${match}</span>`;
+            if (/true|false|null/.test(match)) return match;
+            return `<span class="num">${match}</span>`;
+        }
+    );
 }
 
 // --- Cursor "radar sense" glow (site-wide) ---

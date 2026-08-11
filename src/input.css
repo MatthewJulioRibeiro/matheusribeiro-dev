@@ -293,6 +293,67 @@ body {
 .dark .form-status.error { color: #E8323F; }
 .form-status.error a { text-decoration: underline; }
 
+/* API demo flow diagrams */
+.flow-diagram { overflow: visible; }
+.flow-diagram text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    fill: #6B5D52;
+}
+.dark .flow-diagram text { fill: #A89686; }
+.flow-diagram .flow-label {
+    font-size: 10.5px;
+    fill: #1A1210;
+    font-weight: 600;
+}
+.dark .flow-diagram .flow-label { fill: #EDE3D8; }
+.flow-diagram .flow-label.small { font-size: 8.5px; font-weight: 500; }
+.flow-diagram .flow-box {
+    fill: #FBF7EE;
+    stroke: #1A1210;
+    stroke-width: 1.5;
+}
+.dark .flow-diagram .flow-box { fill: #17110F; stroke: #EDE3D8; }
+.flow-diagram .flow-box.accent { stroke: #B3122A; stroke-width: 2; }
+.dark .flow-diagram .flow-box.accent { stroke: #E8323F; }
+.flow-diagram .flow-box.inner { fill: none; stroke-width: 1; opacity: 0.6; }
+.flow-diagram .flow-arrow {
+    stroke: #1A1210;
+    stroke-width: 1.5;
+    fill: none;
+}
+.dark .flow-diagram .flow-arrow { stroke: #A89686; }
+.flow-diagram .flow-arrowhead { fill: #1A1210; }
+.dark .flow-diagram .flow-arrowhead { fill: #A89686; }
+
+/* API demo result panels */
+.demo-result {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #1A1210;
+    background: #FBF7EE;
+    color: #1A1210;
+    max-height: 260px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.dark .demo-result {
+    border-color: #4A3830;
+    background: #17110F;
+    color: #EDE3D8;
+}
+.demo-result.is-error { border-color: #B3122A; color: #B3122A; }
+.dark .demo-result.is-error { border-color: #E8323F; color: #E8323F; }
+.demo-result .key { color: #B3122A; }
+.dark .demo-result .key { color: #E8323F; }
+.demo-result .str { color: #1D7A4C; }
+.dark .demo-result .str { color: #4ADE9C; }
+.demo-result .num { color: #2A5ADB; }
+.dark .demo-result .num { color: #5B8DEF; }
+
 /* Footer ⌘K hint */
 .footer-hint { opacity: 0.55; transition: opacity 0.15s; }
 .footer-hint:hover { opacity: 1; }

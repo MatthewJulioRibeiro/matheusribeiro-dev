@@ -248,6 +248,114 @@
         </section>
 
         <section class="mb-24 fade-in delay-2">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="section-label" id="title-demos">Live API Demos</h3>
+                <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
+            </div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-8 leading-relaxed max-w-2xl" id="demos-intro">Two small integration APIs, built from scratch and running on my own infrastructure &mdash; not mockups. Call them right here, or check the source/docs.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Mule demo -->
+                <div class="project-card rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">Weather API <span class="text-xs font-mono text-ibm-blue align-middle">Mule 4</span></h4>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Resolves a city, then fetches forecast and air quality <em>in parallel</em> (Scatter-Gather), with a cached geocoding lookup and automatic retries.</p>
+
+                    <svg viewBox="0 0 460 90" class="flow-diagram w-full h-auto mb-4" aria-hidden="true">
+                        <text x="35" y="20" text-anchor="middle">HTTP In</text>
+                        <rect class="flow-box" x="4" y="28" width="62" height="34" rx="0"/>
+                        <text x="35" y="49" text-anchor="middle" class="flow-label">Listener</text>
+
+                        <path class="flow-arrow" d="M66 45 H98"/>
+                        <polygon class="flow-arrowhead" points="94,40 100,45 94,50"/>
+
+                        <text x="135" y="20" text-anchor="middle">1h TTL</text>
+                        <rect class="flow-box" x="100" y="28" width="70" height="34"/>
+                        <text x="135" y="49" text-anchor="middle" class="flow-label">Geocode</text>
+
+                        <path class="flow-arrow" d="M170 45 H202"/>
+                        <polygon class="flow-arrowhead" points="198,40 204,45 198,50"/>
+
+                        <rect class="flow-box accent" x="204" y="8" width="120" height="74"/>
+                        <text x="264" y="26" text-anchor="middle" class="flow-label small">Scatter-Gather</text>
+                        <rect class="flow-box inner" x="212" y="34" width="104" height="18"/>
+                        <text x="264" y="47" text-anchor="middle" class="flow-label small">Forecast</text>
+                        <rect class="flow-box inner" x="212" y="56" width="104" height="18"/>
+                        <text x="264" y="69" text-anchor="middle" class="flow-label small">Air Quality</text>
+
+                        <path class="flow-arrow" d="M324 45 H356"/>
+                        <polygon class="flow-arrowhead" points="352,40 358,45 352,50"/>
+
+                        <text x="418" y="20" text-anchor="middle">JSON</text>
+                        <rect class="flow-box" x="358" y="28" width="98" height="34"/>
+                        <text x="407" y="49" text-anchor="middle" class="flow-label">Response</text>
+                    </svg>
+
+                    <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
+                        <input type="text" id="mule-demo-city" class="form-input" placeholder="City, e.g. Indaiatuba" required />
+                        <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">Get weather</button>
+                    </form>
+                    <pre id="mule-demo-result" class="demo-result"><code>&larr; try a city</code></pre>
+
+                    <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                        <a href="https://github.com/MatthewJulioRibeiro/mule-weather-api" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>Code</a>
+                        <a href="https://mule-demo.matheusribeiro.dev.br/docs/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>Swagger</a>
+                        <a href="https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=Indaiatuba,Sao%20Paulo,Curitiba" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>Compare endpoint</a>
+                    </div>
+                </div>
+
+                <!-- ACE demo -->
+                <div class="project-card rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">Currency API <span class="text-xs font-mono text-ibm-royal align-middle">IBM ACE</span></h4>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">Fetches the full EUR-based rate table once (cached), then triangulates any from/to pair from it &mdash; one upstream call serves every currency combination.</p>
+
+                    <svg viewBox="0 0 460 90" class="flow-diagram w-full h-auto mb-4" aria-hidden="true">
+                        <text x="35" y="20" text-anchor="middle">HTTP In</text>
+                        <rect class="flow-box" x="4" y="28" width="62" height="34"/>
+                        <text x="35" y="49" text-anchor="middle" class="flow-label">Listener</text>
+
+                        <path class="flow-arrow" d="M66 45 H98"/>
+                        <polygon class="flow-arrowhead" points="94,40 100,45 94,50"/>
+
+                        <text x="135" y="20" text-anchor="middle">10m TTL</text>
+                        <rect class="flow-box" x="100" y="28" width="70" height="34"/>
+                        <text x="135" y="49" text-anchor="middle" class="flow-label">Fetch EUR</text>
+
+                        <path class="flow-arrow" d="M170 45 H202"/>
+                        <polygon class="flow-arrowhead" points="198,40 204,45 198,50"/>
+
+                        <rect class="flow-box accent" x="204" y="28" width="120" height="34"/>
+                        <text x="264" y="49" text-anchor="middle" class="flow-label">Triangulate</text>
+                        <text x="264" y="17" text-anchor="middle" class="flow-label small">rate = eur[to] / eur[from]</text>
+
+                        <path class="flow-arrow" d="M324 45 H356"/>
+                        <polygon class="flow-arrowhead" points="352,40 358,45 352,50"/>
+
+                        <text x="418" y="20" text-anchor="middle">JSON</text>
+                        <rect class="flow-box" x="358" y="28" width="98" height="34"/>
+                        <text x="407" y="49" text-anchor="middle" class="flow-label">Reply</text>
+                    </svg>
+
+                    <form id="ace-demo-form" class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 mb-3">
+                        <input type="text" id="ace-demo-from" class="form-input" placeholder="From, e.g. USD" maxlength="3" required />
+                        <input type="text" id="ace-demo-to" class="form-input" placeholder="To, e.g. BRL" maxlength="3" required />
+                        <input type="number" id="ace-demo-amount" class="form-input" placeholder="100" value="100" min="0" step="any" />
+                        <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">Convert</button>
+                    </form>
+                    <pre id="ace-demo-result" class="demo-result"><code>&larr; try a conversion</code></pre>
+
+                    <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                        <a href="https://github.com/MatthewJulioRibeiro/ace-currency-api" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>Code</a>
+                        <a href="https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>Rates endpoint</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 fade-in delay-2">
             <div class="flex items-center gap-4 mb-10">
                 <h3 class="section-label" id="title-experience">Professional Journey</h3>
                 <div class="h-px bg-slate-200 dark:bg-slate-800 flex-1 transition-colors"></div>
