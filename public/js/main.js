@@ -296,11 +296,7 @@ function renderLanguages(languages) {
     `).join('');
 }
 
-// TODO: replace with the real Formspree endpoint before this goes live —
-// sign up free at https://formspree.io, create a form, paste its ID here.
-// Until then the form shows a clear error with a mailto fallback link
-// instead of silently failing.
-const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/mppadwyj';
 
 function renderContactForm(ui, profile) {
     const email = profile.email;
@@ -338,9 +334,6 @@ function renderContactForm(ui, profile) {
         statusEl.textContent = '';
 
         try {
-            if(CONTACT_FORM_ENDPOINT.includes('YOUR_FORM_ID')) {
-                throw new Error('form not configured');
-            }
             const res = await fetch(CONTACT_FORM_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
