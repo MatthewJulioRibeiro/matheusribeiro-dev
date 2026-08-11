@@ -5,7 +5,6 @@ let typeWriterTimeout;
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
     initSpotlight();
-    initApiDemos();
 
     try {
         const response = await fetch('./data/cv-data.json');
@@ -174,6 +173,7 @@ function renderPage() {
     renderCoreStack(common.skills);
     renderExperience(data.experience);
     renderProjects(data.projects, ui);
+    renderApiDemos(common.demos, data.demos, ui);
     renderSkillsGrid(common.skills);
     renderEducation(data.education);
     renderLanguages(common.languages);
@@ -363,7 +363,119 @@ function renderContactForm(ui, profile) {
 }
 
 // --- Live API demos (Mule weather / ACE currency) ---
-function initApiDemos() {
+const DEMO_SVGS = {
+    mule: `<svg viewBox="0 0 460 90" class="flow-diagram w-full h-auto mb-4" aria-hidden="true">
+        <text x="35" y="20" text-anchor="middle">HTTP In</text>
+        <rect class="flow-box" x="4" y="28" width="62" height="34" rx="0"/>
+        <text x="35" y="49" text-anchor="middle" class="flow-label">Listener</text>
+
+        <path class="flow-arrow" d="M66 45 H98"/>
+        <polygon class="flow-arrowhead" points="94,40 100,45 94,50"/>
+
+        <text x="135" y="20" text-anchor="middle">1h TTL</text>
+        <rect class="flow-box" x="100" y="28" width="70" height="34"/>
+        <text x="135" y="49" text-anchor="middle" class="flow-label">Geocode</text>
+
+        <path class="flow-arrow" d="M170 45 H202"/>
+        <polygon class="flow-arrowhead" points="198,40 204,45 198,50"/>
+
+        <rect class="flow-box accent" x="204" y="8" width="120" height="74"/>
+        <text x="264" y="26" text-anchor="middle" class="flow-label small">Scatter-Gather</text>
+        <rect class="flow-box inner" x="212" y="34" width="104" height="18"/>
+        <text x="264" y="47" text-anchor="middle" class="flow-label small">Forecast</text>
+        <rect class="flow-box inner" x="212" y="56" width="104" height="18"/>
+        <text x="264" y="69" text-anchor="middle" class="flow-label small">Air Quality</text>
+
+        <path class="flow-arrow" d="M324 45 H356"/>
+        <polygon class="flow-arrowhead" points="352,40 358,45 352,50"/>
+
+        <text x="418" y="20" text-anchor="middle">JSON</text>
+        <rect class="flow-box" x="358" y="28" width="98" height="34"/>
+        <text x="407" y="49" text-anchor="middle" class="flow-label">Response</text>
+    </svg>`,
+    ace: `<svg viewBox="0 0 460 90" class="flow-diagram w-full h-auto mb-4" aria-hidden="true">
+        <text x="35" y="20" text-anchor="middle">HTTP In</text>
+        <rect class="flow-box" x="4" y="28" width="62" height="34"/>
+        <text x="35" y="49" text-anchor="middle" class="flow-label">Listener</text>
+
+        <path class="flow-arrow" d="M66 45 H98"/>
+        <polygon class="flow-arrowhead" points="94,40 100,45 94,50"/>
+
+        <text x="135" y="20" text-anchor="middle">10m TTL</text>
+        <rect class="flow-box" x="100" y="28" width="70" height="34"/>
+        <text x="135" y="49" text-anchor="middle" class="flow-label">Fetch EUR</text>
+
+        <path class="flow-arrow" d="M170 45 H202"/>
+        <polygon class="flow-arrowhead" points="198,40 204,45 198,50"/>
+
+        <rect class="flow-box accent" x="204" y="28" width="120" height="34"/>
+        <text x="264" y="49" text-anchor="middle" class="flow-label">Triangulate</text>
+        <text x="264" y="17" text-anchor="middle" class="flow-label small">rate = eur[to] / eur[from]</text>
+
+        <path class="flow-arrow" d="M324 45 H356"/>
+        <polygon class="flow-arrowhead" points="352,40 358,45 352,50"/>
+
+        <text x="418" y="20" text-anchor="middle">JSON</text>
+        <rect class="flow-box" x="358" y="28" width="98" height="34"/>
+        <text x="407" y="49" text-anchor="middle" class="flow-label">Reply</text>
+    </svg>`
+};
+
+function renderApiDemos(demosCommon, demosText, ui) {
+    const container = document.getElementById('demos-grid');
+    if (!container || !demosCommon || !demosText) return;
+
+    container.innerHTML = demosCommon.map(dc => {
+        const dt = demosText.find(d => d.id === dc.id);
+        if (!dt) return '';
+
+        if (dc.id === 'mule') {
+            return `
+                <div class="project-card rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-blue align-middle">${dt.badge}</span></h4>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
+                    ${DEMO_SVGS.mule}
+                    <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
+                        <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.inputPlaceholder}" required />
+                        <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
+                    </form>
+                    <pre id="mule-demo-result" class="demo-result"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
+                    <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                        <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
+                        <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
+                        <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>${dt.extraLabel}</a>
+                    </div>
+                </div>`;
+        }
+
+        return `
+            <div class="project-card rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-royal align-middle">${dt.badge}</span></h4>
+                </div>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
+                ${DEMO_SVGS.ace}
+                <form id="ace-demo-form" class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 mb-3">
+                    <input type="text" id="ace-demo-from" class="form-input" placeholder="${dt.fromPlaceholder}" maxlength="3" required />
+                    <input type="text" id="ace-demo-to" class="form-input" placeholder="${dt.toPlaceholder}" maxlength="3" required />
+                    <input type="number" id="ace-demo-amount" class="form-input" placeholder="100" value="100" min="0" step="any" />
+                    <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
+                </form>
+                <pre id="ace-demo-result" class="demo-result"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
+                <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                    <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
+                    <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
+                    <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>${dt.extraLabel}</a>
+                </div>
+            </div>`;
+    }).join('');
+
+    initApiDemos(ui);
+}
+
+function initApiDemos(ui) {
     const muleForm = document.getElementById('mule-demo-form');
     const muleResult = document.getElementById('mule-demo-result');
     if (muleForm && muleResult) {
@@ -372,7 +484,7 @@ function initApiDemos() {
             const city = document.getElementById('mule-demo-city').value.trim();
             if (!city) return;
             runDemoCall(muleForm, muleResult,
-                `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`);
+                `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`, ui);
         };
     }
 
@@ -386,17 +498,17 @@ function initApiDemos() {
             const amount = document.getElementById('ace-demo-amount').value.trim() || '1';
             if (!from || !to) return;
             runDemoCall(aceForm, aceResult,
-                `https://ace-demo.matheusribeiro.dev.br/api/currency?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`);
+                `https://ace-demo.matheusribeiro.dev.br/api/currency?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`, ui);
         };
     }
 }
 
-async function runDemoCall(form, resultEl, url) {
+async function runDemoCall(form, resultEl, url, ui) {
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn ? submitBtn.textContent : null;
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '...'; }
     resultEl.className = 'demo-result';
-    resultEl.textContent = 'Loading...';
+    resultEl.textContent = ui.demoLoadingText || 'Loading...';
 
     try {
         const res = await fetch(url);
@@ -405,7 +517,8 @@ async function runDemoCall(form, resultEl, url) {
         resultEl.innerHTML = syntaxHighlightJson(data);
     } catch (err) {
         resultEl.className = 'demo-result is-error';
-        resultEl.textContent = `Request failed: ${err.message}. The demo VM may be asleep on the first request -- try again in a few seconds.`;
+        const template = ui.demoErrorText || 'Request failed: {msg}. The demo VM may be asleep on the first request -- try again in a few seconds.';
+        resultEl.textContent = template.replace('{msg}', err.message);
     } finally {
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
     }

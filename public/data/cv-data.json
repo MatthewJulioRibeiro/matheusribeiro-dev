@@ -79,6 +79,29 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
     ],
+    "demos": [
+      {
+        "id": "mule",
+        "badge": "Mule 4",
+        "title": "Weather API",
+        "description": "Resolve uma cidade e busca previsão e qualidade do ar em paralelo (Scatter-Gather), com geocoding em cache e retries automáticos.",
+        "inputPlaceholder": "Cidade, ex. Indaiatuba",
+        "submitBtn": "Ver clima",
+        "resultPlaceholder": "← tente uma cidade",
+        "extraLabel": "Endpoint de comparação"
+      },
+      {
+        "id": "ace",
+        "badge": "IBM ACE",
+        "title": "Currency API",
+        "description": "Busca a tabela de taxas em EUR uma vez (em cache) e triangula qualquer par de/para a partir dela — uma chamada upstream atende qualquer combinação de moedas.",
+        "fromPlaceholder": "De, ex. USD",
+        "toPlaceholder": "Para, ex. BRL",
+        "submitBtn": "Converter",
+        "resultPlaceholder": "← tente uma conversão",
+        "extraLabel": "Endpoint de taxas"
+      }
+    ],
     "ui": {
       "experienceTitle": "Trajetória Profissional",
       "skillsTitle": "Expertise Técnica",
@@ -90,6 +113,10 @@
       "demosIntro": "Duas APIs de integração pequenas, construídas do zero e rodando na minha própria infraestrutura — não são mockups. Chame direto aqui, ou veja o código/docs.",
       "viewCodeBtn": "Ver código",
       "tryLiveBtn": "Testar ao vivo",
+      "demoCodeBtn": "Código",
+      "demoSwaggerBtn": "Swagger",
+      "demoLoadingText": "Carregando...",
+      "demoErrorText": "Falha na requisição: {msg}. A VM da demo pode estar hibernando na primeira chamada — tente de novo em alguns segundos.",
       "contactBtn": "Conectar",
       "downloadBtn": "Baixar CV.pdf",
       "scrollText": "Rolar para baixo",
@@ -183,6 +210,29 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
     ],
+    "demos": [
+      {
+        "id": "mule",
+        "badge": "Mule 4",
+        "title": "Weather API",
+        "description": "Resolves a city, then fetches forecast and air quality in parallel (Scatter-Gather), with a cached geocoding lookup and automatic retries.",
+        "inputPlaceholder": "City, e.g. Indaiatuba",
+        "submitBtn": "Get weather",
+        "resultPlaceholder": "← try a city",
+        "extraLabel": "Compare endpoint"
+      },
+      {
+        "id": "ace",
+        "badge": "IBM ACE",
+        "title": "Currency API",
+        "description": "Fetches the full EUR-based rate table once (cached), then triangulates any from/to pair from it — one upstream call serves every currency combination.",
+        "fromPlaceholder": "From, e.g. USD",
+        "toPlaceholder": "To, e.g. BRL",
+        "submitBtn": "Convert",
+        "resultPlaceholder": "← try a conversion",
+        "extraLabel": "Rates endpoint"
+      }
+    ],
     "ui": {
       "experienceTitle": "Professional Journey",
       "skillsTitle": "Technical Expertise",
@@ -194,6 +244,10 @@
       "demosIntro": "Two small integration APIs, built from scratch and running on my own infrastructure — not mockups. Call them right here, or check the source/docs.",
       "viewCodeBtn": "View code",
       "tryLiveBtn": "Try it live",
+      "demoCodeBtn": "Code",
+      "demoSwaggerBtn": "Swagger",
+      "demoLoadingText": "Loading...",
+      "demoErrorText": "Request failed: {msg}. The demo VM may be asleep on the first request — try again in a few seconds.",
       "contactBtn": "Connect",
       "downloadBtn": "Download CV.pdf",
       "scrollText": "Scroll Down",
@@ -208,6 +262,22 @@
     }
   },
   "common": {
+    "demos": [
+      {
+        "id": "mule",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api",
+        "docsUrl": "https://mule-demo.matheusribeiro.dev.br/docs/",
+        "apiBase": "https://mule-demo.matheusribeiro.dev.br/api/weather",
+        "extraUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=Indaiatuba,Sao%20Paulo,Curitiba"
+      },
+      {
+        "id": "ace",
+        "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api",
+        "docsUrl": "https://ace-demo.matheusribeiro.dev.br/docs/",
+        "apiBase": "https://ace-demo.matheusribeiro.dev.br/api/currency",
+        "extraUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD"
+      }
+    ],
     "stats": [
       { "value": "6.5+", "label_en": "Years in integration", "label_pt": "Anos em integração" },
       { "value": "5", "label_en": "Enterprise clients", "label_pt": "Clientes enterprise" },
