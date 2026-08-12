@@ -88,7 +88,14 @@
         "inputPlaceholder": "Cidade, ex. Indaiatuba",
         "submitBtn": "Ver clima",
         "resultPlaceholder": "← tente uma cidade",
-        "extraLabel": "Endpoint de comparação"
+        "extraLabel": "Endpoint de comparação",
+        "steps": [
+          "Geocoding fica em cache por 1h — chame a mesma cidade de novo e veja o tempo de resposta despencar.",
+          "Previsão e qualidade do ar são buscadas em paralelo (Scatter-Gather), não em sequência.",
+          "Se a qualidade do ar falhar, a resposta degrada com <code>airQuality: null</code> em vez de derrubar a chamada inteira.",
+          "Retry automático (2x) em falhas transitórias de rede antes de desistir.",
+          "<code>/compare?cities=</code> roda N cidades ao mesmo tempo (Parallel For Each) — uma cidade inválida não trava as outras."
+        ]
       },
       {
         "id": "ace",
@@ -99,7 +106,13 @@
         "toPlaceholder": "Para, ex. BRL",
         "submitBtn": "Converter",
         "resultPlaceholder": "← tente uma conversão",
-        "extraLabel": "Endpoint de taxas"
+        "extraLabel": "Endpoint de taxas",
+        "steps": [
+          "Uma única tabela de taxas base-EUR alimenta qualquer par de moedas — sem URL dinâmica por request.",
+          "Conversão é pura matemática (<code>eur[to] / eur[from]</code>) rodando em ESQL, sem chamada extra ao upstream.",
+          "Erros de validação (parâmetro faltando, moeda inválida) e falhas de upstream têm rotas de resposta dedicadas.",
+          "<code>/rates?base=</code> expõe a tabela inteira convertida para qualquer moeda base, montada dinamicamente em ESQL."
+        ]
       }
     ],
     "ui": {
@@ -120,6 +133,7 @@
       "demoStatusChecking": "Verificando status...",
       "demoStatusOnline": "Online agora",
       "demoStatusOffline": "Indisponível no momento",
+      "demoHowItWorks": "Como funciona",
       "contactBtn": "Conectar",
       "downloadBtn": "Baixar CV.pdf",
       "scrollText": "Rolar para baixo",
@@ -222,7 +236,14 @@
         "inputPlaceholder": "City, e.g. Indaiatuba",
         "submitBtn": "Get weather",
         "resultPlaceholder": "← try a city",
-        "extraLabel": "Compare endpoint"
+        "extraLabel": "Compare endpoint",
+        "steps": [
+          "Geocoding is cached for 1h — call the same city again and watch the response time drop.",
+          "Forecast and air quality are fetched in parallel (Scatter-Gather), not sequentially.",
+          "If air quality fails, the response degrades with <code>airQuality: null</code> instead of failing the whole call.",
+          "Automatic retry (2x) on transient network failures before giving up.",
+          "<code>/compare?cities=</code> runs N cities concurrently (Parallel For Each) — one bad city doesn't block the others."
+        ]
       },
       {
         "id": "ace",
@@ -233,7 +254,13 @@
         "toPlaceholder": "To, e.g. BRL",
         "submitBtn": "Convert",
         "resultPlaceholder": "← try a conversion",
-        "extraLabel": "Rates endpoint"
+        "extraLabel": "Rates endpoint",
+        "steps": [
+          "A single EUR-based rate table feeds every currency pair — no per-request dynamic URL.",
+          "Conversion is pure math (<code>eur[to] / eur[from]</code>) running in ESQL, no extra upstream call.",
+          "Validation errors (missing param, unknown currency) and upstream failures have dedicated response paths.",
+          "<code>/rates?base=</code> exposes the whole table re-based to any currency, built dynamically in ESQL."
+        ]
       }
     ],
     "ui": {
@@ -254,6 +281,7 @@
       "demoStatusChecking": "Checking status...",
       "demoStatusOnline": "Online right now",
       "demoStatusOffline": "Currently unavailable",
+      "demoHowItWorks": "How it works",
       "contactBtn": "Connect",
       "downloadBtn": "Download CV.pdf",
       "scrollText": "Scroll Down",

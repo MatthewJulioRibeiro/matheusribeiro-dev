@@ -354,6 +354,56 @@ body {
 .demo-result .num { color: #2A5ADB; }
 .dark .demo-result .num { color: #5B8DEF; }
 
+/* API demo "how it works" disclosure */
+.demo-steps-block { font-family: 'IBM Plex Mono', monospace; }
+.demo-steps-summary {
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #6B5D52;
+    list-style: none;
+    user-select: none;
+}
+.demo-steps-summary::-webkit-details-marker { display: none; }
+.demo-steps-summary::before { content: '▸ '; }
+.demo-steps-block[open] .demo-steps-summary::before { content: '▾ '; }
+.demo-steps-summary:hover { color: #B3122A; }
+.dark .demo-steps-summary { color: #A89686; }
+.dark .demo-steps-summary:hover { color: #E8323F; }
+.demo-steps-list {
+    margin-top: 0.5rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: #6B5D52;
+}
+.dark .demo-steps-list { color: #A89686; }
+.demo-steps-list code {
+    font-family: 'IBM Plex Mono', monospace;
+    background: rgba(26, 18, 16, 0.06);
+    padding: 0 0.3rem;
+    border-radius: 2px;
+}
+.dark .demo-steps-list code { background: rgba(237, 227, 216, 0.1); }
+
+/* API demo result meta (status + latency) */
+.demo-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #1D7A4C;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed currentColor;
+    opacity: 0.85;
+}
+.dark .demo-meta { color: #4ADE9C; }
+.demo-result.is-error .demo-meta { color: #B3122A; }
+.dark .demo-result.is-error .demo-meta { color: #E8323F; }
+
 /* API demo live-status dot */
 .demo-status {
     font-size: 10px;

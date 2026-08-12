@@ -421,6 +421,17 @@ const DEMO_SVGS = {
     </svg>`
 };
 
+function renderStepsList(steps, ui) {
+    if (!steps || !steps.length) return '';
+    return `
+        <details class="demo-steps-block mb-4">
+            <summary class="demo-steps-summary">${ui.demoHowItWorks}</summary>
+            <ul class="demo-steps-list">
+                ${steps.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+        </details>`;
+}
+
 function renderApiDemos(demosCommon, demosText, ui) {
     const container = document.getElementById('demos-grid');
     if (!container || !demosCommon || !demosText) return;
@@ -437,6 +448,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
                     </div>
                     <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                     ${DEMO_SVGS.mule}
+                    ${renderStepsList(dt.steps, ui)}
                     <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
                         <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.inputPlaceholder}" required />
                         <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
@@ -457,6 +469,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
                 </div>
                 <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                 ${DEMO_SVGS.ace}
+                ${renderStepsList(dt.steps, ui)}
                 <form id="ace-demo-form" class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 mb-3">
                     <input type="text" id="ace-demo-from" class="form-input" placeholder="${dt.fromPlaceholder}" maxlength="3" required />
                     <input type="text" id="ace-demo-to" class="form-input" placeholder="${dt.toPlaceholder}" maxlength="3" required />
@@ -533,11 +546,13 @@ async function runDemoCall(form, resultEl, url, ui) {
     resultEl.className = 'demo-result';
     resultEl.textContent = ui.demoLoadingText || 'Loading...';
 
+    const start = performance.now();
     try {
         const res = await fetch(url);
+        const elapsed = Math.round(performance.now() - start);
         const data = await res.json();
         resultEl.className = res.ok ? 'demo-result' : 'demo-result is-error';
-        resultEl.innerHTML = syntaxHighlightJson(data);
+        resultEl.innerHTML = `<div class="demo-meta">HTTP ${res.status} &middot; ${elapsed}ms</div>${syntaxHighlightJson(data)}`;
     } catch (err) {
         resultEl.className = 'demo-result is-error';
         const template = ui.demoErrorText || 'Request failed: {msg}. The demo VM may be asleep on the first request -- try again in a few seconds.';
