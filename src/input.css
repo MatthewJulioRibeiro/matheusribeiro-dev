@@ -354,6 +354,24 @@ body {
 .demo-result .num { color: #2A5ADB; }
 .dark .demo-result .num { color: #5B8DEF; }
 
+/* API demo live-status dot */
+.demo-status {
+    font-size: 10px;
+    margin-left: 0.4rem;
+    cursor: default;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+.demo-status.is-checking { color: #A89686; animation: demo-status-pulse 1.4s ease-in-out infinite; }
+.demo-status.is-online { color: #1D7A4C; }
+.dark .demo-status.is-online { color: #4ADE9C; }
+.demo-status.is-offline { color: #B3122A; }
+.dark .demo-status.is-offline { color: #E8323F; }
+@keyframes demo-status-pulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+}
+
 /* Footer ⌘K hint */
 .footer-hint { opacity: 0.55; transition: opacity 0.15s; }
 .footer-hint:hover { opacity: 1; }

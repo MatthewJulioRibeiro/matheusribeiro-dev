@@ -433,7 +433,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
             return `
                 <div class="project-card rounded-lg">
                     <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-blue align-middle">${dt.badge}</span></h4>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-blue align-middle">${dt.badge}</span> <span id="mule-demo-status" class="demo-status is-checking" title="${ui.demoStatusChecking}">&#9679;</span></h4>
                     </div>
                     <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                     ${DEMO_SVGS.mule}
@@ -453,7 +453,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
         return `
             <div class="project-card rounded-lg">
                 <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-royal align-middle">${dt.badge}</span></h4>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">${dt.title} <span class="text-xs font-mono text-ibm-royal align-middle">${dt.badge}</span> <span id="ace-demo-status" class="demo-status is-checking" title="${ui.demoStatusChecking}">&#9679;</span></h4>
                 </div>
                 <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                 ${DEMO_SVGS.ace}
@@ -473,6 +473,29 @@ function renderApiDemos(demosCommon, demosText, ui) {
     }).join('');
 
     initApiDemos(ui);
+    demosCommon.forEach(dc => checkDemoStatus(dc.id, dc.apiBase, ui));
+}
+
+async function checkDemoStatus(id, apiBase, ui) {
+    const el = document.getElementById(`${id}-demo-status`);
+    if (!el) return;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    try {
+        const res = await fetch(apiBase, { signal: controller.signal });
+        // A 4xx here just means our own validation rejected the empty ping request --
+        // the service is still up. Only 5xx / a network failure means it's actually down.
+        if (res.status >= 500) throw new Error('upstream error');
+        el.className = 'demo-status is-online';
+        el.title = ui.demoStatusOnline;
+    } catch (err) {
+        el.className = 'demo-status is-offline';
+        el.title = ui.demoStatusOffline;
+    } finally {
+        clearTimeout(timeoutId);
+    }
 }
 
 function initApiDemos(ui) {
