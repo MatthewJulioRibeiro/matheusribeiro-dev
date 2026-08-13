@@ -459,6 +459,30 @@ function aqiLabel(aqi, ui) {
     return { text: ui.demoAqiVeryPoor, cls: 'is-very-poor' };
 }
 
+// A handful of well-known capitals across continents, verified against the
+// live weather API to resolve to the expected country. `query` is what's
+// actually sent to /api/weather; pt/en are just the button's display label.
+const CAPITAL_SUGGESTIONS = [
+    { query: 'Brasília', pt: 'Brasília', en: 'Brasília' },
+    { query: 'Washington', pt: 'Washington', en: 'Washington' },
+    { query: 'London', pt: 'Londres', en: 'London' },
+    { query: 'Paris', pt: 'Paris', en: 'Paris' },
+    { query: 'Tokyo', pt: 'Tóquio', en: 'Tokyo' },
+    { query: 'Cairo', pt: 'Cairo', en: 'Cairo' },
+    { query: 'Moscow', pt: 'Moscou', en: 'Moscow' },
+    { query: 'Canberra', pt: 'Camberra', en: 'Canberra' },
+    { query: 'New Delhi', pt: 'Nova Delhi', en: 'New Delhi' },
+    { query: 'Buenos Aires', pt: 'Buenos Aires', en: 'Buenos Aires' }
+];
+
+function renderQuickPicks(idPrefix, ui) {
+    return `
+        <div class="demo-quick-picks">
+            <span class="demo-quick-picks-label">${ui.demoQuickPicks}</span>
+            ${CAPITAL_SUGGESTIONS.map((c, i) => `<button type="button" class="demo-chip demo-quick-pick" data-idx="${i}" data-prefix="${idPrefix}">${escapeHtml(currentLang === 'pt' ? c.pt : c.en)}</button>`).join('')}
+        </div>`;
+}
+
 function renderStepsList(steps, ui) {
     if (!steps || !steps.length) return '';
     return `
@@ -586,15 +610,20 @@ function renderApiDemos(demosCommon, demosText, ui) {
                                     <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.geoSearchPlaceholder}" autocomplete="off" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="mule-geo-suggestions" />
                                     <div id="mule-geo-suggestions" class="demo-geo-suggestions is-hidden" role="listbox"></div>
                                 </div>
+                                ${renderQuickPicks('mule-single', ui)}
                                 <button type="submit" class="w-full mt-2 px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
                             </form>
                             <p class="demo-geo-attribution">${ui.demoGeoAttribution} <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
                         </div>
                         <div class="demo-tab-panel is-hidden" data-panel="compare">
-                            <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
-                                <input type="text" id="mule-compare-input" class="form-input" placeholder="${dt.inputPlaceholder}" />
-                                <button type="button" id="mule-compare-add" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] text-[#1A1210] dark:text-[#EDE3D8] text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue transition-all whitespace-nowrap">${dt.addCityBtn}</button>
+                            <div class="demo-geo-search mb-2">
+                                <div class="grid grid-cols-[1fr_auto] gap-2">
+                                    <input type="text" id="mule-compare-input" class="form-input" placeholder="${dt.geoSearchPlaceholder}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="mule-compare-suggestions" />
+                                    <button type="button" id="mule-compare-add" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] text-[#1A1210] dark:text-[#EDE3D8] text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue transition-all whitespace-nowrap">${dt.addCityBtn}</button>
+                                </div>
+                                <div id="mule-compare-suggestions" class="demo-geo-suggestions is-hidden" role="listbox"></div>
                             </div>
+                            ${renderQuickPicks('mule-compare', ui)}
                             <div id="mule-compare-chips" class="demo-chip-list"></div>
                             <p class="demo-chip-hint">${dt.compareHint}</p>
                             <button type="button" id="mule-compare-submit" class="w-full mb-1 px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all">${dt.compareBtn}</button>
@@ -731,6 +760,104 @@ function initApiDemos(ui, demosText) {
     const muleDt = demosText.find(d => d.id === 'mule') || {};
     const aceDt = demosText.find(d => d.id === 'ace') || {};
 
+    // --- Mule: shared location-search autocomplete, reused by both the
+    // single-city input and the compare-cities add-input below ---
+    function createGeoAutocomplete(inputEl, suggestionsEl, onSelect, onEnterFallback) {
+        let results = [];
+        let highlightIndex = -1;
+        let debounceTimer = null;
+
+        function hide() {
+            suggestionsEl.innerHTML = '';
+            suggestionsEl.classList.add('is-hidden');
+            results = [];
+            highlightIndex = -1;
+            inputEl.setAttribute('aria-expanded', 'false');
+            inputEl.removeAttribute('aria-activedescendant');
+        }
+
+        function select(idx) {
+            const r = results[idx];
+            if (!r) return;
+            hide();
+            onSelect(r);
+        }
+
+        function updateHighlight() {
+            suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach((btn, i) => {
+                const active = i === highlightIndex;
+                btn.classList.toggle('is-highlighted', active);
+                btn.setAttribute('aria-selected', active ? 'true' : 'false');
+                if (active) {
+                    btn.scrollIntoView({ block: 'nearest' });
+                    inputEl.setAttribute('aria-activedescendant', btn.id);
+                }
+            });
+        }
+
+        function render(newResults) {
+            results = newResults;
+            highlightIndex = -1;
+            if (!results.length) { hide(); return; }
+            suggestionsEl.innerHTML = results.map((r, i) => {
+                const parts = [r.neighborhood, r.city, r.state, r.country].filter(Boolean);
+                const uniqueParts = parts.filter((p, idx) => parts.indexOf(p) === idx);
+                return `<button type="button" id="${suggestionsEl.id}-option-${i}" role="option" aria-selected="false" class="demo-geo-suggestion" data-idx="${i}">${escapeHtml(uniqueParts.join(', '))}</button>`;
+            }).join('');
+            suggestionsEl.classList.remove('is-hidden');
+            inputEl.setAttribute('aria-expanded', 'true');
+            suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach(btn => {
+                btn.onclick = () => select(Number(btn.dataset.idx));
+            });
+        }
+
+        inputEl.addEventListener('input', () => {
+            const q = inputEl.value.trim();
+            clearTimeout(debounceTimer);
+            if (q.length < 3) { hide(); return; }
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://mule-demo.matheusribeiro.dev.br/api/geocode?q=${encodeURIComponent(q)}`);
+                    const data = await res.json();
+                    render(data.results || []);
+                } catch (err) { hide(); }
+            }, 400);
+        });
+
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' && results.length) {
+                e.preventDefault();
+                highlightIndex = (highlightIndex + 1) % results.length;
+                updateHighlight();
+            } else if (e.key === 'ArrowUp' && results.length) {
+                e.preventDefault();
+                highlightIndex = (highlightIndex - 1 + results.length) % results.length;
+                updateHighlight();
+            } else if (e.key === 'Enter') {
+                if (highlightIndex >= 0 && results.length) {
+                    e.preventDefault();
+                    select(highlightIndex);
+                } else if (onEnterFallback) {
+                    e.preventDefault();
+                    onEnterFallback();
+                }
+            } else if (e.key === 'Escape') {
+                hide();
+            }
+        });
+
+        inputEl.addEventListener('blur', () => setTimeout(hide, 150));
+    }
+
+    function wireQuickPicks(prefix, onPick) {
+        document.querySelectorAll(`.demo-quick-pick[data-prefix="${prefix}"]`).forEach(btn => {
+            btn.onclick = () => {
+                const capital = CAPITAL_SUGGESTIONS[Number(btn.dataset.idx)];
+                if (capital) onPick(capital.query);
+            };
+        });
+    }
+
     // --- Mule: single city (with live location search via /api/geocode) ---
     const muleForm = document.getElementById('mule-demo-form');
     const muleResult = document.getElementById('mule-demo-result');
@@ -738,128 +865,70 @@ function initApiDemos(ui, demosText) {
     const cityInput = document.getElementById('mule-demo-city');
     const suggestionsEl = document.getElementById('mule-geo-suggestions');
     let muleSelectedCity = null;
-    let geoDebounceTimer = null;
-    let geoResults = [];
-    let geoHighlightIndex = -1;
 
-    function hideGeoSuggestions() {
-        if (!suggestionsEl) return;
-        suggestionsEl.innerHTML = '';
-        suggestionsEl.classList.add('is-hidden');
-        geoResults = [];
-        geoHighlightIndex = -1;
-        if (cityInput) {
-            cityInput.setAttribute('aria-expanded', 'false');
-            cityInput.removeAttribute('aria-activedescendant');
-        }
+    function runMuleSingle(city) {
+        if (!city || !muleResult) return;
+        const btn = muleForm ? muleForm.querySelector('button[type="submit"]') : null;
+        const url = `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`;
+        runDemoCall(btn, muleResult, url, ui, mulePretty, (data) => renderWeatherSummary(data, ui));
     }
 
-    function selectGeoSuggestion(idx) {
-        const r = geoResults[idx];
-        if (!r) return;
-        muleSelectedCity = r.city;
-        const displayParts = [r.neighborhood, r.city].filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
-        if (cityInput) cityInput.value = displayParts.join(', ');
-        hideGeoSuggestions();
-    }
-
-    function updateGeoHighlight() {
-        if (!suggestionsEl) return;
-        suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach((btn, i) => {
-            const active = i === geoHighlightIndex;
-            btn.classList.toggle('is-highlighted', active);
-            btn.setAttribute('aria-selected', active ? 'true' : 'false');
-            if (active) {
-                btn.scrollIntoView({ block: 'nearest' });
-                if (cityInput) cityInput.setAttribute('aria-activedescendant', btn.id);
-            }
+    if (cityInput && suggestionsEl) {
+        createGeoAutocomplete(cityInput, suggestionsEl, (r) => {
+            muleSelectedCity = r.city;
+            const displayParts = [r.neighborhood, r.city].filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
+            cityInput.value = displayParts.join(', ');
         });
-    }
-
-    function renderGeoSuggestions(results) {
-        if (!suggestionsEl) return;
-        geoResults = results;
-        geoHighlightIndex = -1;
-        if (!results.length) { hideGeoSuggestions(); return; }
-        suggestionsEl.innerHTML = results.map((r, i) => {
-            const parts = [r.neighborhood, r.city, r.state, r.country].filter(Boolean);
-            const uniqueParts = parts.filter((p, idx) => parts.indexOf(p) === idx);
-            return `<button type="button" id="mule-geo-option-${i}" role="option" aria-selected="false" class="demo-geo-suggestion" data-idx="${i}">${escapeHtml(uniqueParts.join(', '))}</button>`;
-        }).join('');
-        suggestionsEl.classList.remove('is-hidden');
-        if (cityInput) cityInput.setAttribute('aria-expanded', 'true');
-        suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach(btn => {
-            btn.onclick = () => selectGeoSuggestion(Number(btn.dataset.idx));
-        });
-    }
-
-    if (cityInput) {
-        cityInput.oninput = () => {
-            muleSelectedCity = null;
-            const q = cityInput.value.trim();
-            clearTimeout(geoDebounceTimer);
-            if (q.length < 3) { hideGeoSuggestions(); return; }
-            geoDebounceTimer = setTimeout(async () => {
-                try {
-                    const res = await fetch(`https://mule-demo.matheusribeiro.dev.br/api/geocode?q=${encodeURIComponent(q)}`);
-                    const data = await res.json();
-                    renderGeoSuggestions(data.results || []);
-                } catch (err) { hideGeoSuggestions(); }
-            }, 400);
-        };
-        cityInput.addEventListener('keydown', (e) => {
-            if (!geoResults.length) return;
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                geoHighlightIndex = (geoHighlightIndex + 1) % geoResults.length;
-                updateGeoHighlight();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                geoHighlightIndex = (geoHighlightIndex - 1 + geoResults.length) % geoResults.length;
-                updateGeoHighlight();
-            } else if (e.key === 'Enter' && geoHighlightIndex >= 0) {
-                e.preventDefault();
-                selectGeoSuggestion(geoHighlightIndex);
-            } else if (e.key === 'Escape') {
-                hideGeoSuggestions();
-            }
-        });
-        cityInput.addEventListener('blur', () => setTimeout(hideGeoSuggestions, 150));
+        cityInput.addEventListener('input', () => { muleSelectedCity = null; });
     }
 
     if (muleForm && muleResult) {
-        muleForm.onsubmit = async (e) => {
+        muleForm.onsubmit = (e) => {
             e.preventDefault();
-            hideGeoSuggestions();
             const city = muleSelectedCity || (cityInput ? cityInput.value.trim() : '');
-            if (!city) return;
-            const btn = muleForm.querySelector('button[type="submit"]');
-            const url = `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`;
-            runDemoCall(btn, muleResult, url, ui, mulePretty, (data) => renderWeatherSummary(data, ui));
+            runMuleSingle(city);
         };
     }
 
-    // --- Mule: compare cities ---
+    wireQuickPicks('mule-single', (query) => {
+        muleSelectedCity = query;
+        if (cityInput) cityInput.value = query;
+        runMuleSingle(query);
+    });
+
+    // --- Mule: compare cities (also with live location search) ---
     let muleCompareCities = [];
     const muleCompareInput = document.getElementById('mule-compare-input');
+    const muleCompareSuggestionsEl = document.getElementById('mule-compare-suggestions');
     const muleCompareAdd = document.getElementById('mule-compare-add');
     const muleCompareSubmit = document.getElementById('mule-compare-submit');
+
     function renderMuleChips() {
         renderChips('mule-compare-chips', muleCompareCities, ui, (idx) => {
             muleCompareCities.splice(idx, 1);
             renderMuleChips();
         });
     }
-    function addMuleCity() {
-        if (!muleCompareInput) return;
-        const val = muleCompareInput.value.trim();
-        if (!val || muleCompareCities.length >= 5 || muleCompareCities.some(c => c.toLowerCase() === val.toLowerCase())) return;
-        muleCompareCities.push(val);
-        muleCompareInput.value = '';
+    function addCompareCity(city) {
+        if (!city || muleCompareCities.length >= 5 || muleCompareCities.some(c => c.toLowerCase() === city.toLowerCase())) return;
+        muleCompareCities.push(city);
         renderMuleChips();
     }
-    if (muleCompareAdd) muleCompareAdd.onclick = addMuleCity;
-    if (muleCompareInput) muleCompareInput.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); addMuleCity(); } };
+    function addMuleCityFromInput() {
+        if (!muleCompareInput) return;
+        const val = muleCompareInput.value.trim();
+        if (!val) return;
+        addCompareCity(val);
+        muleCompareInput.value = '';
+    }
+
+    if (muleCompareInput && muleCompareSuggestionsEl) {
+        createGeoAutocomplete(muleCompareInput, muleCompareSuggestionsEl, (r) => {
+            addCompareCity(r.city);
+            muleCompareInput.value = '';
+        }, addMuleCityFromInput);
+    }
+    if (muleCompareAdd) muleCompareAdd.onclick = addMuleCityFromInput;
     if (muleCompareSubmit && muleResult) {
         muleCompareSubmit.onclick = () => {
             if (!muleCompareCities.length) return;
@@ -867,6 +936,8 @@ function initApiDemos(ui, demosText) {
             runDemoCall(muleCompareSubmit, muleResult, url, ui, mulePretty, (data) => renderCompareResults(data, ui));
         };
     }
+
+    wireQuickPicks('mule-compare', (query) => addCompareCity(query));
 
     initDemoTabs('mule', 'mule-demo-result', 'mule-demo-pretty', (muleDt.resultPlaceholder || '').replace(/^←\s*/, ''));
 

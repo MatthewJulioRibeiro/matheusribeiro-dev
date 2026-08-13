@@ -540,6 +540,14 @@ body {
 .demo-chip-hint { font-size: 10.5px; color: #6B5D52; margin-bottom: 0.6rem; }
 .dark .demo-chip-hint { color: #A89686; }
 
+/* API demo quick-pick capitals */
+.demo-quick-picks { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.5rem 0; }
+.demo-quick-picks-label { font-size: 10px; color: #6B5D52; margin-right: 0.15rem; }
+.dark .demo-quick-picks-label { color: #A89686; }
+.demo-quick-pick { cursor: pointer; background: none; transition: color 0.15s ease, border-color 0.15s ease; }
+.demo-quick-pick:hover { border-color: #B3122A; color: #B3122A; }
+.dark .demo-quick-pick:hover { border-color: #E8323F; color: #E8323F; }
+
 /* API demo inline example link (inside a tab panel) */
 .demo-inline-link {
     display: inline-block;
