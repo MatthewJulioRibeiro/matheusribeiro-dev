@@ -521,6 +521,24 @@ function renderConvertSummary(data, ui) {
         </div>`;
 }
 
+function renderManyResults(data, ui) {
+    if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
+    const results = data.results || [];
+    return `<div class="demo-compare-grid">${results.map(r => {
+        if (!r.ok) {
+            return `<div class="demo-compare-card is-error">
+                <div class="demo-compare-city">${escapeHtml(r.pair)}</div>
+                <div class="demo-compare-err">${escapeHtml(r.error || '?')}</div>
+            </div>`;
+        }
+        return `<div class="demo-compare-card">
+            <div class="demo-compare-city">${escapeHtml(r.pair)}</div>
+            <div class="demo-compare-temp">${r.convertedAmount} ${r.to}</div>
+            <div class="demo-compare-desc">1 ${r.from} = ${r.rate} ${r.to}</div>
+        </div>`;
+    }).join('')}</div>`;
+}
+
 function renderRatesTable(data, ui) {
     if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
     const rows = Object.entries(data.rates || {}).sort((a, b) => a[0].localeCompare(b[0]));
@@ -605,6 +623,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
                 <div id="ace-tabs" class="demo-tabs">
                     <button type="button" class="demo-tab is-active" data-tab="convert">${dt.tabConvertLabel}</button>
                     <button type="button" class="demo-tab" data-tab="rates">${dt.tabRatesLabel}</button>
+                    <button type="button" class="demo-tab" data-tab="many">${dt.tabManyLabel}</button>
                 </div>
                 <div id="ace-panels">
                     <div class="demo-tab-panel" data-panel="convert">
@@ -626,6 +645,21 @@ function renderApiDemos(demosCommon, demosText, ui) {
                             <button type="button" id="ace-rates-submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.loadRatesBtn}</button>
                         </div>
                         <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="demo-inline-link">${dt.extraLabel} &#8599;</a>
+                    </div>
+                    <div class="demo-tab-panel is-hidden" data-panel="many">
+                        <div class="grid grid-cols-[1fr_auto_1fr_auto] gap-2 mb-2">
+                            <select id="ace-many-from" class="form-input">${renderCurrencyOptions('USD')}</select>
+                            <span class="demo-convert-arrow">&rarr;</span>
+                            <select id="ace-many-to" class="form-input">${renderCurrencyOptions('BRL')}</select>
+                            <button type="button" id="ace-many-add" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] text-[#1A1210] dark:text-[#EDE3D8] text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue transition-all whitespace-nowrap">${dt.addPairBtn}</button>
+                        </div>
+                        <div id="ace-many-chips" class="demo-chip-list"></div>
+                        <p class="demo-chip-hint">${dt.manyHint}</p>
+                        <div class="grid grid-cols-[1fr_auto] gap-2 mb-1">
+                            <input type="number" id="ace-many-amount" class="form-input" value="100" min="0" step="any" />
+                            <button type="button" id="ace-many-submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.manyBtn}</button>
+                        </div>
+                        <a href="${dc.extraUrl2}" target="_blank" rel="noopener noreferrer" class="demo-inline-link">${dt.extraLabel2} &#8599;</a>
                     </div>
                 </div>
 
@@ -870,6 +904,40 @@ function initApiDemos(ui, demosText) {
             const base = document.getElementById('ace-rates-base').value;
             const url = `https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=${encodeURIComponent(base)}`;
             runDemoCall(aceRatesBtn, aceResult, url, ui, acePretty, (data) => renderRatesTable(data, ui));
+        };
+    }
+
+    // --- ACE: convert many ---
+    let aceManyPairs = [];
+    const aceManyFrom = document.getElementById('ace-many-from');
+    const aceManyTo = document.getElementById('ace-many-to');
+    const aceManyAdd = document.getElementById('ace-many-add');
+    const aceManyAmount = document.getElementById('ace-many-amount');
+    const aceManySubmit = document.getElementById('ace-many-submit');
+    function renderAceManyChips() {
+        renderChips('ace-many-chips', aceManyPairs, ui, (idx) => {
+            aceManyPairs.splice(idx, 1);
+            renderAceManyChips();
+        });
+    }
+    if (aceManyAdd) {
+        aceManyAdd.onclick = () => {
+            if (!aceManyFrom || !aceManyTo || aceManyPairs.length >= 6) return;
+            const from = aceManyFrom.value;
+            const to = aceManyTo.value;
+            if (from === to) return;
+            const pair = `${from}-${to}`;
+            if (aceManyPairs.includes(pair)) return;
+            aceManyPairs.push(pair);
+            renderAceManyChips();
+        };
+    }
+    if (aceManySubmit && aceResult) {
+        aceManySubmit.onclick = () => {
+            if (!aceManyPairs.length) return;
+            const amount = aceManyAmount ? (aceManyAmount.value.trim() || '1') : '1';
+            const url = `https://ace-demo.matheusribeiro.dev.br/api/currency/convert-many?pairs=${encodeURIComponent(aceManyPairs.join(','))}&amount=${encodeURIComponent(amount)}`;
+            runDemoCall(aceManySubmit, aceResult, url, ui, acePretty, (data) => renderManyResults(data, ui));
         };
     }
 

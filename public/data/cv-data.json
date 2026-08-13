@@ -113,10 +113,15 @@
         "submitBtn": "Converter",
         "resultPlaceholder": "← tente uma conversão",
         "extraLabel": "Ver exemplo de tabela de taxas",
+        "extraLabel2": "Ver exemplo de conversão em lote",
         "tabConvertLabel": "Converter",
         "tabRatesLabel": "Tabela de taxas",
+        "tabManyLabel": "Converter vários",
         "loadRatesBtn": "Carregar taxas",
         "swapAriaLabel": "Trocar moedas",
+        "addPairBtn": "Adicionar",
+        "manyHint": "Adicione até 6 pares de moedas e converta todos de uma vez.",
+        "manyBtn": "Converter todos",
         "steps": [
           "Uma única tabela de taxas base-EUR alimenta qualquer par de moedas — sem URL dinâmica por request.",
           "Conversão é pura matemática (<code>eur[to] / eur[from]</code>) rodando em ESQL, sem chamada extra ao upstream.",
@@ -281,10 +286,15 @@
         "submitBtn": "Convert",
         "resultPlaceholder": "← try a conversion",
         "extraLabel": "See a rate table example",
+        "extraLabel2": "See a batch-convert example",
         "tabConvertLabel": "Convert",
         "tabRatesLabel": "Rate table",
+        "tabManyLabel": "Convert many",
         "loadRatesBtn": "Load rates",
         "swapAriaLabel": "Swap currencies",
+        "addPairBtn": "Add",
+        "manyHint": "Add up to 6 currency pairs and convert them all at once.",
+        "manyBtn": "Convert all",
         "steps": [
           "A single EUR-based rate table feeds every currency pair — no per-request dynamic URL.",
           "Conversion is pure math (<code>eur[to] / eur[from]</code>) running in ESQL, no extra upstream call.",
@@ -349,7 +359,8 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api",
         "docsUrl": "https://ace-demo.matheusribeiro.dev.br/docs/",
         "apiBase": "https://ace-demo.matheusribeiro.dev.br/api/currency",
-        "extraUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD"
+        "extraUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD",
+        "extraUrl2": "https://ace-demo.matheusribeiro.dev.br/api/currency/convert-many?pairs=USD-BRL,EUR-JPY,GBP-CAD&amount=100"
       }
     ],
     "stats": [
