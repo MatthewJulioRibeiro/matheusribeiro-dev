@@ -483,6 +483,8 @@ body {
 .demo-geo-suggestion:last-child { border-bottom: none; }
 .demo-geo-suggestion:hover { background: rgba(179, 18, 42, 0.08); color: #B3122A; }
 .dark .demo-geo-suggestion:hover { background: rgba(232, 50, 63, 0.12); color: #E8323F; }
+.demo-geo-suggestion.is-highlighted { background: rgba(179, 18, 42, 0.08); color: #B3122A; }
+.dark .demo-geo-suggestion.is-highlighted { background: rgba(232, 50, 63, 0.12); color: #E8323F; }
 .demo-geo-attribution {
     font-size: 10px;
     color: #6B5D52;

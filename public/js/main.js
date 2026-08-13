@@ -565,8 +565,8 @@ function renderApiDemos(demosCommon, demosText, ui) {
                         <div class="demo-tab-panel" data-panel="single">
                             <form id="mule-demo-form" class="mb-1">
                                 <div class="demo-geo-search">
-                                    <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.geoSearchPlaceholder}" autocomplete="off" required />
-                                    <div id="mule-geo-suggestions" class="demo-geo-suggestions is-hidden"></div>
+                                    <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.geoSearchPlaceholder}" autocomplete="off" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="mule-geo-suggestions" />
+                                    <div id="mule-geo-suggestions" class="demo-geo-suggestions is-hidden" role="listbox"></div>
                                 </div>
                                 <button type="submit" class="w-full mt-2 px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
                             </form>
@@ -705,30 +705,57 @@ function initApiDemos(ui, demosText) {
     const suggestionsEl = document.getElementById('mule-geo-suggestions');
     let muleSelectedCity = null;
     let geoDebounceTimer = null;
+    let geoResults = [];
+    let geoHighlightIndex = -1;
 
     function hideGeoSuggestions() {
         if (!suggestionsEl) return;
         suggestionsEl.innerHTML = '';
         suggestionsEl.classList.add('is-hidden');
+        geoResults = [];
+        geoHighlightIndex = -1;
+        if (cityInput) {
+            cityInput.setAttribute('aria-expanded', 'false');
+            cityInput.removeAttribute('aria-activedescendant');
+        }
+    }
+
+    function selectGeoSuggestion(idx) {
+        const r = geoResults[idx];
+        if (!r) return;
+        muleSelectedCity = r.city;
+        const displayParts = [r.neighborhood, r.city].filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
+        if (cityInput) cityInput.value = displayParts.join(', ');
+        hideGeoSuggestions();
+    }
+
+    function updateGeoHighlight() {
+        if (!suggestionsEl) return;
+        suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach((btn, i) => {
+            const active = i === geoHighlightIndex;
+            btn.classList.toggle('is-highlighted', active);
+            btn.setAttribute('aria-selected', active ? 'true' : 'false');
+            if (active) {
+                btn.scrollIntoView({ block: 'nearest' });
+                if (cityInput) cityInput.setAttribute('aria-activedescendant', btn.id);
+            }
+        });
     }
 
     function renderGeoSuggestions(results) {
         if (!suggestionsEl) return;
+        geoResults = results;
+        geoHighlightIndex = -1;
         if (!results.length) { hideGeoSuggestions(); return; }
         suggestionsEl.innerHTML = results.map((r, i) => {
             const parts = [r.neighborhood, r.city, r.state, r.country].filter(Boolean);
             const uniqueParts = parts.filter((p, idx) => parts.indexOf(p) === idx);
-            return `<button type="button" class="demo-geo-suggestion" data-idx="${i}">${escapeHtml(uniqueParts.join(', '))}</button>`;
+            return `<button type="button" id="mule-geo-option-${i}" role="option" aria-selected="false" class="demo-geo-suggestion" data-idx="${i}">${escapeHtml(uniqueParts.join(', '))}</button>`;
         }).join('');
         suggestionsEl.classList.remove('is-hidden');
+        if (cityInput) cityInput.setAttribute('aria-expanded', 'true');
         suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach(btn => {
-            btn.onclick = () => {
-                const r = results[Number(btn.dataset.idx)];
-                muleSelectedCity = r.city;
-                const displayParts = [r.neighborhood, r.city].filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
-                if (cityInput) cityInput.value = displayParts.join(', ');
-                hideGeoSuggestions();
-            };
+            btn.onclick = () => selectGeoSuggestion(Number(btn.dataset.idx));
         });
     }
 
@@ -746,6 +773,23 @@ function initApiDemos(ui, demosText) {
                 } catch (err) { hideGeoSuggestions(); }
             }, 400);
         };
+        cityInput.addEventListener('keydown', (e) => {
+            if (!geoResults.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                geoHighlightIndex = (geoHighlightIndex + 1) % geoResults.length;
+                updateGeoHighlight();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                geoHighlightIndex = (geoHighlightIndex - 1 + geoResults.length) % geoResults.length;
+                updateGeoHighlight();
+            } else if (e.key === 'Enter' && geoHighlightIndex >= 0) {
+                e.preventDefault();
+                selectGeoSuggestion(geoHighlightIndex);
+            } else if (e.key === 'Escape') {
+                hideGeoSuggestions();
+            }
+        });
         cityInput.addEventListener('blur', () => setTimeout(hideGeoSuggestions, 150));
     }
 
