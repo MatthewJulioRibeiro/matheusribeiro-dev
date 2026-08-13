@@ -563,10 +563,14 @@ function renderApiDemos(demosCommon, demosText, ui) {
                     </div>
                     <div id="mule-panels">
                         <div class="demo-tab-panel" data-panel="single">
-                            <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
-                                <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.inputPlaceholder}" required />
-                                <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
+                            <form id="mule-demo-form" class="mb-1">
+                                <div class="demo-geo-search">
+                                    <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.geoSearchPlaceholder}" autocomplete="off" required />
+                                    <div id="mule-geo-suggestions" class="demo-geo-suggestions is-hidden"></div>
+                                </div>
+                                <button type="submit" class="w-full mt-2 px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
                             </form>
+                            <p class="demo-geo-attribution">${ui.demoGeoAttribution} <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
                         </div>
                         <div class="demo-tab-panel is-hidden" data-panel="compare">
                             <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
@@ -693,14 +697,63 @@ function initApiDemos(ui, demosText) {
     const muleDt = demosText.find(d => d.id === 'mule') || {};
     const aceDt = demosText.find(d => d.id === 'ace') || {};
 
-    // --- Mule: single city ---
+    // --- Mule: single city (with live location search via /api/geocode) ---
     const muleForm = document.getElementById('mule-demo-form');
     const muleResult = document.getElementById('mule-demo-result');
     const mulePretty = document.getElementById('mule-demo-pretty');
+    const cityInput = document.getElementById('mule-demo-city');
+    const suggestionsEl = document.getElementById('mule-geo-suggestions');
+    let muleSelectedCity = null;
+    let geoDebounceTimer = null;
+
+    function hideGeoSuggestions() {
+        if (!suggestionsEl) return;
+        suggestionsEl.innerHTML = '';
+        suggestionsEl.classList.add('is-hidden');
+    }
+
+    function renderGeoSuggestions(results) {
+        if (!suggestionsEl) return;
+        if (!results.length) { hideGeoSuggestions(); return; }
+        suggestionsEl.innerHTML = results.map((r, i) => {
+            const parts = [r.neighborhood, r.city, r.state, r.country].filter(Boolean);
+            const uniqueParts = parts.filter((p, idx) => parts.indexOf(p) === idx);
+            return `<button type="button" class="demo-geo-suggestion" data-idx="${i}">${escapeHtml(uniqueParts.join(', '))}</button>`;
+        }).join('');
+        suggestionsEl.classList.remove('is-hidden');
+        suggestionsEl.querySelectorAll('.demo-geo-suggestion').forEach(btn => {
+            btn.onclick = () => {
+                const r = results[Number(btn.dataset.idx)];
+                muleSelectedCity = r.city;
+                const displayParts = [r.neighborhood, r.city].filter(Boolean).filter((p, i, a) => a.indexOf(p) === i);
+                if (cityInput) cityInput.value = displayParts.join(', ');
+                hideGeoSuggestions();
+            };
+        });
+    }
+
+    if (cityInput) {
+        cityInput.oninput = () => {
+            muleSelectedCity = null;
+            const q = cityInput.value.trim();
+            clearTimeout(geoDebounceTimer);
+            if (q.length < 3) { hideGeoSuggestions(); return; }
+            geoDebounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://mule-demo.matheusribeiro.dev.br/api/geocode?q=${encodeURIComponent(q)}`);
+                    const data = await res.json();
+                    renderGeoSuggestions(data.results || []);
+                } catch (err) { hideGeoSuggestions(); }
+            }, 400);
+        };
+        cityInput.addEventListener('blur', () => setTimeout(hideGeoSuggestions, 150));
+    }
+
     if (muleForm && muleResult) {
         muleForm.onsubmit = async (e) => {
             e.preventDefault();
-            const city = document.getElementById('mule-demo-city').value.trim();
+            hideGeoSuggestions();
+            const city = muleSelectedCity || (cityInput ? cityInput.value.trim() : '');
             if (!city) return;
             const btn = muleForm.querySelector('button[type="submit"]');
             const url = `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`;

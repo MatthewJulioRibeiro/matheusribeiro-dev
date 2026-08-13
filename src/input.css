@@ -450,6 +450,49 @@ body {
 .dark .demo-tab.is-active { color: #EDE3D8; border-bottom-color: #E8323F; }
 .demo-tab-panel.is-hidden { display: none; }
 
+/* API demo location search (Nominatim autocomplete) */
+.demo-geo-search { position: relative; }
+.demo-geo-suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1.5px solid #1A1210;
+    background: #FBF7EE;
+    box-shadow: 3px 3px 0 rgba(26, 18, 16, 0.15);
+}
+.dark .demo-geo-suggestions { border-color: #EDE3D8; background: #17110F; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4); }
+.demo-geo-suggestions.is-hidden { display: none; }
+.demo-geo-suggestion {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(26, 18, 16, 0.08);
+    color: #1A1210;
+    cursor: pointer;
+}
+.dark .demo-geo-suggestion { color: #EDE3D8; border-bottom-color: rgba(237, 227, 216, 0.1); }
+.demo-geo-suggestion:last-child { border-bottom: none; }
+.demo-geo-suggestion:hover { background: rgba(179, 18, 42, 0.08); color: #B3122A; }
+.dark .demo-geo-suggestion:hover { background: rgba(232, 50, 63, 0.12); color: #E8323F; }
+.demo-geo-attribution {
+    font-size: 10px;
+    color: #6B5D52;
+    margin-top: 0.4rem;
+}
+.dark .demo-geo-attribution { color: #A89686; }
+.demo-geo-attribution a { text-decoration: underline; text-underline-offset: 2px; }
+.demo-geo-attribution a:hover { color: #B3122A; }
+.dark .demo-geo-attribution a:hover { color: #E8323F; }
+
 /* API demo currency swap button */
 .demo-swap-btn {
     font-size: 16px;
