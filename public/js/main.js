@@ -587,6 +587,9 @@ function renderApiDemos(demosCommon, demosText, ui) {
             <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
                 <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
                 <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
+                ${dc.logsUrl ? `<a href="${dc.logsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-list-columns-reverse"></i>${ui.demoLogsBtn}</a>` : ''}
+                ${dc.metricsUrl ? `<a href="${dc.metricsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-graph-up"></i>${ui.demoMetricsBtn}</a>` : ''}
+                ${dc.adminUrl ? `<a href="${dc.adminUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-terminal"></i>${ui.demoAdminBtn}</a>` : ''}
             </div>`;
 
         if (dc.id === 'mule') {
