@@ -421,6 +421,44 @@ const DEMO_SVGS = {
     </svg>`
 };
 
+function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ISO codes actually present in the live Frankfurter-backed rate table (verified against
+// GET /api/currency/rates?base=EUR). Keeps the <select> options guaranteed valid server-side.
+const ACE_CURRENCIES = ['USD', 'BRL', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
+    'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN',
+    'RON', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'];
+
+function renderCurrencyOptions(selected) {
+    return ACE_CURRENCIES.map(c => `<option value="${c}"${c === selected ? ' selected' : ''}>${c}</option>`).join('');
+}
+
+// Keyed by the English description text the Mule flow always emits (a fixed WMO-code enum) --
+// no backend change needed to get an icon client-side.
+const WEATHER_EMOJI = {
+    'Clear sky': '☀️', 'Mainly clear': '🌤️', 'Partly cloudy': '⛅', 'Overcast': '☁️',
+    'Fog': '🌫️', 'Depositing rime fog': '🌫️',
+    'Light drizzle': '🌦️', 'Moderate drizzle': '🌦️', 'Dense drizzle': '🌧️',
+    'Slight rain': '🌧️', 'Moderate rain': '🌧️', 'Heavy rain': '🌧️',
+    'Slight snow': '🌨️', 'Moderate snow': '🌨️', 'Heavy snow': '❄️',
+    'Slight rain showers': '🌦️', 'Moderate rain showers': '🌧️', 'Violent rain showers': '⛈️',
+    'Thunderstorm': '⛈️', 'Thunderstorm with slight hail': '⛈️', 'Thunderstorm with heavy hail': '⛈️'
+};
+function weatherEmoji(desc) {
+    return (desc && WEATHER_EMOJI[desc.en]) || '🌡️';
+}
+
+function aqiLabel(aqi, ui) {
+    if (aqi == null) return null;
+    if (aqi <= 20) return { text: ui.demoAqiGood, cls: 'is-good' };
+    if (aqi <= 40) return { text: ui.demoAqiFair, cls: 'is-fair' };
+    if (aqi <= 60) return { text: ui.demoAqiModerate, cls: 'is-moderate' };
+    if (aqi <= 80) return { text: ui.demoAqiPoor, cls: 'is-poor' };
+    return { text: ui.demoAqiVeryPoor, cls: 'is-very-poor' };
+}
+
 function renderStepsList(steps, ui) {
     if (!steps || !steps.length) return '';
     return `
@@ -432,6 +470,69 @@ function renderStepsList(steps, ui) {
         </details>`;
 }
 
+function renderWeatherSummary(data, ui) {
+    if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
+    const emoji = weatherEmoji(data.description);
+    const desc = (currentLang === 'pt' ? data.description.pt : data.description.en) || '';
+    const aq = data.airQuality ? aqiLabel(data.airQuality.europeanAqi, ui) : null;
+    return `
+        <div class="demo-weather-summary">
+            <div class="demo-weather-emoji">${emoji}</div>
+            <div class="demo-weather-main">
+                <div class="demo-weather-temp">${data.temperatureCelsius}&deg;C</div>
+                <div class="demo-weather-place">${escapeHtml(data.city)}${data.country ? ', ' + escapeHtml(data.country) : ''} &mdash; ${escapeHtml(desc)}</div>
+            </div>
+            <div class="demo-weather-stats">
+                <span>&#128168; ${data.windSpeedKmh} km/h</span>
+                ${aq ? `<span class="demo-aqi-badge ${aq.cls}">AQI ${data.airQuality.europeanAqi} &middot; ${aq.text}</span>` : ''}
+            </div>
+        </div>`;
+}
+
+function renderCompareResults(data, ui) {
+    if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
+    const results = data.results || [];
+    return `<div class="demo-compare-grid">${results.map(r => {
+        if (!r.ok) {
+            return `<div class="demo-compare-card is-error">
+                <div class="demo-compare-city">${escapeHtml(r.city)}</div>
+                <div class="demo-compare-err">${escapeHtml(r.error || '?')}</div>
+            </div>`;
+        }
+        const emoji = weatherEmoji(r.data.description);
+        const desc = (currentLang === 'pt' ? r.data.description.pt : r.data.description.en) || '';
+        return `<div class="demo-compare-card">
+            <div class="demo-compare-city">${escapeHtml(r.data.city)}</div>
+            <div class="demo-compare-emoji">${emoji}</div>
+            <div class="demo-compare-temp">${r.data.temperatureCelsius}&deg;C</div>
+            <div class="demo-compare-desc">${escapeHtml(desc)}</div>
+        </div>`;
+    }).join('')}</div>`;
+}
+
+function renderConvertSummary(data, ui) {
+    if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
+    return `
+        <div class="demo-convert-summary">
+            <span class="demo-convert-amount">${data.amount} ${data.from}</span>
+            <span class="demo-convert-arrow">&rarr;</span>
+            <span class="demo-convert-result">${data.convertedAmount} ${data.to}</span>
+            <span class="demo-convert-rate">1 ${data.from} = ${data.rate} ${data.to}${data.cached ? ' &#9889;' : ''}</span>
+        </div>`;
+}
+
+function renderRatesTable(data, ui) {
+    if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
+    const rows = Object.entries(data.rates || {}).sort((a, b) => a[0].localeCompare(b[0]));
+    return `
+        <div class="demo-rates-table-wrap">
+            <table class="demo-rates-table">
+                <thead><tr><th>${ui.demoRatesTableCcy}</th><th>${ui.demoRatesTableRate}</th></tr></thead>
+                <tbody>${rows.map(([code, rate]) => `<tr><td>${code}</td><td>${rate}</td></tr>`).join('')}</tbody>
+            </table>
+        </div>`;
+}
+
 function renderApiDemos(demosCommon, demosText, ui) {
     const container = document.getElementById('demos-grid');
     if (!container || !demosCommon || !demosText) return;
@@ -439,6 +540,12 @@ function renderApiDemos(demosCommon, demosText, ui) {
     container.innerHTML = demosCommon.map(dc => {
         const dt = demosText.find(d => d.id === dc.id);
         if (!dt) return '';
+
+        const linksRow = `
+            <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
+                <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
+                <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
+            </div>`;
 
         if (dc.id === 'mule') {
             return `
@@ -449,16 +556,36 @@ function renderApiDemos(demosCommon, demosText, ui) {
                     <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                     ${DEMO_SVGS.mule}
                     ${renderStepsList(dt.steps, ui)}
-                    <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
-                        <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.inputPlaceholder}" required />
-                        <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
-                    </form>
-                    <pre id="mule-demo-result" class="demo-result"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
-                    <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
-                        <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
-                        <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
-                        <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>${dt.extraLabel}</a>
+
+                    <div id="mule-tabs" class="demo-tabs">
+                        <button type="button" class="demo-tab is-active" data-tab="single">${dt.tabSingleLabel}</button>
+                        <button type="button" class="demo-tab" data-tab="compare">${dt.tabCompareLabel}</button>
                     </div>
+                    <div id="mule-panels">
+                        <div class="demo-tab-panel" data-panel="single">
+                            <form id="mule-demo-form" class="grid grid-cols-[1fr_auto] gap-2 mb-3">
+                                <input type="text" id="mule-demo-city" class="form-input" placeholder="${dt.inputPlaceholder}" required />
+                                <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
+                            </form>
+                        </div>
+                        <div class="demo-tab-panel is-hidden" data-panel="compare">
+                            <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
+                                <input type="text" id="mule-compare-input" class="form-input" placeholder="${dt.inputPlaceholder}" />
+                                <button type="button" id="mule-compare-add" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] text-[#1A1210] dark:text-[#EDE3D8] text-sm font-mono hover:border-ibm-blue hover:text-ibm-blue transition-all whitespace-nowrap">${dt.addCityBtn}</button>
+                            </div>
+                            <div id="mule-compare-chips" class="demo-chip-list"></div>
+                            <p class="demo-chip-hint">${dt.compareHint}</p>
+                            <button type="button" id="mule-compare-submit" class="w-full mb-1 px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all">${dt.compareBtn}</button>
+                            <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="demo-inline-link">${dt.extraLabel} &#8599;</a>
+                        </div>
+                    </div>
+
+                    <div id="mule-demo-pretty" class="mt-3"></div>
+                    <details class="demo-raw-json-block mt-2">
+                        <summary class="demo-steps-summary">${ui.demoRawJsonToggle}</summary>
+                        <pre id="mule-demo-result" class="demo-result mt-2"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
+                    </details>
+                    ${linksRow}
                 </div>`;
         }
 
@@ -470,22 +597,44 @@ function renderApiDemos(demosCommon, demosText, ui) {
                 <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${dt.description}</p>
                 ${DEMO_SVGS.ace}
                 ${renderStepsList(dt.steps, ui)}
-                <form id="ace-demo-form" class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 mb-3">
-                    <input type="text" id="ace-demo-from" class="form-input" placeholder="${dt.fromPlaceholder}" maxlength="3" required />
-                    <input type="text" id="ace-demo-to" class="form-input" placeholder="${dt.toPlaceholder}" maxlength="3" required />
-                    <input type="number" id="ace-demo-amount" class="form-input" placeholder="100" value="100" min="0" step="any" />
-                    <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
-                </form>
-                <pre id="ace-demo-result" class="demo-result"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
-                <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[#1A1210]/10 dark:border-[#EDE3D8]/10">
-                    <a href="${dc.repoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-github"></i>${ui.demoCodeBtn}</a>
-                    <a href="${dc.docsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-file-earmark-text"></i>${ui.demoSwaggerBtn}</a>
-                    <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-mono text-[#1A1210] dark:text-[#EDE3D8] hover:text-ibm-blue dark:hover:text-ibm-blue transition-colors"><i class="bi bi-box-arrow-up-right"></i>${dt.extraLabel}</a>
+
+                <div id="ace-tabs" class="demo-tabs">
+                    <button type="button" class="demo-tab is-active" data-tab="convert">${dt.tabConvertLabel}</button>
+                    <button type="button" class="demo-tab" data-tab="rates">${dt.tabRatesLabel}</button>
                 </div>
+                <div id="ace-panels">
+                    <div class="demo-tab-panel" data-panel="convert">
+                        <form id="ace-demo-form" class="mb-3">
+                            <div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-center mb-2">
+                                <select id="ace-demo-from" class="form-input">${renderCurrencyOptions('USD')}</select>
+                                <button type="button" id="ace-demo-swap" class="demo-swap-btn" aria-label="${dt.swapAriaLabel}" title="${dt.swapAriaLabel}">&#8646;</button>
+                                <select id="ace-demo-to" class="form-input">${renderCurrencyOptions('BRL')}</select>
+                            </div>
+                            <div class="grid grid-cols-[1fr_auto] gap-2">
+                                <input type="number" id="ace-demo-amount" class="form-input" value="100" min="0" step="any" />
+                                <button type="submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.submitBtn}</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="demo-tab-panel is-hidden" data-panel="rates">
+                        <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
+                            <select id="ace-rates-base" class="form-input">${renderCurrencyOptions('USD')}</select>
+                            <button type="button" id="ace-rates-submit" class="px-4 py-2 border-2 border-[#1A1210] dark:border-[#EDE3D8] bg-[#1A1210] dark:bg-[#EDE3D8] text-white dark:text-[#1A1210] text-sm font-mono hover:bg-ibm-blue hover:border-ibm-blue dark:hover:bg-ibm-blue dark:hover:border-ibm-blue dark:hover:text-white transition-all whitespace-nowrap">${dt.loadRatesBtn}</button>
+                        </div>
+                        <a href="${dc.extraUrl}" target="_blank" rel="noopener noreferrer" class="demo-inline-link">${dt.extraLabel} &#8599;</a>
+                    </div>
+                </div>
+
+                <div id="ace-demo-pretty" class="mt-3"></div>
+                <details class="demo-raw-json-block mt-2">
+                    <summary class="demo-steps-summary">${ui.demoRawJsonToggle}</summary>
+                    <pre id="ace-demo-result" class="demo-result mt-2"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
+                </details>
+                ${linksRow}
             </div>`;
     }).join('');
 
-    initApiDemos(ui);
+    initApiDemos(ui, demosText);
     demosCommon.forEach(dc => checkDemoStatus(dc.id, dc.apiBase, ui));
 }
 
@@ -511,38 +660,129 @@ async function checkDemoStatus(id, apiBase, ui) {
     }
 }
 
-function initApiDemos(ui) {
+function initDemoTabs(prefix, resultElId, prettyElId, placeholderText) {
+    const tabs = document.querySelectorAll(`#${prefix}-tabs .demo-tab`);
+    const resultEl = document.getElementById(resultElId);
+    const prettyEl = document.getElementById(prettyElId);
+    tabs.forEach(tab => {
+        tab.onclick = () => {
+            if (tab.classList.contains('is-active')) return;
+            tabs.forEach(t => t.classList.remove('is-active'));
+            tab.classList.add('is-active');
+            document.querySelectorAll(`#${prefix}-panels .demo-tab-panel`).forEach(p => {
+                p.classList.toggle('is-hidden', p.dataset.panel !== tab.dataset.tab);
+            });
+            if (resultEl) { resultEl.className = 'demo-result'; resultEl.innerHTML = `<code>&larr; ${placeholderText}</code>`; }
+            if (prettyEl) prettyEl.innerHTML = '';
+        };
+    });
+}
+
+function renderChips(containerId, cities, ui, onRemove) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = cities.map((c, i) => `
+        <span class="demo-chip">${escapeHtml(c)}<button type="button" class="demo-chip-remove" data-idx="${i}" aria-label="${ui.demoChipRemove}">&times;</button></span>
+    `).join('');
+    el.querySelectorAll('.demo-chip-remove').forEach(btn => {
+        btn.onclick = () => onRemove(Number(btn.dataset.idx));
+    });
+}
+
+function initApiDemos(ui, demosText) {
+    const muleDt = demosText.find(d => d.id === 'mule') || {};
+    const aceDt = demosText.find(d => d.id === 'ace') || {};
+
+    // --- Mule: single city ---
     const muleForm = document.getElementById('mule-demo-form');
     const muleResult = document.getElementById('mule-demo-result');
+    const mulePretty = document.getElementById('mule-demo-pretty');
     if (muleForm && muleResult) {
         muleForm.onsubmit = async (e) => {
             e.preventDefault();
             const city = document.getElementById('mule-demo-city').value.trim();
             if (!city) return;
-            runDemoCall(muleForm, muleResult,
-                `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`, ui);
+            const btn = muleForm.querySelector('button[type="submit"]');
+            const url = `https://mule-demo.matheusribeiro.dev.br/api/weather?city=${encodeURIComponent(city)}`;
+            runDemoCall(btn, muleResult, url, ui, mulePretty, (data) => renderWeatherSummary(data, ui));
         };
     }
 
+    // --- Mule: compare cities ---
+    let muleCompareCities = [];
+    const muleCompareInput = document.getElementById('mule-compare-input');
+    const muleCompareAdd = document.getElementById('mule-compare-add');
+    const muleCompareSubmit = document.getElementById('mule-compare-submit');
+    function renderMuleChips() {
+        renderChips('mule-compare-chips', muleCompareCities, ui, (idx) => {
+            muleCompareCities.splice(idx, 1);
+            renderMuleChips();
+        });
+    }
+    function addMuleCity() {
+        if (!muleCompareInput) return;
+        const val = muleCompareInput.value.trim();
+        if (!val || muleCompareCities.length >= 5 || muleCompareCities.some(c => c.toLowerCase() === val.toLowerCase())) return;
+        muleCompareCities.push(val);
+        muleCompareInput.value = '';
+        renderMuleChips();
+    }
+    if (muleCompareAdd) muleCompareAdd.onclick = addMuleCity;
+    if (muleCompareInput) muleCompareInput.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); addMuleCity(); } };
+    if (muleCompareSubmit && muleResult) {
+        muleCompareSubmit.onclick = () => {
+            if (!muleCompareCities.length) return;
+            const url = `https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=${encodeURIComponent(muleCompareCities.join(','))}`;
+            runDemoCall(muleCompareSubmit, muleResult, url, ui, mulePretty, (data) => renderCompareResults(data, ui));
+        };
+    }
+
+    initDemoTabs('mule', 'mule-demo-result', 'mule-demo-pretty', (muleDt.resultPlaceholder || '').replace(/^←\s*/, ''));
+
+    // --- ACE: convert ---
     const aceForm = document.getElementById('ace-demo-form');
     const aceResult = document.getElementById('ace-demo-result');
+    const acePretty = document.getElementById('ace-demo-pretty');
     if (aceForm && aceResult) {
         aceForm.onsubmit = async (e) => {
             e.preventDefault();
-            const from = document.getElementById('ace-demo-from').value.trim().toUpperCase();
-            const to = document.getElementById('ace-demo-to').value.trim().toUpperCase();
+            const from = document.getElementById('ace-demo-from').value;
+            const to = document.getElementById('ace-demo-to').value;
             const amount = document.getElementById('ace-demo-amount').value.trim() || '1';
-            if (!from || !to) return;
-            runDemoCall(aceForm, aceResult,
-                `https://ace-demo.matheusribeiro.dev.br/api/currency?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`, ui);
+            const btn = aceForm.querySelector('button[type="submit"]');
+            const url = `https://ace-demo.matheusribeiro.dev.br/api/currency?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`;
+            runDemoCall(btn, aceResult, url, ui, acePretty, (data) => renderConvertSummary(data, ui));
         };
     }
+    const aceSwap = document.getElementById('ace-demo-swap');
+    if (aceSwap) {
+        aceSwap.onclick = () => {
+            const fromEl = document.getElementById('ace-demo-from');
+            const toEl = document.getElementById('ace-demo-to');
+            if (!fromEl || !toEl) return;
+            const tmp = fromEl.value;
+            fromEl.value = toEl.value;
+            toEl.value = tmp;
+        };
+    }
+
+    // --- ACE: rate table ---
+    const aceRatesBtn = document.getElementById('ace-rates-submit');
+    if (aceRatesBtn && aceResult) {
+        aceRatesBtn.onclick = () => {
+            const base = document.getElementById('ace-rates-base').value;
+            const url = `https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=${encodeURIComponent(base)}`;
+            runDemoCall(aceRatesBtn, aceResult, url, ui, acePretty, (data) => renderRatesTable(data, ui));
+        };
+    }
+
+    initDemoTabs('ace', 'ace-demo-result', 'ace-demo-pretty', (aceDt.resultPlaceholder || '').replace(/^←\s*/, ''));
 }
 
-async function runDemoCall(form, resultEl, url, ui) {
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn ? submitBtn.textContent : null;
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '...'; }
+async function runDemoCall(triggerBtn, resultEl, url, ui, prettyEl, prettyRenderFn) {
+    const originalBtnText = triggerBtn ? triggerBtn.textContent : null;
+    if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.textContent = '...'; }
+    if (prettyEl) prettyEl.innerHTML = '';
     resultEl.className = 'demo-result';
     resultEl.textContent = ui.demoLoadingText || 'Loading...';
 
@@ -553,12 +793,15 @@ async function runDemoCall(form, resultEl, url, ui) {
         const data = await res.json();
         resultEl.className = res.ok ? 'demo-result' : 'demo-result is-error';
         resultEl.innerHTML = `<div class="demo-meta">HTTP ${res.status} &middot; ${elapsed}ms</div>${syntaxHighlightJson(data)}`;
+        if (prettyEl && prettyRenderFn) {
+            try { prettyEl.innerHTML = prettyRenderFn(data); } catch (e) { /* pretty view is best-effort, raw JSON above always works */ }
+        }
     } catch (err) {
         resultEl.className = 'demo-result is-error';
         const template = ui.demoErrorText || 'Request failed: {msg}. The demo VM may be asleep on the first request -- try again in a few seconds.';
         resultEl.textContent = template.replace('{msg}', err.message);
     } finally {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+        if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = originalBtnText; }
     }
 }
 
