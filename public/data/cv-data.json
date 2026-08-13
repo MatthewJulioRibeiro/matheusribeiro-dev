@@ -143,6 +143,9 @@
       "tryLiveBtn": "Testar ao vivo",
       "demoCodeBtn": "Código",
       "demoSwaggerBtn": "Swagger",
+      "demoLogsBtn": "Logs (Kibana)",
+      "demoMetricsBtn": "Dashboard (Grafana)",
+      "demoAdminBtn": "Console admin (ACE)",
       "demoLoadingText": "Carregando...",
       "demoErrorText": "Falha na requisição: {msg}. A VM da demo pode estar hibernando na primeira chamada — tente de novo em alguns segundos.",
       "demoStatusChecking": "Verificando status...",
@@ -317,6 +320,9 @@
       "tryLiveBtn": "Try it live",
       "demoCodeBtn": "Code",
       "demoSwaggerBtn": "Swagger",
+      "demoLogsBtn": "Logs (Kibana)",
+      "demoMetricsBtn": "Dashboard (Grafana)",
+      "demoAdminBtn": "Admin console (ACE)",
       "demoLoadingText": "Loading...",
       "demoErrorText": "Request failed: {msg}. The demo VM may be asleep on the first request — try again in a few seconds.",
       "demoStatusChecking": "Checking status...",
@@ -354,7 +360,9 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api",
         "docsUrl": "https://mule-demo.matheusribeiro.dev.br/docs/",
         "apiBase": "https://mule-demo.matheusribeiro.dev.br/api/weather",
-        "extraUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=Indaiatuba,Sao%20Paulo,Curitiba"
+        "extraUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=Indaiatuba,Sao%20Paulo,Curitiba",
+        "logsUrl": "https://kibana-demo.matheusribeiro.dev.br/",
+        "metricsUrl": "https://kibana-demo.matheusribeiro.dev.br/grafana/d/portfolio-traffic/"
       },
       {
         "id": "ace",
@@ -362,7 +370,10 @@
         "docsUrl": "https://ace-demo.matheusribeiro.dev.br/docs/",
         "apiBase": "https://ace-demo.matheusribeiro.dev.br/api/currency",
         "extraUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD",
-        "extraUrl2": "https://ace-demo.matheusribeiro.dev.br/api/currency/convert-many?pairs=USD-BRL,EUR-JPY,GBP-CAD&amount=100"
+        "extraUrl2": "https://ace-demo.matheusribeiro.dev.br/api/currency/convert-many?pairs=USD-BRL,EUR-JPY,GBP-CAD&amount=100",
+        "logsUrl": "https://kibana-demo.matheusribeiro.dev.br/",
+        "metricsUrl": "https://kibana-demo.matheusribeiro.dev.br/grafana/d/portfolio-traffic/",
+        "adminUrl": "https://ace-admin.matheusribeiro.dev.br/"
       }
     ],
     "stats": [
