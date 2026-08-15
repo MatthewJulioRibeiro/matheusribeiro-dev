@@ -360,6 +360,7 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api",
         "docsUrl": "https://mule-demo.matheusribeiro.dev.br/docs/",
         "apiBase": "https://mule-demo.matheusribeiro.dev.br/api/weather",
+        "healthUrl": "https://mule-demo.matheusribeiro.dev.br/health",
         "extraUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather/compare?cities=Indaiatuba,Sao%20Paulo,Curitiba",
         "logsUrl": "https://kibana-demo.matheusribeiro.dev.br/app/discover#/view/portfolio-recent-requests?_g=(time:(from:now-30d,to:now))",
         "metricsUrl": "https://kibana-demo.matheusribeiro.dev.br/grafana/d/portfolio-traffic/"
@@ -369,6 +370,7 @@
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api",
         "docsUrl": "https://ace-demo.matheusribeiro.dev.br/docs/",
         "apiBase": "https://ace-demo.matheusribeiro.dev.br/api/currency",
+        "healthUrl": "https://ace-demo.matheusribeiro.dev.br/health",
         "extraUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency/rates?base=USD",
         "extraUrl2": "https://ace-demo.matheusribeiro.dev.br/api/currency/convert-many?pairs=USD-BRL,EUR-JPY,GBP-CAD&amount=100",
         "logsUrl": "https://kibana-demo.matheusribeiro.dev.br/app/discover#/view/portfolio-recent-requests?_g=(time:(from:now-30d,to:now))",
