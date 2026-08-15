@@ -45,7 +45,9 @@
     const maxR = Math.min(w, h) / 2 - 2;
 
     analyser.getByteFrequencyData(dataArray);
-    const bass = avg(dataArray, 0, 8) / 255;
+    // bins 1-4 span ~172-689Hz (bin 0 is DC/near-0Hz and often noisy) --
+    // kick-drum bass, not the low-mids a wider band would also catch
+    const bass = avg(dataArray, 1, 5) / 255;
     const overall = avg(dataArray, 0, dataArray.length) / 255;
 
     beatThreshold = Math.max(BEAT_FLOOR, beatThreshold * BEAT_DECAY);
@@ -116,7 +118,11 @@
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioCtx.createMediaElementSource(audioEl);
       analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
+      // 256 gives 128 bins at ~172Hz each (44.1kHz / 256) -- fine enough to
+      // isolate true bass (kick fundamental, roughly under ~500Hz) instead
+      // of the old fftSize=64's ~689Hz-wide bins, which pulled in low-mids
+      // and made the "bass" band react to more than just the low end.
+      analyser.fftSize = 256;
       dataArray = new Uint8Array(analyser.frequencyBinCount);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
