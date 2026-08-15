@@ -17,9 +17,25 @@
   let analyser = null;
   let dataArray = null;
   let rafId = null;
-  let sweepAngle = 0;
   let statusInterval = null;
   let playing = false;
+
+  // Beat detection: an adaptive threshold that jumps up right after a hit
+  // (so the tail of that same kick can't immediately re-trigger it) and
+  // decays back down toward a floor every frame, so the next genuine beat
+  // just needs to clear wherever the threshold has decayed to. A plain
+  // rolling average was tried first and failed in practice: on a sustained
+  // kick-heavy passage the average gets pulled up by the beats themselves
+  // within ~0.5s, so it stops firing after the first hit or two -- verified
+  // by sampling ring pixels across 200 animation frames (only the first two
+  // beats registered, then nothing). Each detected beat spawns one
+  // expanding, fading ring (a sonar ping) rather than a constantly-rotating
+  // sweep, so the visual is silent between hits and only pulses on the hit.
+  const BEAT_FLOOR = 0.28;
+  const BEAT_DECAY = 0.965;
+  let beatThreshold = BEAT_FLOOR;
+  let lastBeatTime = 0;
+  let pulses = [];
 
   function drawRadar() {
     const w = canvas.width;
@@ -30,9 +46,16 @@
 
     analyser.getByteFrequencyData(dataArray);
     const bass = avg(dataArray, 0, 8) / 255;
-    const mid = avg(dataArray, 8, 24) / 255;
-    const treble = avg(dataArray, 24, dataArray.length) / 255;
-    const level = (bass + mid + treble) / 3;
+    const overall = avg(dataArray, 0, dataArray.length) / 255;
+
+    beatThreshold = Math.max(BEAT_FLOOR, beatThreshold * BEAT_DECAY);
+    const now = performance.now();
+    const isBeat = bass > beatThreshold && now - lastBeatTime > 260;
+    if (isBeat) {
+      lastBeatTime = now;
+      beatThreshold = bass * 1.08;
+      pulses.push({ radius: 2, alpha: 1 });
+    }
 
     ctx2d.clearRect(0, 0, w, h);
 
@@ -42,37 +65,24 @@
     ctx2d.fillStyle = 'rgba(179,18,42,0.06)';
     ctx2d.fill();
 
-    // concentric rings pulsing with bass/mid/treble
-    [bass, mid, treble].forEach((v, i) => {
-      const r = maxR * ((i + 1) / 3) * (0.7 + v * 0.3);
+    // expanding sonar pings, one per detected beat
+    pulses = pulses.filter((p) => p.alpha > 0.03 && p.radius < maxR + 4);
+    for (const p of pulses) {
       ctx2d.beginPath();
-      ctx2d.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx2d.strokeStyle = ACCENT;
-      ctx2d.globalAlpha = 0.25 + v * 0.6;
-      ctx2d.lineWidth = 1;
+      ctx2d.arc(cx, cy, p.radius, 0, Math.PI * 2);
+      ctx2d.strokeStyle = ACCENT_BRIGHT;
+      ctx2d.globalAlpha = p.alpha;
+      ctx2d.lineWidth = 1.5;
       ctx2d.stroke();
-    });
+      p.radius += 1.6;
+      p.alpha *= 0.92;
+    }
     ctx2d.globalAlpha = 1;
 
-    // rotating sweep line, Daredevil-radar style
-    sweepAngle += 0.06 + level * 0.05;
-    const gradient = ctx2d.createConicGradient
-      ? ctx2d.createConicGradient(sweepAngle - Math.PI / 2, cx, cy)
-      : null;
-    ctx2d.save();
+    // center dot -- a small flash on the beat itself, otherwise idles with
+    // overall volume so it still reads as "alive" between hits
     ctx2d.beginPath();
-    ctx2d.moveTo(cx, cy);
-    ctx2d.arc(cx, cy, maxR, sweepAngle - 0.5, sweepAngle);
-    ctx2d.closePath();
-    ctx2d.fillStyle = ACCENT_BRIGHT;
-    ctx2d.globalAlpha = 0.35;
-    ctx2d.fill();
-    ctx2d.restore();
-    ctx2d.globalAlpha = 1;
-
-    // center dot pulsing with overall level
-    ctx2d.beginPath();
-    ctx2d.arc(cx, cy, 1.5 + level * 2.5, 0, Math.PI * 2);
+    ctx2d.arc(cx, cy, isBeat ? 3.5 : 1.3 + overall * 1.5, 0, Math.PI * 2);
     ctx2d.fillStyle = ACCENT_BRIGHT;
     ctx2d.fill();
 
@@ -130,6 +140,8 @@
     if (rafId) cancelAnimationFrame(rafId);
     if (statusInterval) clearInterval(statusInterval);
     ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+    pulses = [];
+    beatThreshold = BEAT_FLOOR;
 
     panel.classList.add('hidden');
     panel.classList.remove('flex');
