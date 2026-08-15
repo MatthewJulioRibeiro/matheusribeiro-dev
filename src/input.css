@@ -760,6 +760,66 @@ body {
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+/* Daredevil mode -- the site's "secret identity": Matthew Murdock (the CV,
+   the professional default) vs. Daredevil (triggered by the radio). Layers
+   on top of dark mode rather than replacing it -- radio.js forces dark mode
+   on and restores whatever the visitor had before on stop. */
+html.daredevil body {
+    background-color: #070403 !important;
+}
+html.daredevil .halftone-bg {
+    opacity: 0.16 !important;
+    background-image: radial-gradient(#E8323F 1px, transparent 1px) !important;
+}
+html.daredevil #site-spotlight {
+    background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 20%), rgba(232, 50, 63, 0.18), transparent 70%) !important;
+}
+
+#daredevil-skyline {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 20vh;
+    min-height: 130px;
+    max-height: 240px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+#daredevil-skyline svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+html.daredevil #daredevil-skyline {
+    opacity: 0.92;
+}
+
+#daredevil-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(ellipse at center, transparent 38%, rgba(179, 18, 42, 0.4) 100%);
+    transition: opacity 0.8s ease;
+}
+html.daredevil #daredevil-vignette {
+    opacity: 1;
+}
+html.daredevil #daredevil-vignette.pulse {
+    animation: dd-sonar-pulse 0.45s ease-out;
+}
+@keyframes dd-sonar-pulse {
+    0% { opacity: 1; filter: brightness(1.9) saturate(1.3); }
+    100% { opacity: 1; filter: brightness(1) saturate(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    html.daredevil #daredevil-vignette.pulse { animation: none; }
+}
+
 /* --- Print Styles --- */
 @media print {
     nav, #command-palette, footer, #scroll-indicator, .halftone-bg, #site-spotlight { display: none !important; }
