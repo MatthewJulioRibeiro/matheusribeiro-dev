@@ -9,6 +9,7 @@
   const panel = document.getElementById('radio-panel');
   const nowPlayingEl = document.getElementById('radio-now-playing');
   const canvas = document.getElementById('radio-radar');
+  const vignetteEl = document.getElementById('daredevil-vignette');
   if (!toggleBtn || !canvas) return;
 
   const ctx2d = canvas.getContext('2d');
@@ -19,6 +20,22 @@
   let rafId = null;
   let statusInterval = null;
   let playing = false;
+  let wasDarkBeforeRadio = false;
+  let vignettePulseTimeout = null;
+
+  // Murdock -> Daredevil: the radio playing is the site's "secret identity"
+  // trigger. Forces dark mode on (remembering whatever the visitor had, to
+  // restore on stop) and lets the beat detection below drive a full-page
+  // echolocation-style flash on every kick, not just the corner widget.
+  function pulseVignette() {
+    if (!vignetteEl) return;
+    vignetteEl.classList.remove('pulse');
+    // restart the CSS animation even if it's still mid-run from the last beat
+    void vignetteEl.offsetWidth;
+    vignetteEl.classList.add('pulse');
+    clearTimeout(vignettePulseTimeout);
+    vignettePulseTimeout = setTimeout(() => vignetteEl.classList.remove('pulse'), 500);
+  }
 
   // Beat detection: an adaptive threshold that jumps up right after a hit
   // (so the tail of that same kick can't immediately re-trigger it) and
@@ -57,6 +74,7 @@
       lastBeatTime = now;
       beatThreshold = bass * 1.08;
       pulses.push({ radius: 2, alpha: 1 });
+      pulseVignette();
     }
 
     ctx2d.clearRect(0, 0, w, h);
@@ -130,6 +148,9 @@
     audioCtx.resume();
     audioEl.play().catch(() => {});
 
+    wasDarkBeforeRadio = document.documentElement.classList.contains('dark');
+    document.documentElement.classList.add('dark', 'daredevil');
+
     panel.classList.remove('hidden');
     panel.classList.add('flex');
     toggleBtn.setAttribute('aria-pressed', 'true');
@@ -148,6 +169,10 @@
     ctx2d.clearRect(0, 0, canvas.width, canvas.height);
     pulses = [];
     beatThreshold = BEAT_FLOOR;
+
+    document.documentElement.classList.remove('daredevil');
+    if (!wasDarkBeforeRadio) document.documentElement.classList.remove('dark');
+    localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
     panel.classList.add('hidden');
     panel.classList.remove('flex');
