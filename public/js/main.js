@@ -705,10 +705,10 @@ function renderApiDemos(demosCommon, demosText, ui) {
     }).join('');
 
     initApiDemos(ui, demosText);
-    demosCommon.forEach(dc => checkDemoStatus(dc.id, dc.apiBase, ui));
+    demosCommon.forEach(dc => checkDemoStatus(dc.id, dc.healthUrl || dc.apiBase, ui));
 }
 
-async function checkDemoStatus(id, apiBase, ui) {
+async function checkDemoStatus(id, healthUrl, ui) {
     const el = document.getElementById(`${id}-demo-status`);
     if (!el) return;
 
@@ -716,10 +716,13 @@ async function checkDemoStatus(id, apiBase, ui) {
     const timeoutId = setTimeout(() => controller.abort(), 6000);
 
     try {
-        const res = await fetch(apiBase, { signal: controller.signal });
-        // A 4xx here just means our own validation rejected the empty ping request --
-        // the service is still up. Only 5xx / a network failure means it's actually down.
-        if (res.status >= 500) throw new Error('upstream error');
+        // Dedicated /health route -- see CurrencyApi_Health.esql /
+        // weather-health-main in each API repo for why this isn't just a
+        // bare ping against the real business endpoint anymore: that used
+        // to log a real MISSING_CITY/MISSING_PARAM "error" on every single
+        // page view.
+        const res = await fetch(healthUrl, { signal: controller.signal });
+        if (!res.ok) throw new Error('upstream error');
         el.className = 'demo-status is-online';
         el.title = ui.demoStatusOnline;
     } catch (err) {
