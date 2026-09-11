@@ -588,8 +588,14 @@ body {
     user-select: none;
 }
 .demo-steps-summary::-webkit-details-marker { display: none; }
-.demo-steps-summary::before { content: '▸ '; }
-.demo-steps-block[open] .demo-steps-summary::before { content: '▾ '; }
+.demo-steps-summary::before {
+    content: '▸';
+    display: inline-block;
+    width: 1em;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+details[open] > .demo-steps-summary::before { transform: rotate(90deg); }
+details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
 .demo-steps-summary:hover { color: #B3122A; }
 .dark .demo-steps-summary { color: #A89686; }
 .dark .demo-steps-summary:hover { color: #E8323F; }
@@ -609,6 +615,57 @@ body {
     border-radius: 2px;
 }
 .dark .demo-steps-list code { background: rgba(237, 227, 216, 0.1); }
+
+/* Details open/close — body expands to its measured height (--h set in JS on toggle) */
+.demo-steps-block > :not(summary),
+.demo-raw-json-block > :not(summary) {
+    overflow: hidden;
+}
+.demo-steps-block > .is-opening,
+.demo-raw-json-block > .is-opening {
+    animation: details-open 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes details-open {
+    from { max-height: 0; opacity: 0; transform: translateY(-4px); }
+    to   { max-height: var(--h, 400px); opacity: 1; transform: none; }
+}
+.demo-steps-block.is-closing > :not(summary),
+.demo-raw-json-block.is-closing > :not(summary) {
+    animation: details-close 0.25s ease forwards;
+}
+@keyframes details-close {
+    from { max-height: var(--h, 400px); opacity: 1; }
+    to   { max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; padding-bottom: 0; transform: translateY(-4px); }
+}
+/* "How it works" steps cascade in */
+.demo-steps-block[open] .demo-steps-list li {
+    animation: step-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(0.08s + var(--i, 0) * 70ms);
+}
+@keyframes step-in {
+    from { opacity: 0; transform: translateX(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+/* Raw JSON types in line by line (also when a new response lands while open) */
+.json-line { display: block; }
+.demo-raw-json-block[open] .json-line {
+    animation: json-line-in 0.3s ease-out both;
+    animation-delay: min(calc(var(--l, 0) * 22ms), 700ms);
+}
+@keyframes json-line-in {
+    from { opacity: 0; transform: translateX(4px); }
+    to   { opacity: 1; transform: none; }
+}
+.demo-raw-json-block[open] .demo-meta {
+    animation: json-line-in 0.3s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+    .demo-steps-block > .is-opening, .demo-raw-json-block > .is-opening,
+    .demo-steps-block.is-closing > :not(summary), .demo-raw-json-block.is-closing > :not(summary),
+    .demo-steps-block[open] .demo-steps-list li,
+    .demo-raw-json-block[open] .json-line, .demo-raw-json-block[open] .demo-meta { animation: none; }
+    .demo-steps-summary::before { transition: none; }
+}
 
 /* API demo result meta (status + latency) */
 .demo-meta {

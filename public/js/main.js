@@ -558,7 +558,7 @@ function renderStepsList(steps, ui) {
         <details class="demo-steps-block mb-4">
             <summary class="demo-steps-summary">${ui.demoHowItWorks}</summary>
             <ul class="demo-steps-list">
-                ${steps.map(s => `<li>${s}</li>`).join('')}
+                ${steps.map((s, i) => `<li style="--i:${i}">${s}</li>`).join('')}
             </ul>
         </details>`;
 }
@@ -1166,7 +1166,7 @@ async function runDemoCall(triggerBtn, resultEl, url, ui, prettyEl, prettyRender
 function syntaxHighlightJson(obj) {
     const json = JSON.stringify(obj, null, 2)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(
+    const highlighted = json.replace(
         /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
         (match) => {
             if (/^"/.test(match)) return `<span class="${/:$/.test(match) ? 'key' : 'str'}">${match}</span>`;
@@ -1174,7 +1174,43 @@ function syntaxHighlightJson(obj) {
             return `<span class="num">${match}</span>`;
         }
     );
+    // One span per line so the raw view can type in top-to-bottom
+    return highlighted.split('\n').map((line, i) => `<span class="json-line" style="--l:${i}">${line}</span>`).join('');
 }
+
+// Demo <details> (how it works / raw JSON): measure the body so open/close can animate height
+(function initDemoDetails() {
+    const isDemoDetails = (el) => el && el.matches && el.matches('details.demo-steps-block, details.demo-raw-json-block');
+    const bodyOf = (d) => [...d.children].find(c => c.tagName !== 'SUMMARY');
+    const measure = (d, body) => {
+        const cap = parseFloat(getComputedStyle(body).maxHeight);
+        const h = Math.min(body.scrollHeight, isFinite(cap) ? cap : Infinity);
+        body.style.setProperty('--h', h + 'px');
+    };
+    document.addEventListener('toggle', (e) => {
+        const d = e.target;
+        if (!isDemoDetails(d) || !d.open || prefersReducedMotion()) return;
+        const body = bodyOf(d);
+        if (!body) return;
+        measure(d, body);
+        body.classList.remove('is-opening');
+        void body.offsetWidth;
+        body.classList.add('is-opening');
+    }, true);
+    document.addEventListener('click', (e) => {
+        const summary = e.target.closest('summary.demo-steps-summary');
+        const d = summary && summary.parentElement;
+        if (!isDemoDetails(d) || !d.open || prefersReducedMotion()) return;
+        e.preventDefault();
+        if (d.classList.contains('is-closing')) return;
+        const body = bodyOf(d);
+        if (!body) { d.open = false; return; }
+        measure(d, body);
+        body.classList.remove('is-opening');
+        d.classList.add('is-closing');
+        body.addEventListener('animationend', () => { d.classList.remove('is-closing'); d.open = false; }, { once: true });
+    });
+})();
 
 // --- Cursor "radar sense" glow (site-wide) ---
 function initSpotlight() {
