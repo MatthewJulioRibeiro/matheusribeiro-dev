@@ -2,15 +2,15 @@
   "pt": {
     "profile": {
       "name": "Matheus Ribeiro",
-      "role": "Engenheiro de Software de Integração",
+      "role": "Engenheiro de Integração · Desenvolvedor Web",
       "location": "Indaiatuba, SP",
       "email": "ribeiromatheusjulio@gmail.com",
       "phone": "+55 19 99963-8591",
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs — atuação técnica de longa data em IBM ACE (v11/v12) e MQ para a TIM e, nos últimos meses, também em MuleSoft (Anypoint Platform) para a American Tower. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API, com passagens também por Bradesco, SEBRAE e Porto Seguro ao longo da carreira.",
-      "availability": "Disponível"
+      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs — atuação técnica de longa data em IBM ACE (v11/v12) e MQ para a TIM e, nos últimos meses, também em MuleSoft (Anypoint Platform) para a American Tower. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API, com passagens também por Bradesco, SEBRAE e Porto Seguro ao longo da carreira. Fora do expediente, desenvolvo sites e aplicações web como freelancer — de uma página institucional simples a um sistema com banco de dados e área restrita.",
+      "availability": "Aberto a freelas"
     },
     "experience": [
       {
@@ -50,31 +50,61 @@
     ],
     "projects": [
       {
+        "title": "Site de casamento com RSVP",
+        "description": "Site de convite feito pra amigos: confirmação de presença gravada no Firestore, painel administrativo com login e exportação em CSV pros noivos. No ar, com domínio próprio e HTTPS.",
+        "tech": [
+          "Next.js",
+          "TypeScript",
+          "Firebase"
+        ],
+        "demoUrl": "https://pedroenatiele.com.br"
+      },
+      {
         "title": "Migração Crítica & Modernização",
         "description": "Coordenação técnica da migração de IBM ACE para OpenShift para a TIM, incluindo configuração de Runtimes, Pods e Services para componentes IBM MQ e API Connect.",
-        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
+        "tech": [
+          "OpenShift",
+          "IBM ACE v12",
+          "Docker"
+        ]
       },
       {
         "title": "Automação DevOps (CI/CD)",
         "description": "Implementação de pipelines completos usando GitLab CI e ArgoCD para deployments automatizados e gerenciamento de versão baseado em Git.",
-        "tech": ["GitLab CI", "ArgoCD", "Helm"]
+        "tech": [
+          "GitLab CI",
+          "ArgoCD",
+          "Helm"
+        ]
       },
       {
         "title": "MuleSoft — Nova Frente",
         "description": "Iniciativa atual (últimos 3 meses): atuação em uma suíte de integrações MuleSoft para a American Tower, com foco em levantamento de backlog técnico e hardening de APIs em produção.",
-        "tech": ["MuleSoft", "Anypoint Platform", "Governança de API"]
+        "tech": [
+          "MuleSoft",
+          "Anypoint Platform",
+          "Governança de API"
+        ]
       },
       {
         "title": "API de Clima (demo MuleSoft)",
         "description": "API pública ao vivo construída em Mule 4: orquestra dois endpoints do Open-Meteo com DataWeave e tratamento de erros. Código aberto, sem chaves de API.",
-        "tech": ["Mule 4", "DataWeave", "Docker"],
+        "tech": [
+          "Mule 4",
+          "DataWeave",
+          "Docker"
+        ],
         "demoUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather?city=Indaiatuba",
         "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api"
       },
       {
         "title": "API de Câmbio (demo IBM ACE)",
         "description": "API pública ao vivo construída em IBM ACE: HTTP Input, ESQL e uma chamada HTTP de saída, com rotas de erro dedicadas. Código aberto, sem chaves de API.",
-        "tech": ["IBM ACE", "ESQL", "Docker"],
+        "tech": [
+          "IBM ACE",
+          "ESQL",
+          "Docker"
+        ],
         "demoUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency?from=USD&to=BRL&amount=100",
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
@@ -174,20 +204,55 @@
       "contactSending": "Enviando...",
       "contactSuccess": "Mensagem enviada — obrigado pelo contato!",
       "contactError": "Não consegui enviar agora. Tenta de novo ou manda direto pro"
+    },
+    "freelance": {
+      "title": "Freelance",
+      "intro": "Além do trabalho com integração, faço sites e aplicações web por conta própria. Se você precisa de um site pro seu negócio, de um sistema sob medida ou de conectar duas ferramentas que não conversam, me chama — respondo rápido e trabalho com preço fechado.",
+      "ctaBtn": "Pedir um orçamento",
+      "items": [
+        {
+          "title": "Sites para negócios",
+          "description": "Página ou site institucional com serviços, fotos, horário, mapa e botão de WhatsApp. Rápido, funciona bem no celular e não precisa de mensalidade pra ficar no ar.",
+          "tech": [
+            "HTML/CSS",
+            "Tailwind",
+            "Vercel"
+          ]
+        },
+        {
+          "title": "Aplicações web",
+          "description": "Sistemas sob medida: formulários com banco de dados, painéis administrativos, áreas com login. Exemplo recente: site de casamento com confirmação de presença e painel pros noivos.",
+          "tech": [
+            "Next.js",
+            "TypeScript",
+            "Firebase"
+          ]
+        },
+        {
+          "title": "Integrações e APIs",
+          "description": "Conectar sistemas que não se falam, expor ou consumir APIs, automatizar rotinas entre ferramentas. É o que faço no dia a dia há mais de seis anos.",
+          "tech": [
+            "MuleSoft",
+            "IBM ACE",
+            "Node.js"
+          ]
+        }
+      ],
+      "ctaAlt": "ou manda um email pra"
     }
   },
   "en": {
     "profile": {
       "name": "Matheus Ribeiro",
-      "role": "Integration Software Engineer",
+      "role": "Integration Engineer · Web Developer",
       "location": "Indaiatuba, Brazil",
       "email": "ribeiromatheusjulio@gmail.com",
       "phone": "+55 19 99963-8591",
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience — long-standing technical depth in IBM ACE (v11/v12) and MQ for TIM, and, over the past few months, also MuleSoft (Anypoint Platform) for American Tower. Proven track record leading critical migrations, OpenShift modernization, and API governance, with prior engagements at Bradesco, SEBRAE, and Porto Seguro.",
-      "availability": "Open to work"
+      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience — long-standing technical depth in IBM ACE (v11/v12) and MQ for TIM, and, over the past few months, also MuleSoft (Anypoint Platform) for American Tower. Proven track record leading critical migrations, OpenShift modernization, and API governance, with prior engagements at Bradesco, SEBRAE, and Porto Seguro. Outside of that, I build websites and web apps as a freelancer — from a simple business page to a full app with a database and a protected admin area.",
+      "availability": "Open to freelance"
     },
     "experience": [
       {
@@ -227,31 +292,61 @@
     ],
     "projects": [
       {
+        "title": "Wedding site with RSVP",
+        "description": "Invitation site built for friends: RSVPs stored in Firestore, a login-protected admin panel and CSV export for the couple. Live on its own domain with HTTPS.",
+        "tech": [
+          "Next.js",
+          "TypeScript",
+          "Firebase"
+        ],
+        "demoUrl": "https://pedroenatiele.com.br"
+      },
+      {
         "title": "Critical Migration & Modernization",
         "description": "Technical coordination of IBM ACE migration to OpenShift for TIM, including configuration of Runtimes, Pods, and Services for IBM MQ and API Connect components.",
-        "tech": ["OpenShift", "IBM ACE v12", "Docker"]
+        "tech": [
+          "OpenShift",
+          "IBM ACE v12",
+          "Docker"
+        ]
       },
       {
         "title": "DevOps Automation (CI/CD)",
         "description": "Implementation of full pipelines using GitLab CI and ArgoCD for automated deployments and Git-based version control.",
-        "tech": ["GitLab CI", "ArgoCD", "Helm"]
+        "tech": [
+          "GitLab CI",
+          "ArgoCD",
+          "Helm"
+        ]
       },
       {
         "title": "MuleSoft — New Focus",
         "description": "Current initiative (last 3 months): working on a MuleSoft integration suite for American Tower, focused on technical backlog discovery and hardening of production APIs.",
-        "tech": ["MuleSoft", "Anypoint Platform", "API Governance"]
+        "tech": [
+          "MuleSoft",
+          "Anypoint Platform",
+          "API Governance"
+        ]
       },
       {
         "title": "Weather API (MuleSoft demo)",
         "description": "Live public API built with Mule 4: orchestrates two Open-Meteo endpoints with DataWeave and error handling. Open source, no API keys.",
-        "tech": ["Mule 4", "DataWeave", "Docker"],
+        "tech": [
+          "Mule 4",
+          "DataWeave",
+          "Docker"
+        ],
         "demoUrl": "https://mule-demo.matheusribeiro.dev.br/api/weather?city=Indaiatuba",
         "repoUrl": "https://github.com/MatthewJulioRibeiro/mule-weather-api"
       },
       {
         "title": "Currency API (IBM ACE demo)",
         "description": "Live public API built with IBM ACE: HTTP Input, ESQL, and an outbound HTTP call, with dedicated error-path routing. Open source, no API keys.",
-        "tech": ["IBM ACE", "ESQL", "Docker"],
+        "tech": [
+          "IBM ACE",
+          "ESQL",
+          "Docker"
+        ],
         "demoUrl": "https://ace-demo.matheusribeiro.dev.br/api/currency?from=USD&to=BRL&amount=100",
         "repoUrl": "https://github.com/MatthewJulioRibeiro/ace-currency-api"
       }
@@ -351,6 +446,41 @@
       "contactSending": "Sending...",
       "contactSuccess": "Message sent — thanks for reaching out!",
       "contactError": "Couldn't send that right now. Try again or email"
+    },
+    "freelance": {
+      "title": "Freelance",
+      "intro": "Besides my integration work, I build websites and web apps on my own. If you need a site for your business, a custom app, or two tools wired together, get in touch — I reply fast and work on a fixed-price basis.",
+      "ctaBtn": "Request a quote",
+      "items": [
+        {
+          "title": "Business websites",
+          "description": "A one-page or multi-page site with services, photos, opening hours, map and a WhatsApp button. Fast, mobile-friendly, and no monthly fee required to stay online.",
+          "tech": [
+            "HTML/CSS",
+            "Tailwind",
+            "Vercel"
+          ]
+        },
+        {
+          "title": "Web applications",
+          "description": "Custom systems: forms backed by a database, admin dashboards, login-protected areas. Recent example: a wedding site with RSVP and a private panel for the couple.",
+          "tech": [
+            "Next.js",
+            "TypeScript",
+            "Firebase"
+          ]
+        },
+        {
+          "title": "Integrations & APIs",
+          "description": "Connecting systems that don't talk to each other, exposing or consuming APIs, automating routines between tools. It's what I do day to day, for six-plus years now.",
+          "tech": [
+            "MuleSoft",
+            "IBM ACE",
+            "Node.js"
+          ]
+        }
+      ],
+      "ctaAlt": "or email"
     }
   },
   "common": {
@@ -375,20 +505,103 @@
       }
     ],
     "stats": [
-      { "value": "6.5+", "label_en": "Years in integration", "label_pt": "Anos em integração" },
-      { "value": "5", "label_en": "Enterprise clients", "label_pt": "Clientes enterprise" },
-      { "value": "2", "label_en": "Integration platforms", "label_pt": "Plataformas de integração" }
+      {
+        "value": "6.5+",
+        "label_en": "Years in integration",
+        "label_pt": "Anos em integração"
+      },
+      {
+        "value": "5",
+        "label_en": "Enterprise clients",
+        "label_pt": "Clientes enterprise"
+      },
+      {
+        "value": "2",
+        "label_en": "Integration platforms",
+        "label_pt": "Plataformas de integração"
+      }
     ],
     "languages": [
-      { "name": "Português", "level": "Native" },
-      { "name": "English", "level": "Intermediate" },
-      { "name": "Español", "level": "Basic" }
+      {
+        "name": "Português",
+        "level": "Native"
+      },
+      {
+        "name": "English",
+        "level": "Intermediate"
+      },
+      {
+        "name": "Español",
+        "level": "Basic"
+      }
     ],
     "skills": [
-      { "category": "Integration Platforms", "category_pt": "Plataformas de Integração", "items": ["App Connect Enterprise", "IBM MQ", "MuleSoft (Anypoint Platform)", "API Connect", "Cloud Pak (CP4I)", "ESQL", "Integration Bus (IIB)"] },
-      { "category": "Cloud & DevOps", "category_pt": "Nuvem e DevOps", "items": ["OpenShift", "Docker", "Kubernetes", "GitLab CI", "ArgoCD", "Helm", "PVCs"] },
-      { "category": "Backend & DB", "category_pt": "Backend e Banco de Dados", "items": ["Java", "Node.js", "REST/SOAP", "OAuth 2.0", "Oracle", "SQL Server", "MySQL", "Microservices"] },
-      { "category": "Tools & Observability", "category_pt": "Ferramentas e Observabilidade", "items": ["Kibana", "ElasticSearch", "Log4j2", "JIRA", "Scrum", "Maven", "Git"] }
+      {
+        "category": "Integration Platforms",
+        "category_pt": "Plataformas de Integração",
+        "items": [
+          "App Connect Enterprise",
+          "IBM MQ",
+          "MuleSoft (Anypoint Platform)",
+          "API Connect",
+          "Cloud Pak (CP4I)",
+          "ESQL",
+          "Integration Bus (IIB)"
+        ]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "category_pt": "Nuvem e DevOps",
+        "items": [
+          "OpenShift",
+          "Docker",
+          "Kubernetes",
+          "GitLab CI",
+          "ArgoCD",
+          "Helm",
+          "PVCs"
+        ]
+      },
+      {
+        "category": "Backend & DB",
+        "category_pt": "Backend e Banco de Dados",
+        "items": [
+          "Java",
+          "Node.js",
+          "REST/SOAP",
+          "OAuth 2.0",
+          "Oracle",
+          "SQL Server",
+          "MySQL",
+          "Microservices"
+        ]
+      },
+      {
+        "category": "Tools & Observability",
+        "category_pt": "Ferramentas e Observabilidade",
+        "items": [
+          "Kibana",
+          "ElasticSearch",
+          "Log4j2",
+          "JIRA",
+          "Scrum",
+          "Maven",
+          "Git"
+        ]
+      },
+      {
+        "category": "Web & Front-end",
+        "category_pt": "Web e Front-end",
+        "items": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind CSS",
+          "Firebase (Firestore)",
+          "Vercel",
+          "HTML/CSS"
+        ]
+      }
     ]
   }
 }

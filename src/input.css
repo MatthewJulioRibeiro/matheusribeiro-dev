@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 /* Base */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -186,6 +190,40 @@ body {
     background: #B3122A;
 }
 .dark .job-bullets li::before { background: #E8323F; }
+
+/* Card spotlight — the radar glow, localized to the card under the cursor */
+.project-card,
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+.project-card::after,
+.stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    background: radial-gradient(260px circle at var(--cx, 50%) var(--cy, 50%), rgba(179, 18, 42, 0.10), transparent 65%);
+}
+.dark .project-card::after,
+.dark .stat-card::after {
+    background: radial-gradient(260px circle at var(--cx, 50%) var(--cy, 50%), rgba(232, 50, 63, 0.16), transparent 65%);
+}
+.project-card:hover::after,
+.stat-card:hover::after {
+    opacity: 1;
+}
+.project-card > *,
+.stat-card > * {
+    position: relative;
+    z-index: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .project-card::after,
+    .stat-card::after { display: none; }
+}
 
 /* Site-wide "radar sense" cursor glow */
 #site-spotlight {

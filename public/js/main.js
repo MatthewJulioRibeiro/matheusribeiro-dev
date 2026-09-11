@@ -170,6 +170,7 @@ function renderPage() {
 
     // Sections
     renderStats(common.stats);
+    renderFreelance(data.freelance);
     renderCoreStack(common.skills);
     renderExperience(data.experience);
     renderProjects(data.projects, ui);
@@ -186,8 +187,68 @@ function renderStats(stats) {
 
     container.innerHTML = stats.map(s => `
         <div class="stat-card">
-            <b>${s.value}</b>
+            <b data-value="${s.value}">${s.value}</b>
             <span>${currentLang === 'pt' ? s.label_pt : s.label_en}</span>
+        </div>
+    `).join('');
+    animateStatCounters(container);
+}
+
+// Count the stat numbers up once the row scrolls into view (keeps any suffix like "+")
+function animateStatCounters(container) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion || !('IntersectionObserver' in window)) return;
+
+    const nodes = [...container.querySelectorAll('b[data-value]')];
+    const parsed = nodes.map(b => {
+        const m = /^([\d.,]+)(.*)$/.exec(b.dataset.value);
+        if(!m) return null;
+        const num = parseFloat(m[1].replace(',', '.'));
+        const decimals = (m[1].split(/[.,]/)[1] || '').length;
+        const sep = m[1].includes(',') ? ',' : '.';
+        return { b, num, decimals, sep, suffix: m[2] };
+    }).filter(Boolean);
+    if(!parsed.length) return;
+
+    parsed.forEach(p => { p.b.textContent = (0).toFixed(p.decimals).replace('.', p.sep) + p.suffix; });
+
+    const io = new IntersectionObserver((entries) => {
+        if(!entries.some(en => en.isIntersecting)) return;
+        io.disconnect();
+        const start = performance.now(), dur = 900;
+        const tick = (now) => {
+            const t = Math.min(1, (now - start) / dur);
+            const ease = 1 - Math.pow(1 - t, 3);
+            parsed.forEach(p => {
+                p.b.textContent = (p.num * ease).toFixed(p.decimals).replace('.', p.sep) + p.suffix;
+            });
+            if(t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    io.observe(container);
+}
+
+function renderFreelance(fl) {
+    const section = document.getElementById('freelance');
+    if(!section) return;
+    if(!fl) { section.hidden = true; return; }
+    section.hidden = false;
+
+    setText('title-freelance', fl.title);
+    setText('freelance-intro', fl.intro);
+    setText('freelance-cta-text', fl.ctaBtn);
+    setText('freelance-cta-alt', fl.ctaAlt);
+
+    const grid = document.getElementById('freelance-grid');
+    if(!grid) return;
+    grid.innerHTML = fl.items.map(item => `
+        <div class="project-card cursor-default">
+            <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">${item.title}</h4>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${item.description}</p>
+            <div class="flex flex-wrap gap-2">
+                ${item.tech.map((t, i) => `<span class="text-xs font-mono ${i % 2 ? 'text-ibm-royal bg-ibm-royal/10' : 'text-ibm-blue bg-ibm-blue/10'} px-2 py-1 rounded-md">${t}</span>`).join('')}
+            </div>
         </div>
     `).join('');
 }
@@ -1072,6 +1133,12 @@ function initSpotlight() {
         raf = requestAnimationFrame(() => {
             spot.style.setProperty('--mx', e.clientX + 'px');
             spot.style.setProperty('--my', e.clientY + 'px');
+            const card = e.target.closest && e.target.closest('.project-card, .stat-card');
+            if(card) {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--cx', (e.clientX - r.left) + 'px');
+                card.style.setProperty('--cy', (e.clientY - r.top) + 'px');
+            }
             raf = null;
         });
     });
