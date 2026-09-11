@@ -616,9 +616,12 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
 }
 .dark .demo-steps-list code { background: rgba(237, 227, 216, 0.1); }
 
-/* Details open/close — body expands to its measured height (--h set in JS on toggle) */
-.demo-steps-block > :not(summary),
-.demo-raw-json-block > :not(summary) {
+/* Details open/close — body expands to its measured height (--h set in JS on toggle).
+   overflow is clipped only while animating: the raw JSON <pre> needs its own scrollbar after. */
+.demo-steps-block > .is-opening,
+.demo-raw-json-block > .is-opening,
+.demo-steps-block.is-closing > :not(summary),
+.demo-raw-json-block.is-closing > :not(summary) {
     overflow: hidden;
 }
 .demo-steps-block > .is-opening,

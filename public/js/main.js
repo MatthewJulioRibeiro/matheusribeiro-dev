@@ -1196,6 +1196,8 @@ function syntaxHighlightJson(obj) {
         body.classList.remove('is-opening');
         void body.offsetWidth;
         body.classList.add('is-opening');
+        const onEnd = (ev) => { if (ev.target !== body) return; body.classList.remove('is-opening'); body.removeEventListener('animationend', onEnd); };
+        body.addEventListener('animationend', onEnd);
     }, true);
     document.addEventListener('click', (e) => {
         const summary = e.target.closest('summary.demo-steps-summary');
@@ -1208,7 +1210,8 @@ function syntaxHighlightJson(obj) {
         measure(d, body);
         body.classList.remove('is-opening');
         d.classList.add('is-closing');
-        body.addEventListener('animationend', () => { d.classList.remove('is-closing'); d.open = false; }, { once: true });
+        const onClosed = (ev) => { if (ev.target !== body) return; body.removeEventListener('animationend', onClosed); d.classList.remove('is-closing'); d.open = false; };
+        body.addEventListener('animationend', onClosed);
     });
 })();
 
