@@ -1285,9 +1285,11 @@ function renderName(name) {
     if(prefersReducedMotion()) { el.textContent = name; return; }
     el.setAttribute('aria-label', name);
     el.classList.add('name-split');
-    el.innerHTML = [...name].map((ch, i) =>
-        `<span class="name-char${ch === ' ' ? ' is-space' : ''}" style="--i:${i}" aria-hidden="true">${ch === ' ' ? '' : ch}</span>`
-    ).join('');
+    // Letters are grouped per word so the line can only break at a space, never inside a name
+    let i = 0;
+    el.innerHTML = name.split(' ').map(word =>
+        `<span class="name-word" aria-hidden="true">${[...word].map(ch => `<span class="name-char" style="--i:${i++}">${ch}</span>`).join('')}</span>`
+    ).join(' ');
 }
 
 // Mono section labels resolve from noise into their text, terminal-style

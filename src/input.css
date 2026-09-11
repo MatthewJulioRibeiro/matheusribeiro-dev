@@ -1047,7 +1047,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
     animation: nameCharUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     animation-delay: calc(0.15s + var(--i, 0) * 35ms);
 }
-.name-char.is-space { width: 0.28em; }
+.name-word { display: inline-block; white-space: nowrap; }
 /* After the reveal, hand transform back to the element's own hover styles */
 .reveal.anim-done,
 .reveal.is-visible .stagger > .anim-done {
