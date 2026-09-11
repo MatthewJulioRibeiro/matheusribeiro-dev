@@ -421,6 +421,133 @@ body {
 .flow-diagram .flow-arrowhead { fill: #1A1210; }
 .dark .flow-diagram .flow-arrowhead { fill: #A89686; }
 
+/* Flow diagram in flight — arrows march and boxes light up in order while a request runs */
+.flow-diagram .flow-box,
+.flow-diagram .flow-arrow,
+.flow-diagram .flow-arrowhead {
+    transition: stroke 0.3s ease, fill 0.3s ease, filter 0.3s ease;
+}
+.flow-diagram.is-running .flow-arrow {
+    stroke-dasharray: 5 4;
+    animation: flow-march 0.5s linear infinite;
+}
+@keyframes flow-march {
+    to { stroke-dashoffset: -9; }
+}
+.flow-diagram.is-running .flow-box:not(.inner) {
+    animation: flow-box-light 1.6s ease-in-out infinite;
+    animation-delay: calc(var(--n, 0) * 0.32s);
+}
+@keyframes flow-box-light {
+    0%, 55%, 100% { stroke: #1A1210; filter: none; }
+    18%, 36% { stroke: #B3122A; filter: drop-shadow(0 0 4px rgba(179, 18, 42, 0.55)); }
+}
+.dark .flow-diagram.is-running .flow-box:not(.inner) { animation-name: flow-box-light-dark; }
+@keyframes flow-box-light-dark {
+    0%, 55%, 100% { stroke: #EDE3D8; filter: none; }
+    18%, 36% { stroke: #E8323F; filter: drop-shadow(0 0 5px rgba(232, 50, 63, 0.7)); }
+}
+/* the accent (orchestration) box keeps its red stroke, so it glows instead */
+.flow-diagram.is-running .flow-box.accent { animation-name: flow-accent-glow; }
+@keyframes flow-accent-glow {
+    0%, 55%, 100% { filter: none; }
+    18%, 36% { filter: drop-shadow(0 0 6px rgba(232, 50, 63, 0.8)); }
+}
+/* response sweep: one pass left-to-right, green on success, red on failure */
+.flow-diagram.is-done .flow-box:not(.inner),
+.flow-diagram.is-failed .flow-box:not(.inner) {
+    animation: flow-sweep-ok 0.7s ease-out forwards;
+    animation-delay: calc(var(--n, 0) * 0.14s);
+}
+.flow-diagram.is-failed .flow-box:not(.inner) { animation-name: flow-sweep-fail; }
+@keyframes flow-sweep-ok {
+    30% { stroke: #1D7A4C; filter: drop-shadow(0 0 5px rgba(29, 122, 76, 0.6)); }
+    100% { filter: none; }
+}
+@keyframes flow-sweep-fail {
+    30% { stroke: #B3122A; filter: drop-shadow(0 0 5px rgba(179, 18, 42, 0.6)); }
+    100% { filter: none; }
+}
+.flow-diagram.is-done .flow-arrow { animation: flow-arrow-ok 0.7s ease-out forwards; }
+@keyframes flow-arrow-ok { 30% { stroke: #1D7A4C; } }
+
+/* Sliding tab underline */
+.demo-tabs { position: relative; }
+.demo-tabs::after {
+    content: '';
+    position: absolute;
+    left: var(--tab-x, 0);
+    width: var(--tab-w, 0);
+    bottom: -1.5px;
+    height: 2px;
+    background: #B3122A;
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dark .demo-tabs::after { background: #E8323F; }
+.demo-tabs.has-slider .demo-tab.is-active { border-bottom-color: transparent; }
+
+/* Panels crossfade in */
+.demo-tab-panel.is-entering { animation: panel-in 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes panel-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Results pop in; comparison cards stagger */
+.demo-pretty-in > * { animation: result-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.demo-pretty-in .demo-compare-grid > * {
+    animation: result-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+}
+@keyframes result-pop {
+    from { opacity: 0; transform: translateY(8px) scale(0.985); }
+    to   { opacity: 1; transform: none; }
+}
+.demo-result.is-fresh { animation: result-flash 0.7s ease-out; }
+.demo-result.is-error.is-fresh { animation: result-flash-error 0.7s ease-out; }
+@keyframes result-flash {
+    0% { box-shadow: inset 0 0 0 1.5px rgba(29, 122, 76, 0.9); }
+    100% { box-shadow: inset 0 0 0 1.5px transparent; }
+}
+@keyframes result-flash-error {
+    0% { box-shadow: inset 0 0 0 1.5px rgba(179, 18, 42, 0.9); }
+    100% { box-shadow: inset 0 0 0 1.5px transparent; }
+}
+/* Loading: pulsing text with a walking ellipsis */
+.demo-result.is-loading { animation: demo-status-pulse 1.4s ease-in-out infinite; }
+.demo-result.is-loading::after {
+    content: '';
+    display: inline-block;
+    width: 1.2em;
+    text-align: left;
+    animation: loading-dots 1.2s steps(4, end) infinite;
+}
+@keyframes loading-dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+}
+/* Swap button spins a half turn per click (hover already tilts it) */
+.demo-swap-btn { transition: color 0.15s ease, border-color 0.15s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.demo-swap-btn.is-swapped { transform: rotate(180deg); }
+.demo-swap-btn.is-swapped:hover { transform: rotate(200deg); }
+/* Chips pop in */
+.demo-chip { animation: result-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+    .flow-diagram.is-running .flow-arrow,
+    .flow-diagram.is-running .flow-box:not(.inner),
+    .flow-diagram.is-done .flow-box:not(.inner),
+    .flow-diagram.is-failed .flow-box:not(.inner),
+    .flow-diagram.is-done .flow-arrow,
+    .demo-tab-panel.is-entering,
+    .demo-pretty-in > *, .demo-pretty-in .demo-compare-grid > *,
+    .demo-result.is-fresh, .demo-result.is-loading, .demo-chip { animation: none; }
+    .demo-tabs::after { transition: none; }
+    .demo-swap-btn { transition: color 0.15s ease, border-color 0.15s ease; }
+}
+
 /* API demo result panels */
 .demo-result {
     font-family: 'IBM Plex Mono', monospace;
@@ -600,10 +727,9 @@ body {
     width: 2.25rem;
     height: 2.25rem;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 .dark .demo-swap-btn { border-color: #EDE3D8; color: #EDE3D8; }
-.demo-swap-btn:hover { color: #B3122A; border-color: #B3122A; transform: rotate(180deg); }
+.demo-swap-btn:hover { color: #B3122A; border-color: #B3122A; transform: rotate(20deg); }
 .dark .demo-swap-btn:hover { color: #E8323F; border-color: #E8323F; }
 
 /* API demo city chips (compare mode) */

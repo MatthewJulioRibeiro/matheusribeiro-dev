@@ -803,21 +803,59 @@ async function checkDemoStatus(id, healthUrl, ui) {
 }
 
 function initDemoTabs(prefix, resultElId, prettyElId, placeholderText) {
+    const tabsEl = document.getElementById(`${prefix}-tabs`);
     const tabs = document.querySelectorAll(`#${prefix}-tabs .demo-tab`);
     const resultEl = document.getElementById(resultElId);
     const prettyEl = document.getElementById(prettyElId);
+
+    // Underline slides between tabs instead of jumping (position measured, so it survives label changes)
+    const moveSlider = () => {
+        const active = tabsEl && tabsEl.querySelector('.demo-tab.is-active');
+        if (!active) return;
+        tabsEl.classList.add('has-slider');
+        tabsEl.style.setProperty('--tab-x', active.offsetLeft + 'px');
+        tabsEl.style.setProperty('--tab-w', active.offsetWidth + 'px');
+    };
+    moveSlider();
+    if (tabsEl) tabsEl._moveSlider = moveSlider;
+
     tabs.forEach(tab => {
         tab.onclick = () => {
             if (tab.classList.contains('is-active')) return;
             tabs.forEach(t => t.classList.remove('is-active'));
             tab.classList.add('is-active');
+            moveSlider();
             document.querySelectorAll(`#${prefix}-panels .demo-tab-panel`).forEach(p => {
-                p.classList.toggle('is-hidden', p.dataset.panel !== tab.dataset.tab);
+                const show = p.dataset.panel === tab.dataset.tab;
+                p.classList.toggle('is-hidden', !show);
+                p.classList.remove('is-entering');
+                if (show) { void p.offsetWidth; p.classList.add('is-entering'); }
             });
             if (resultEl) { resultEl.className = 'demo-result'; resultEl.innerHTML = `<code>&larr; ${placeholderText}</code>`; }
             if (prettyEl) prettyEl.innerHTML = '';
         };
     });
+}
+
+// Keep tab underlines aligned when the layout changes width
+window.addEventListener('resize', () => {
+    document.querySelectorAll('.demo-tabs').forEach(t => { if (t._moveSlider) t._moveSlider(); });
+}, { passive: true });
+
+// Number the flow-diagram boxes so the in-flight animation can light them up in order
+function indexFlowDiagrams(root) {
+    (root || document).querySelectorAll('.flow-diagram').forEach(svg => {
+        svg.querySelectorAll('.flow-box:not(.inner)').forEach((box, i) => box.style.setProperty('--n', i));
+    });
+}
+
+// Flow diagram state for the demo card that owns resultEl: 'running' | 'done' | 'failed' | ''
+function setFlowState(resultEl, state) {
+    const card = resultEl && resultEl.closest('.project-card');
+    const svg = card && card.querySelector('.flow-diagram');
+    if (!svg) return;
+    svg.classList.remove('is-running', 'is-done', 'is-failed');
+    if (state) { void svg.getBoundingClientRect(); svg.classList.add('is-' + state); }
 }
 
 function renderChips(containerId, cities, ui, onRemove) {
@@ -1014,6 +1052,7 @@ function initApiDemos(ui, demosText) {
 
     wireQuickPicks('mule-compare', (query) => addCompareCity(query));
 
+    indexFlowDiagrams();
     initDemoTabs('mule', 'mule-demo-result', 'mule-demo-pretty', (muleDt.resultPlaceholder || '').replace(/^←\s*/, ''));
 
     // --- ACE: convert ---
@@ -1040,6 +1079,7 @@ function initApiDemos(ui, demosText) {
             const tmp = fromEl.value;
             fromEl.value = toEl.value;
             toEl.value = tmp;
+            aceSwap.classList.toggle('is-swapped');
         };
     }
 
@@ -1093,22 +1133,29 @@ function initApiDemos(ui, demosText) {
 async function runDemoCall(triggerBtn, resultEl, url, ui, prettyEl, prettyRenderFn) {
     const originalBtnText = triggerBtn ? triggerBtn.textContent : null;
     if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.textContent = '...'; }
-    if (prettyEl) prettyEl.innerHTML = '';
-    resultEl.className = 'demo-result';
-    resultEl.textContent = ui.demoLoadingText || 'Loading...';
+    if (prettyEl) { prettyEl.innerHTML = ''; prettyEl.classList.remove('demo-pretty-in'); }
+    resultEl.className = 'demo-result is-loading';
+    resultEl.textContent = (ui.demoLoadingText || 'Loading...').replace(/\.+$/, '');
+    setFlowState(resultEl, 'running');
 
     const start = performance.now();
     try {
         const res = await fetch(url);
         const elapsed = Math.round(performance.now() - start);
         const data = await res.json();
-        resultEl.className = res.ok ? 'demo-result' : 'demo-result is-error';
+        resultEl.className = res.ok ? 'demo-result is-fresh' : 'demo-result is-error is-fresh';
         resultEl.innerHTML = `<div class="demo-meta">HTTP ${res.status} &middot; ${elapsed}ms</div>${syntaxHighlightJson(data)}`;
+        setFlowState(resultEl, res.ok && !data.error ? 'done' : 'failed');
         if (prettyEl && prettyRenderFn) {
-            try { prettyEl.innerHTML = prettyRenderFn(data); } catch (e) { /* pretty view is best-effort, raw JSON above always works */ }
+            try {
+                prettyEl.innerHTML = prettyRenderFn(data);
+                prettyEl.querySelectorAll('.demo-compare-grid > *').forEach((c, i) => c.style.setProperty('--i', i));
+                prettyEl.classList.add('demo-pretty-in');
+            } catch (e) { /* pretty view is best-effort, raw JSON above always works */ }
         }
     } catch (err) {
-        resultEl.className = 'demo-result is-error';
+        resultEl.className = 'demo-result is-error is-fresh';
+        setFlowState(resultEl, 'failed');
         const template = ui.demoErrorText || 'Request failed: {msg}. The demo VM may be asleep on the first request -- try again in a few seconds.';
         resultEl.textContent = template.replace('{msg}', err.message);
     } finally {
