@@ -207,12 +207,14 @@
     },
     "freelance": {
       "title": "Freelance",
-      "intro": "Além do trabalho com integração, faço sites e aplicações web por conta própria. Se você precisa de um site pro seu negócio, de um sistema sob medida ou de conectar duas ferramentas que não conversam, me chama — respondo rápido e trabalho com preço fechado.",
+      "intro": "Também faço sites e aplicações web por conta própria — preço fechado, prazo combinado antes, e eu cuido de tudo, do domínio até o site no ar.",
       "ctaBtn": "Pedir um orçamento",
+      "ctaAlt": "ou manda um email pra",
       "items": [
         {
-          "title": "Sites para negócios",
-          "description": "Página ou site institucional com serviços, fotos, horário, mapa e botão de WhatsApp. Rápido, funciona bem no celular e não precisa de mensalidade pra ficar no ar.",
+          "title": "Site para o seu negócio",
+          "meta": "pronto em dias",
+          "description": "Uma página ou site institucional com serviços, fotos, horário, mapa e botão de WhatsApp. Funciona bem no celular e não precisa de mensalidade pra ficar no ar.",
           "tech": [
             "HTML/CSS",
             "Tailwind",
@@ -220,8 +222,9 @@
           ]
         },
         {
-          "title": "Aplicações web",
-          "description": "Sistemas sob medida: formulários com banco de dados, painéis administrativos, áreas com login. Exemplo recente: site de casamento com confirmação de presença e painel pros noivos.",
+          "title": "Aplicação web sob medida",
+          "meta": "com banco de dados",
+          "description": "Formulários que gravam num banco, painel administrativo, área com login. Exemplo recente: site de casamento com confirmação de presença e painel pros noivos.",
           "tech": [
             "Next.js",
             "TypeScript",
@@ -229,16 +232,16 @@
           ]
         },
         {
-          "title": "Integrações e APIs",
-          "description": "Conectar sistemas que não se falam, expor ou consumir APIs, automatizar rotinas entre ferramentas. É o que faço no dia a dia há mais de seis anos.",
+          "title": "Integração entre sistemas",
+          "meta": "APIs e automação",
+          "description": "Conectar ferramentas que não se falam, expor ou consumir APIs, automatizar rotinas. É o que faço no dia a dia há mais de seis anos.",
           "tech": [
             "MuleSoft",
             "IBM ACE",
             "Node.js"
           ]
         }
-      ],
-      "ctaAlt": "ou manda um email pra"
+      ]
     }
   },
   "en": {
@@ -449,12 +452,14 @@
     },
     "freelance": {
       "title": "Freelance",
-      "intro": "Besides my integration work, I build websites and web apps on my own. If you need a site for your business, a custom app, or two tools wired together, get in touch — I reply fast and work on a fixed-price basis.",
+      "intro": "I also build websites and web apps on my own — fixed price, timeline agreed up front, and I handle everything from the domain to the site going live.",
       "ctaBtn": "Request a quote",
+      "ctaAlt": "or email",
       "items": [
         {
-          "title": "Business websites",
-          "description": "A one-page or multi-page site with services, photos, opening hours, map and a WhatsApp button. Fast, mobile-friendly, and no monthly fee required to stay online.",
+          "title": "A website for your business",
+          "meta": "ready in days",
+          "description": "A one-page or multi-page site with services, photos, opening hours, map and a WhatsApp button. Works well on phones and needs no monthly fee to stay online.",
           "tech": [
             "HTML/CSS",
             "Tailwind",
@@ -462,8 +467,9 @@
           ]
         },
         {
-          "title": "Web applications",
-          "description": "Custom systems: forms backed by a database, admin dashboards, login-protected areas. Recent example: a wedding site with RSVP and a private panel for the couple.",
+          "title": "A custom web app",
+          "meta": "with a database",
+          "description": "Forms that save to a database, an admin panel, login-protected areas. Recent example: a wedding site with RSVP and a private panel for the couple.",
           "tech": [
             "Next.js",
             "TypeScript",
@@ -471,16 +477,16 @@
           ]
         },
         {
-          "title": "Integrations & APIs",
-          "description": "Connecting systems that don't talk to each other, exposing or consuming APIs, automating routines between tools. It's what I do day to day, for six-plus years now.",
+          "title": "Integration between systems",
+          "meta": "APIs and automation",
+          "description": "Connecting tools that don't talk to each other, exposing or consuming APIs, automating routines. It's what I do day to day, for six-plus years now.",
           "tech": [
             "MuleSoft",
             "IBM ACE",
             "Node.js"
           ]
         }
-      ],
-      "ctaAlt": "or email"
+      ]
     }
   },
   "common": {

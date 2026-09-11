@@ -191,6 +191,63 @@ body {
 }
 .dark .job-bullets li::before { background: #E8323F; }
 
+/* Freelance service list — one bordered block, rows instead of identical cards */
+.service-list {
+    border: 2px solid #1A1210;
+    background-color: #FBF7EE;
+    box-shadow: 4px 4px 0 rgba(26, 18, 16, 0.15);
+}
+.dark .service-list {
+    border-color: #4A3830;
+    background-color: #17110F;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+.service-row {
+    position: relative;
+    padding: 1.25rem 1.5rem 1.25rem 1.75rem;
+    border-top: 1px solid rgba(26, 18, 16, 0.12);
+    transition: background-color 0.2s ease;
+}
+.dark .service-row { border-top-color: rgba(237, 227, 216, 0.10); }
+.service-row:first-child { border-top: 0; }
+.service-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #B3122A;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.25s ease;
+}
+.dark .service-row::before { background: #E8323F; }
+.service-row:hover { background-color: rgba(179, 18, 42, 0.04); }
+.dark .service-row:hover { background-color: rgba(232, 50, 63, 0.06); }
+.service-row:hover::before { transform: scaleY(1); }
+.service-row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+}
+.service-row-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: #B3122A;
+    white-space: nowrap;
+}
+.dark .service-row-meta { color: #E8323F; }
+@media (max-width: 640px) {
+    .service-row-head { flex-wrap: wrap; gap: 0.15rem 1rem; }
+    .service-row-meta { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .service-row::before { transition: none; }
+}
+
 /* Card spotlight — the radar glow, localized to the card under the cursor */
 .project-card,
 .stat-card {

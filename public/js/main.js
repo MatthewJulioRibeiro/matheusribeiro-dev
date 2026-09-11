@@ -240,13 +240,16 @@ function renderFreelance(fl) {
     setText('freelance-cta-text', fl.ctaBtn);
     setText('freelance-cta-alt', fl.ctaAlt);
 
-    const grid = document.getElementById('freelance-grid');
-    if(!grid) return;
-    grid.innerHTML = fl.items.map(item => `
-        <div class="project-card cursor-default">
-            <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 font-sans">${item.title}</h4>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">${item.description}</p>
-            <div class="flex flex-wrap gap-2">
+    const list = document.getElementById('freelance-list');
+    if(!list) return;
+    list.innerHTML = fl.items.map(item => `
+        <div class="service-row">
+            <div class="service-row-head">
+                <h4 class="font-sans font-bold text-slate-900 dark:text-slate-100">${item.title}</h4>
+                ${item.meta ? `<span class="service-row-meta">${item.meta}</span>` : ''}
+            </div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">${item.description}</p>
+            <div class="flex flex-wrap gap-2 mt-3">
                 ${item.tech.map((t, i) => `<span class="text-xs font-mono ${i % 2 ? 'text-ibm-royal bg-ibm-royal/10' : 'text-ibm-blue bg-ibm-blue/10'} px-2 py-1 rounded-md">${t}</span>`).join('')}
             </div>
         </div>
