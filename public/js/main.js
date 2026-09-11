@@ -5,6 +5,9 @@ let typeWriterTimeout;
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
     initSpotlight();
+    initScrollReveal();
+    initScrollProgress();
+    initMagnetic();
 
     try {
         const response = await fetch('./data/cv-data.json');
@@ -126,7 +129,7 @@ function renderPage() {
     const ui = data.ui;
 
     // Header & Texts
-    setText('profile-name', data.profile.name);
+    renderName(data.profile.name);
     startTypeWriter(data.profile.role, 'profile-role');
     setText('profile-summary', data.profile.summary);
     setText('contact-text', ui.contactBtn);
@@ -179,6 +182,7 @@ function renderPage() {
     renderEducation(data.education);
     renderLanguages(common.languages);
     renderContactForm(ui, data.profile);
+    indexStagger();
 }
 
 function renderStats(stats) {
@@ -193,6 +197,7 @@ function renderStats(stats) {
     `).join('');
     animateStatCounters(container);
 }
+
 
 // Count the stat numbers up once the row scrolls into view (keeps any suffix like "+")
 function animateStatCounters(container) {
@@ -1147,10 +1152,114 @@ function initSpotlight() {
     });
 }
 
+// --- Motion: scroll reveal, name split, label scramble, progress, magnetic ---
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Sections below the hero wait for the viewport instead of animating at load
+function initScrollReveal() {
+    const targets = [...document.querySelectorAll('main section.fade-in')];
+    if(!targets.length) return;
+    if(prefersReducedMotion() || !('IntersectionObserver' in window)) return;
+
+    targets.forEach(el => {
+        el.classList.remove('fade-in', 'delay-1', 'delay-2', 'delay-3');
+        el.classList.add('reveal');
+    });
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+            if(!en.isIntersecting) return;
+            en.target.classList.add('is-visible');
+            en.target.querySelectorAll('.section-label').forEach(scrambleText);
+            io.unobserve(en.target);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    targets.forEach(el => io.observe(el));
+
+    // Once a reveal finishes, drop the animation so hover transforms work again
+    document.addEventListener('animationend', (e) => {
+        if(e.animationName === 'fadeInUp' && e.target.closest('.reveal')) e.target.classList.add('anim-done');
+    });
+}
+
+// Give each direct child of a .stagger container its index (drives animation-delay)
+function indexStagger(root) {
+    (root || document).querySelectorAll('.stagger').forEach(list => {
+        [...list.children].forEach((child, i) => child.style.setProperty('--i', i));
+        list.querySelectorAll('.job-node').forEach((n, i) => n.style.setProperty('--i', i));
+    });
+}
+
+// Hero name, letter by letter (only the first time — language switches keep it still)
+function renderName(name) {
+    const el = document.getElementById('profile-name');
+    if(!el) return;
+    if(el.dataset.split === name) return;
+    el.dataset.split = name;
+    if(prefersReducedMotion()) { el.textContent = name; return; }
+    el.setAttribute('aria-label', name);
+    el.classList.add('name-split');
+    el.innerHTML = [...name].map((ch, i) =>
+        `<span class="name-char${ch === ' ' ? ' is-space' : ''}" style="--i:${i}" aria-hidden="true">${ch === ' ' ? '' : ch}</span>`
+    ).join('');
+}
+
+// Mono section labels resolve from noise into their text, terminal-style
+function scrambleText(el) {
+    if(!el || el.dataset.scrambling) return;
+    const final = el.textContent;
+    if(!final.trim()) return;
+    const glyphs = '#%&/<>=+*:;01';
+    const frames = 14;
+    let frame = 0;
+    el.dataset.scrambling = '1';
+    const tick = () => {
+        const settled = Math.floor((frame / frames) * final.length);
+        el.textContent = [...final].map((ch, i) =>
+            ch === ' ' || i < settled ? ch : glyphs[Math.floor(Math.random() * glyphs.length)]
+        ).join('');
+        frame++;
+        if(frame <= frames) requestAnimationFrame(tick);
+        else { el.textContent = el.dataset.pending || final; delete el.dataset.pending; delete el.dataset.scrambling; }
+    };
+    requestAnimationFrame(tick);
+}
+
+// Thin red line across the top tracking how far down the page you are
+function initScrollProgress() {
+    const bar = document.getElementById('scroll-progress');
+    if(!bar || prefersReducedMotion()) return;
+    let raf = null;
+    const update = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.setProperty('--p', max > 0 ? Math.min(1, window.scrollY / max) : 0);
+        raf = null;
+    };
+    window.addEventListener('scroll', () => { if(!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    update();
+}
+
+// Primary CTAs lean toward the cursor while it hovers, then spring back
+function initMagnetic() {
+    if(prefersReducedMotion() || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.querySelectorAll('.magnetic').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const r = btn.getBoundingClientRect();
+            const dx = e.clientX - (r.left + r.width / 2);
+            const dy = e.clientY - (r.top + r.height / 2);
+            btn.style.transform = `translate(${dx * 0.18}px, ${dy * 0.28}px)`;
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+}
+
 // --- Helpers ---
 function setText(id, text) {
     const el = document.getElementById(id);
-    if (el) el.textContent = text;
+    if (!el) return;
+    // A label mid-scramble gets the new text when the effect settles
+    if (el.dataset.scrambling) { el.dataset.pending = text; return; }
+    el.textContent = text;
 }
 
 function showErrorUI(msg) {
@@ -1204,7 +1313,8 @@ async function generatePDF() {
             filename:     `CV_Matheus_Ribeiro_${currentLang.toUpperCase()}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['legacy'] }
         };
 
         // 4. Mostra e Gera
@@ -1225,6 +1335,7 @@ function renderPDFTemplate() {
 
     // Header
     setText('pdf-name', data.profile.name);
+    setText('pdf-name-2', data.profile.name);
     setText('pdf-role', data.profile.role);
     
     // Contato
@@ -1262,11 +1373,14 @@ function renderPDFTemplate() {
     // Projetos
     const projDiv = document.getElementById('pdf-projects');
     if(projDiv) {
+        const stripUrl = (u) => u.replace(/^https?:\/\//, '').replace(/[?#].*$/, '').replace(/\/$/, '');
         projDiv.innerHTML = data.projects.map(p => `
-            <div class="mb-3 break-inside-avoid">
+            <div class="break-inside-avoid">
                 <h4 class="font-bold text-sm text-slate-900">${p.title}</h4>
                 <p class="text-xs text-slate-700 leading-snug mb-1">${p.description}</p>
                 <div class="text-[10px] text-slate-500 font-mono">Stack: ${p.tech.join(', ')}</div>
+                ${p.demoUrl ? `<div class="text-[10px] text-ibm-blue font-mono"><a href="${p.demoUrl}">${stripUrl(p.demoUrl)}</a></div>` : ''}
+                ${p.repoUrl ? `<div class="text-[10px] text-ibm-blue font-mono"><a href="${p.repoUrl}">${stripUrl(p.repoUrl)}</a></div>` : ''}
             </div>
         `).join('');
     }

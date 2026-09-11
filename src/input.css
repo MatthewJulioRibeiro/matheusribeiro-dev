@@ -828,6 +828,123 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Scroll reveal — sections below the fold wait until they enter the viewport */
+.reveal {
+    opacity: 0;
+}
+:where(.reveal) {
+    transform: translateY(16px);
+}
+.reveal.is-visible {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+/* Children of a revealed list come in one after another */
+/* :where() keeps specificity at zero so a card's own :hover transform still wins later */
+:where(.reveal .stagger) > * {
+    opacity: 0;
+    transform: translateY(12px);
+}
+.reveal.is-visible .stagger > * {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 70ms);
+}
+
+/* Hero name — each letter rises out of a clipped line */
+#profile-name.name-split {
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: 0.6rem;
+}
+.name-char {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: nameCharUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(0.15s + var(--i, 0) * 35ms);
+}
+.name-char.is-space { width: 0.28em; }
+/* After the reveal, hand transform back to the element's own hover styles */
+.reveal.anim-done,
+.reveal.is-visible .stagger > .anim-done {
+    animation: none;
+    opacity: 1;
+}
+/* transform is released at zero specificity, so a card's own :hover lift wins */
+:where(.reveal.anim-done),
+:where(.reveal .stagger) > :where(.anim-done) {
+    transform: none;
+}
+
+@keyframes nameCharUp {
+    to { transform: translateY(0); }
+}
+
+/* Scroll progress — hairline at the very top, same red as the rest */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #B3122A;
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+    z-index: 60;
+    pointer-events: none;
+}
+.dark #scroll-progress { background: #E8323F; }
+
+/* Magnetic CTAs — nudged toward the cursor, sprung back on leave */
+.magnetic {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* Experience timeline — the line draws down, nodes pop in as it passes */
+.reveal #experience-list::before {
+    transform: scaleY(0);
+    transform-origin: top;
+}
+.reveal.is-visible #experience-list::before {
+    animation: lineDraw 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+@keyframes lineDraw {
+    to { transform: scaleY(1); }
+}
+.reveal .job-node {
+    transform: rotate(45deg) scale(0);
+}
+.reveal.is-visible .job-node {
+    animation: nodePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(0.35s + var(--i, 0) * 0.4s);
+}
+@keyframes nodePop {
+    to { transform: rotate(45deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal .stagger > *, .reveal .job-node { opacity: 1; transform: none; animation: none; }
+    .reveal .job-node { transform: rotate(45deg); }
+    .reveal #experience-list::before { transform: none; animation: none; }
+    .name-char { transform: none; animation: none; }
+    #scroll-progress { display: none; }
+    .magnetic { transition: none; }
+}
+
+/* PDF template — fixed A4 pages so html2pdf breaks between them, never mid-line */
+.pdf-page {
+    width: 210mm;
+    height: 297mm;
+    padding: 12mm;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #fff;
+    /* No CSS page-break here on purpose: pages are exactly A4 tall, so html2pdf's
+       natural slicing lands between them; adding break-after produced a blank page. */
+}
+/* 1mm of slack so pixel rounding in html2canvas can't spill a blank trailing page */
+.pdf-page-last { height: 296mm; }
+.pdf-page a { color: inherit; text-decoration: none; }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
