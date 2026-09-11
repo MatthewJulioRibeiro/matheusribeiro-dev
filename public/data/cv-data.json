@@ -9,7 +9,7 @@
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs — atuação técnica de longa data em IBM ACE (v11/v12) e MQ para a TIM e, nos últimos meses, também em MuleSoft (Anypoint Platform) para a American Tower. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API, com passagens também por Bradesco, SEBRAE e Porto Seguro ao longo da carreira. Fora do expediente, desenvolvo sites e aplicações web como freelancer — de uma página institucional simples a um sistema com banco de dados e área restrita.",
+      "summary": "Engenheiro de Software com +6,5 anos de experiência em middleware e APIs: atuação técnica de longa data em IBM ACE (v11/v12) e MQ para a TIM e, nos últimos meses, também em MuleSoft (Anypoint Platform) para a American Tower. Histórico comprovado em coordenação técnica de migrações críticas, modernização via OpenShift e governança de API, com passagens também por Bradesco, SEBRAE e Porto Seguro ao longo da carreira. Fora do expediente, desenvolvo sites e aplicações web como freelancer, de uma página institucional simples a um sistema com banco de dados e área restrita.",
       "availability": "Aberto a freelas"
     },
     "experience": [
@@ -20,7 +20,7 @@
         "description": [
           "Entrou na TIM como desenvolvedor júnior integrando sistemas via IBM ACE, e assumiu, ao longo dos anos seguintes, a responsabilidade técnica única por um portfólio extenso de fluxos entre TI e ServiceNow.",
           "Conduziu a modernização desse portfólio para IBM ACE v12 e OpenShift, do desenho da arquitetura ao pipeline de deploy via ArgoCD.",
-          "Levou os fluxos ao API Connect com um catálogo simplificado, adaptando parte deles ao padrão TM Forum — incluindo uma solução de compartilhamento de alarmes entre a TIM e um parceiro.",
+          "Levou os fluxos ao API Connect com um catálogo simplificado, adaptando parte deles ao padrão TM Forum, incluindo uma solução de compartilhamento de alarmes entre a TIM e um parceiro.",
           "Atua com MuleSoft para a American Tower desde que se capacitou na plataforma, acumulando suporte em produção (N2/N3) com o time evolutivo dessas APIs, apoiando o aprendizado de outros desenvolvedores e conduzindo uma revisão técnica e de segurança no portfólio."
         ]
       },
@@ -31,7 +31,7 @@
         "description": [
           "Integrou o time de um projeto estruturado para a SEBRAE, desenvolvendo funcionalidades de front e back-end sobre o CMS da OpenText.",
           "Apoiou um GP na leitura e documentação técnica de código legado herdado num projeto para o Bradesco, após a saída dos desenvolvedores originais.",
-          "Assumiu o portoSDM, sistema de chamados dos portais da Porto Seguro, identificando e corrigindo problemas antes mesmo de virarem chamados formais — até sair em busca de um time de desenvolvimento."
+          "Assumiu o portoSDM, sistema de chamados dos portais da Porto Seguro, identificando e corrigindo problemas antes mesmo de virarem chamados formais, até sair em busca de um time de desenvolvimento."
         ]
       },
       {
@@ -78,7 +78,7 @@
         ]
       },
       {
-        "title": "MuleSoft — Nova Frente",
+        "title": "MuleSoft: Nova Frente",
         "description": "Iniciativa atual (últimos 3 meses): atuação em uma suíte de integrações MuleSoft para a American Tower, com foco em levantamento de backlog técnico e hardening de APIs em produção.",
         "tech": [
           "MuleSoft",
@@ -126,18 +126,18 @@
         "compareBtn": "Comparar cidades",
         "compareHint": "Adicione até 5 cidades e compare o clima entre elas em paralelo.",
         "steps": [
-          "Geocoding fica em cache por 1h — chame a mesma cidade de novo e veja o tempo de resposta despencar.",
+          "Geocoding fica em cache por 1h: chame a mesma cidade de novo e veja o tempo de resposta despencar.",
           "Previsão e qualidade do ar são buscadas em paralelo (Scatter-Gather), não em sequência.",
           "Se a qualidade do ar falhar, a resposta degrada com <code>airQuality: null</code> em vez de derrubar a chamada inteira.",
           "Retry automático (2x) em falhas transitórias de rede antes de desistir.",
-          "<code>/compare?cities=</code> roda N cidades ao mesmo tempo (Parallel For Each) — uma cidade inválida não trava as outras."
+          "<code>/compare?cities=</code> roda N cidades ao mesmo tempo (Parallel For Each), e uma cidade inválida não trava as outras."
         ]
       },
       {
         "id": "ace",
         "badge": "IBM ACE",
         "title": "Currency API",
-        "description": "Busca a tabela de taxas em EUR uma vez (em cache) e triangula qualquer par de/para a partir dela — uma chamada upstream atende qualquer combinação de moedas.",
+        "description": "Busca a tabela de taxas em EUR uma vez (em cache) e triangula qualquer par de/para a partir dela: uma chamada upstream atende qualquer combinação de moedas.",
         "fromPlaceholder": "De, ex. USD",
         "toPlaceholder": "Para, ex. BRL",
         "submitBtn": "Converter",
@@ -153,7 +153,7 @@
         "manyHint": "Adicione até 6 pares de moedas e converta todos de uma vez.",
         "manyBtn": "Converter todos",
         "steps": [
-          "Uma única tabela de taxas base-EUR alimenta qualquer par de moedas — sem URL dinâmica por request.",
+          "Uma única tabela de taxas base-EUR alimenta qualquer par de moedas, sem URL dinâmica por request.",
           "Conversão é pura matemática (<code>eur[to] / eur[from]</code>) rodando em ESQL, sem chamada extra ao upstream.",
           "Erros de validação (parâmetro faltando, moeda inválida) e falhas de upstream têm rotas de resposta dedicadas.",
           "<code>/rates?base=</code> expõe a tabela inteira convertida para qualquer moeda base, montada dinamicamente em ESQL."
@@ -168,7 +168,7 @@
       "coreStackTitle": "Core Stack",
       "projectsTitle": "Destaques Técnicos",
       "demosTitle": "Demos de API ao Vivo",
-      "demosIntro": "Duas APIs de integração pequenas, construídas do zero e rodando na minha própria infraestrutura — não são mockups, e cada requisição é logada e monitorada em tempo real. Chame direto aqui, ou veja o código/docs.",
+      "demosIntro": "Duas APIs de integração pequenas, construídas do zero e rodando na minha própria infraestrutura. Não são mockups: cada requisição é logada e monitorada em tempo real. Chame direto aqui, ou veja o código/docs.",
       "viewCodeBtn": "Ver código",
       "tryLiveBtn": "Testar ao vivo",
       "demoCodeBtn": "Código",
@@ -177,7 +177,7 @@
       "demoMetricsBtn": "Dashboard (Grafana)",
       "demoAdminBtn": "Console admin (ACE)",
       "demoLoadingText": "Carregando...",
-      "demoErrorText": "Falha na requisição: {msg}. A VM da demo pode estar hibernando na primeira chamada — tente de novo em alguns segundos.",
+      "demoErrorText": "Falha na requisição: {msg}. A VM da demo pode estar hibernando na primeira chamada. Tente de novo em alguns segundos.",
       "demoStatusChecking": "Verificando status...",
       "demoStatusOnline": "Online agora",
       "demoStatusOffline": "Indisponível no momento",
@@ -202,12 +202,12 @@
       "contactMessagePlaceholder": "Mensagem",
       "contactSendBtn": "Enviar",
       "contactSending": "Enviando...",
-      "contactSuccess": "Mensagem enviada — obrigado pelo contato!",
+      "contactSuccess": "Mensagem enviada, obrigado pelo contato!",
       "contactError": "Não consegui enviar agora. Tenta de novo ou manda direto pro"
     },
     "freelance": {
       "title": "Freelance",
-      "intro": "Também faço sites e aplicações web por conta própria — preço fechado, prazo combinado antes, e eu cuido de tudo, do domínio até o site no ar.",
+      "intro": "Também faço sites e aplicações web por conta própria: preço fechado, prazo combinado antes, e eu cuido de tudo, do domínio até o site no ar.",
       "ctaBtn": "Pedir um orçamento",
       "ctaAlt": "ou manda um email pra",
       "items": [
@@ -254,7 +254,7 @@
       "linkedin": "https://www.linkedin.com/in/matheus-julio-ribeiro/",
       "github": "https://github.com/MatthewJulioRibeiro",
       "photoUrl": "images/profile.jpg",
-      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience — long-standing technical depth in IBM ACE (v11/v12) and MQ for TIM, and, over the past few months, also MuleSoft (Anypoint Platform) for American Tower. Proven track record leading critical migrations, OpenShift modernization, and API governance, with prior engagements at Bradesco, SEBRAE, and Porto Seguro. Outside of that, I build websites and web apps as a freelancer — from a simple business page to a full app with a database and a protected admin area.",
+      "summary": "Highly skilled Integration Engineer with 6.5+ years of experience: long-standing technical depth in IBM ACE (v11/v12) and MQ for TIM, and, over the past few months, also MuleSoft (Anypoint Platform) for American Tower. Proven track record leading critical migrations, OpenShift modernization, and API governance, with prior engagements at Bradesco, SEBRAE, and Porto Seguro. Outside of that, I build websites and web apps as a freelancer, from a simple business page to a full app with a database and a protected admin area.",
       "availability": "Open to freelance"
     },
     "experience": [
@@ -265,7 +265,7 @@
         "description": [
           "Joined TIM as a junior developer integrating systems via IBM ACE, and over the following years took on sole technical ownership of an extensive portfolio of IT/ServiceNow integration flows.",
           "Led the modernization of that portfolio to IBM ACE v12 and OpenShift, from architecture design through the ArgoCD deployment pipeline.",
-          "Brought the flows into API Connect with a simplified catalog, adapting part of them to the TM Forum standard — including a mutual alarm-sharing solution between TIM and a partner.",
+          "Brought the flows into API Connect with a simplified catalog, adapting part of them to the TM Forum standard, including a mutual alarm-sharing solution between TIM and a partner.",
           "Works with MuleSoft for American Tower since training on the platform, combining N2/N3 production support with the APIs' evolutionary development team, helping other developers ramp up, and having led a technical and security review of the portfolio."
         ]
       },
@@ -276,7 +276,7 @@
         "description": [
           "Joined the team on a structured project for SEBRAE, building front and back-end features on top of OpenText's CMS.",
           "Supported a PM in reading and documenting legacy code inherited on a Bradesco project, after the original developers had left.",
-          "Took over portoSDM, Porto Seguro's ticketing system for its portals, catching and fixing issues before they became formal tickets — until leaving in search of a development-focused team."
+          "Took over portoSDM, Porto Seguro's ticketing system for its portals, catching and fixing issues before they became formal tickets, until leaving in search of a development-focused team."
         ]
       },
       {
@@ -323,7 +323,7 @@
         ]
       },
       {
-        "title": "MuleSoft — New Focus",
+        "title": "MuleSoft: New Focus",
         "description": "Current initiative (last 3 months): working on a MuleSoft integration suite for American Tower, focused on technical backlog discovery and hardening of production APIs.",
         "tech": [
           "MuleSoft",
@@ -371,18 +371,18 @@
         "compareBtn": "Compare cities",
         "compareHint": "Add up to 5 cities and compare their weather concurrently.",
         "steps": [
-          "Geocoding is cached for 1h — call the same city again and watch the response time drop.",
+          "Geocoding is cached for 1h: call the same city again and watch the response time drop.",
           "Forecast and air quality are fetched in parallel (Scatter-Gather), not sequentially.",
           "If air quality fails, the response degrades with <code>airQuality: null</code> instead of failing the whole call.",
           "Automatic retry (2x) on transient network failures before giving up.",
-          "<code>/compare?cities=</code> runs N cities concurrently (Parallel For Each) — one bad city doesn't block the others."
+          "<code>/compare?cities=</code> runs N cities concurrently (Parallel For Each), and one bad city doesn't block the others."
         ]
       },
       {
         "id": "ace",
         "badge": "IBM ACE",
         "title": "Currency API",
-        "description": "Fetches the full EUR-based rate table once (cached), then triangulates any from/to pair from it — one upstream call serves every currency combination.",
+        "description": "Fetches the full EUR-based rate table once (cached), then triangulates any from/to pair from it: one upstream call serves every currency combination.",
         "fromPlaceholder": "From, e.g. USD",
         "toPlaceholder": "To, e.g. BRL",
         "submitBtn": "Convert",
@@ -398,7 +398,7 @@
         "manyHint": "Add up to 6 currency pairs and convert them all at once.",
         "manyBtn": "Convert all",
         "steps": [
-          "A single EUR-based rate table feeds every currency pair — no per-request dynamic URL.",
+          "A single EUR-based rate table feeds every currency pair, no per-request dynamic URL.",
           "Conversion is pure math (<code>eur[to] / eur[from]</code>) running in ESQL, no extra upstream call.",
           "Validation errors (missing param, unknown currency) and upstream failures have dedicated response paths.",
           "<code>/rates?base=</code> exposes the whole table re-based to any currency, built dynamically in ESQL."
@@ -413,7 +413,7 @@
       "coreStackTitle": "Core Stack",
       "projectsTitle": "Technical Highlights",
       "demosTitle": "Live API Demos",
-      "demosIntro": "Two small integration APIs, built from scratch and running on my own infrastructure — not mockups, and every request is logged and monitored in real time. Call them right here, or check the source/docs.",
+      "demosIntro": "Two small integration APIs, built from scratch and running on my own infrastructure. Not mockups: every request is logged and monitored in real time. Call them right here, or check the source/docs.",
       "viewCodeBtn": "View code",
       "tryLiveBtn": "Try it live",
       "demoCodeBtn": "Code",
@@ -422,7 +422,7 @@
       "demoMetricsBtn": "Dashboard (Grafana)",
       "demoAdminBtn": "Admin console (ACE)",
       "demoLoadingText": "Loading...",
-      "demoErrorText": "Request failed: {msg}. The demo VM may be asleep on the first request — try again in a few seconds.",
+      "demoErrorText": "Request failed: {msg}. The demo VM may be asleep on the first request. Try again in a few seconds.",
       "demoStatusChecking": "Checking status...",
       "demoStatusOnline": "Online right now",
       "demoStatusOffline": "Currently unavailable",
@@ -447,12 +447,12 @@
       "contactMessagePlaceholder": "Message",
       "contactSendBtn": "Send",
       "contactSending": "Sending...",
-      "contactSuccess": "Message sent — thanks for reaching out!",
+      "contactSuccess": "Message sent, thanks for reaching out!",
       "contactError": "Couldn't send that right now. Try again or email"
     },
     "freelance": {
       "title": "Freelance",
-      "intro": "I also build websites and web apps on my own — fixed price, timeline agreed up front, and I handle everything from the domain to the site going live.",
+      "intro": "I also build websites and web apps on my own: fixed price, timeline agreed up front, and I handle everything from the domain to the site going live.",
       "ctaBtn": "Request a quote",
       "ctaAlt": "or email",
       "items": [

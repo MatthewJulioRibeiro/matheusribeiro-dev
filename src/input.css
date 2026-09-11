@@ -191,7 +191,7 @@ body {
 }
 .dark .job-bullets li::before { background: #E8323F; }
 
-/* Freelance service list — one bordered block, rows instead of identical cards */
+/* Freelance service list: one bordered block, rows instead of identical cards */
 .service-list {
     border: 2px solid #1A1210;
     background-color: #FBF7EE;
@@ -248,7 +248,7 @@ body {
     .service-row::before { transition: none; }
 }
 
-/* Card spotlight — the radar glow, localized to the card under the cursor */
+/* Card spotlight: the radar glow, localized to the card under the cursor */
 .project-card,
 .stat-card {
     position: relative;
@@ -421,7 +421,7 @@ body {
 .flow-diagram .flow-arrowhead { fill: #1A1210; }
 .dark .flow-diagram .flow-arrowhead { fill: #A89686; }
 
-/* Flow diagram in flight — arrows march and boxes light up in order while a request runs */
+/* Flow diagram in flight: arrows march and boxes light up in order while a request runs */
 .flow-diagram .flow-box,
 .flow-diagram .flow-arrow,
 .flow-diagram .flow-arrowhead {
@@ -616,7 +616,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
 }
 .dark .demo-steps-list code { background: rgba(237, 227, 216, 0.1); }
 
-/* Details open/close — body expands to its measured height (--h set in JS on toggle).
+/* Details open/close: body expands to its measured height (--h set in JS on toggle).
    overflow is clipped only while animating: the raw JSON <pre> needs its own scrollbar after. */
 .demo-steps-block > .is-opening,
 .demo-raw-json-block > .is-opening,
@@ -1014,7 +1014,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Scroll reveal — sections below the fold wait until they enter the viewport */
+/* Scroll reveal: sections below the fold wait until they enter the viewport */
 .reveal {
     opacity: 0;
 }
@@ -1035,7 +1035,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
     animation-delay: calc(0.12s + var(--i, 0) * 70ms);
 }
 
-/* Hero name — each letter rises out of a clipped line */
+/* Hero name: each letter rises out of a clipped line */
 #profile-name.name-split {
     overflow: hidden;
     padding-bottom: 0.08em;
@@ -1064,7 +1064,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
     to { transform: translateY(0); }
 }
 
-/* Scroll progress — hairline at the very top, same red as the rest */
+/* Scroll progress: hairline at the very top, same red as the rest */
 #scroll-progress {
     position: fixed;
     top: 0;
@@ -1079,13 +1079,13 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
 }
 .dark #scroll-progress { background: #E8323F; }
 
-/* Magnetic CTAs — nudged toward the cursor, sprung back on leave */
+/* Magnetic CTAs: nudged toward the cursor, sprung back on leave */
 .magnetic {
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
 }
 
-/* Experience timeline — the line draws down, nodes pop in as it passes */
+/* Experience timeline: the line draws down, nodes pop in as it passes */
 .reveal #experience-list::before {
     transform: scaleY(0);
     transform-origin: top;
@@ -1116,7 +1116,7 @@ details.is-closing > .demo-steps-summary::before { transform: rotate(0deg); }
     .magnetic { transition: none; }
 }
 
-/* PDF template — fixed A4 pages so html2pdf breaks between them, never mid-line */
+/* PDF template: fixed A4 pages so html2pdf breaks between them, never mid-line */
 .pdf-page {
     width: 210mm;
     height: 297mm;

@@ -573,7 +573,7 @@ function renderWeatherSummary(data, ui) {
             <div class="demo-weather-emoji">${emoji}</div>
             <div class="demo-weather-main">
                 <div class="demo-weather-temp">${data.temperatureCelsius}&deg;C</div>
-                <div class="demo-weather-place">${escapeHtml(data.city)}${data.country ? ', ' + escapeHtml(data.country) : ''} &mdash; ${escapeHtml(desc)}</div>
+                <div class="demo-weather-place">${escapeHtml(data.city)}${data.country ? ', ' + escapeHtml(data.country) : ''}: ${escapeHtml(desc)}</div>
             </div>
             <div class="demo-weather-stats">
                 <span>&#128168; ${data.windSpeedKmh} km/h</span>
@@ -1276,7 +1276,7 @@ function indexStagger(root) {
     });
 }
 
-// Hero name, letter by letter (only the first time — language switches keep it still)
+// Hero name, letter by letter (only the first time; language switches keep it still)
 function renderName(name) {
     const el = document.getElementById('profile-name');
     if(!el) return;
