@@ -21,7 +21,7 @@
           "Entrou na TIM como desenvolvedor júnior integrando sistemas via IBM ACE, e assumiu, ao longo dos anos seguintes, a responsabilidade técnica única por um portfólio extenso de fluxos entre TI e ServiceNow.",
           "Conduziu a modernização desse portfólio para IBM ACE v12 e OpenShift, do desenho da arquitetura ao pipeline de deploy via ArgoCD.",
           "Levou os fluxos ao API Connect com um catálogo simplificado, adaptando parte deles ao padrão TM Forum, incluindo uma solução de compartilhamento de alarmes entre a TIM e um parceiro.",
-          "Atua com MuleSoft para a American Tower desde que se capacitou na plataforma, acumulando suporte em produção (N2/N3) com o time evolutivo dessas APIs, apoiando o aprendizado de outros desenvolvedores e conduzindo uma revisão técnica e de segurança no portfólio."
+          "Atua com MuleSoft para a American Tower desde que se capacitou na plataforma, desenvolvendo e mantendo APIs no modelo API-led (Mule 4, DataWeave, RAML, MUnit, deploy no CloudHub 2.0 via GitHub Actions), acumulando o suporte em produção (N2/N3), apoiando o aprendizado de outros desenvolvedores e conduzindo uma revisão técnica e de segurança no portfólio."
         ]
       },
       {
@@ -78,12 +78,12 @@
         ]
       },
       {
-        "title": "MuleSoft: Nova Frente",
-        "description": "Iniciativa atual (últimos 3 meses): atuação em uma suíte de integrações MuleSoft para a American Tower, com foco em levantamento de backlog técnico e hardening de APIs em produção.",
+        "title": "APIs MuleSoft (API-led)",
+        "description": "Frente atual: desenvolvimento e sustentação de APIs Experience e System em MuleSoft para a American Tower, com contratos em RAML, testes em MUnit e pipelines no GitHub Actions publicando no CloudHub 2.0 (QA, homologação e produção).",
         "tech": [
-          "MuleSoft",
-          "Anypoint Platform",
-          "Governança de API"
+          "Mule 4",
+          "RAML",
+          "CloudHub 2.0"
         ]
       },
       {
@@ -266,7 +266,7 @@
           "Joined TIM as a junior developer integrating systems via IBM ACE, and over the following years took on sole technical ownership of an extensive portfolio of IT/ServiceNow integration flows.",
           "Led the modernization of that portfolio to IBM ACE v12 and OpenShift, from architecture design through the ArgoCD deployment pipeline.",
           "Brought the flows into API Connect with a simplified catalog, adapting part of them to the TM Forum standard, including a mutual alarm-sharing solution between TIM and a partner.",
-          "Works with MuleSoft for American Tower since training on the platform, combining N2/N3 production support with the APIs' evolutionary development team, helping other developers ramp up, and having led a technical and security review of the portfolio."
+          "Works with MuleSoft for American Tower since training on the platform, building and maintaining API-led APIs (Mule 4, DataWeave, RAML, MUnit, CloudHub 2.0 deploys via GitHub Actions), covering N2/N3 production support, helping other developers ramp up, and having led a technical and security review of the portfolio."
         ]
       },
       {
@@ -323,12 +323,12 @@
         ]
       },
       {
-        "title": "MuleSoft: New Focus",
-        "description": "Current initiative (last 3 months): working on a MuleSoft integration suite for American Tower, focused on technical backlog discovery and hardening of production APIs.",
+        "title": "MuleSoft APIs (API-led)",
+        "description": "Current work: building and supporting Experience and System APIs in MuleSoft for American Tower, with RAML contracts, MUnit tests and GitHub Actions pipelines deploying to CloudHub 2.0 (QA, UAT and production).",
         "tech": [
-          "MuleSoft",
-          "Anypoint Platform",
-          "API Governance"
+          "Mule 4",
+          "RAML",
+          "CloudHub 2.0"
         ]
       },
       {
@@ -549,6 +549,7 @@
           "App Connect Enterprise",
           "IBM MQ",
           "MuleSoft (Anypoint Platform)",
+          "DataWeave / RAML",
           "API Connect",
           "Cloud Pak (CP4I)",
           "ESQL",
@@ -562,6 +563,8 @@
           "OpenShift",
           "Docker",
           "Kubernetes",
+          "CloudHub 2.0",
+          "GitHub Actions",
           "GitLab CI",
           "ArgoCD",
           "Helm",
@@ -592,6 +595,7 @@
           "JIRA",
           "Scrum",
           "Maven",
+          "MUnit",
           "Git"
         ]
       },
