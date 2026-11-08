@@ -567,6 +567,11 @@ body {
     background: #17110F;
     color: #EDE3D8;
 }
+/* MCP block on the Mule demo: a short, real agent conversation */
+.demo-mcp-transcript { white-space: normal; max-height: none; }
+.demo-mcp-line + .demo-mcp-line { margin-top: 0.45rem; }
+.demo-mcp-label { color: #B3122A; font-weight: 600; }
+.dark .demo-mcp-label { color: #E8323F; }
 .demo-result.is-error { border-color: #B3122A; color: #B3122A; }
 .dark .demo-result.is-error { border-color: #E8323F; color: #E8323F; }
 .demo-result .key { color: #B3122A; }

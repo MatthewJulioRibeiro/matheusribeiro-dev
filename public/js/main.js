@@ -563,6 +563,27 @@ function renderStepsList(steps, ui) {
         </details>`;
 }
 
+// The Mule demo also serves AI agents over MCP (/mcp). Static block: a real,
+// dated agent conversation plus the command to connect, all from cv-data.json.
+function renderMcpBlock(mcp) {
+    if (!mcp) return '';
+    const line = (label, text) =>
+        `<p class="demo-mcp-line"><span class="demo-mcp-label">${escapeHtml(label)}&gt;</span> ${escapeHtml(text)}</p>`;
+    return `
+        <details class="demo-steps-block demo-mcp-block mt-4">
+            <summary class="demo-steps-summary">${escapeHtml(mcp.title)}</summary>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 mb-2 leading-relaxed">${escapeHtml(mcp.intro)}</p>
+            <div class="demo-result demo-mcp-transcript">
+                ${line(mcp.youLabel, mcp.question)}
+                ${line(mcp.toolLabel, mcp.toolCall)}
+                ${line(mcp.agentLabel, mcp.answer)}
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 mb-1">${escapeHtml(mcp.connectLabel)}</p>
+            <pre class="demo-result"><code>${escapeHtml(mcp.command)}</code></pre>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(mcp.note)}</p>
+        </details>`;
+}
+
 function renderWeatherSummary(data, ui) {
     if (data.error) return `<div class="demo-pretty-error">${escapeHtml(data.message || data.error)}</div>`;
     const emoji = weatherEmoji(data.description);
@@ -708,6 +729,7 @@ function renderApiDemos(demosCommon, demosText, ui) {
                         <summary class="demo-steps-summary">${ui.demoRawJsonToggle}</summary>
                         <pre id="mule-demo-result" class="demo-result mt-2"><code>&larr; ${dt.resultPlaceholder.replace(/^←\s*/, '')}</code></pre>
                     </details>
+                    ${renderMcpBlock(dt.mcp)}
                     ${linksRow}
                 </div>`;
         }
