@@ -5,6 +5,12 @@
 /* Base */
 html {
     scroll-behavior: smooth;
+    /* Native UI (scrollbars, form controls) follows the manual theme toggle (.dark class) */
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
 }
 
 body {
